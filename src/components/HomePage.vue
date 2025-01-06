@@ -1,5 +1,4 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
   <div class="app-container">
@@ -8,8 +7,10 @@
     </header>
     <main>
       <div class="button-container">
-        <button type="button" class="btn"><router-link to='/table'>予約表</router-link></button><br>
-        <button type="button" class="btn">新規入力</button>
+        <button type="button" class="btn"><router-link to="/form">新規受付</router-link></button
+        ><br />
+        <button type="button" class="btn"><router-link to="/table">予約表</router-link></button
+        ><br />
       </div>
     </main>
   </div>
@@ -27,7 +28,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: url('https://tblg.k-img.com/restaurant/images/Rvw/154487/640x640_rect_154487046.jpg') no-repeat center center; /* 背景画像 */
+  background: url('https://tblg.k-img.com/restaurant/images/Rvw/154487/640x640_rect_154487046.jpg')
+    no-repeat center center; /* 背景画像 */
   background-size: cover; /* 画像をページ全体にフィット */
 }
 
@@ -61,7 +63,9 @@ header h1 {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .btn:hover {
