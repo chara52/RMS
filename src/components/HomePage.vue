@@ -1,16 +1,18 @@
 <script setup></script>
 
 <template>
-  <div class="app-container">
+ <div class="app-container">
     <header>
       <h1>居酒屋 壱</h1>
     </header>
     <main>
       <div class="button-container">
-        <button type="button" class="btn"><router-link to="/form">新規受付</router-link></button
-        ><br />
-        <button type="button" class="btn"><router-link to="/table">予約表</router-link></button
-        ><br />
+        <router-link to="/table" class="btn-link">
+          <button type="button" class="btn">予約表</button>
+        </router-link>
+        <router-link to="/new-entry" class="btn-link">
+          <button type="button" class="btn">新規入力</button>
+        </router-link>
       </div>
     </main>
   </div>
