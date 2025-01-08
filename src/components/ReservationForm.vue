@@ -1,49 +1,3 @@
-<template>
-  <div class="reservation-form">
-    <h1>新規受付</h1>
-    <form @submit.prevent="submitReservation">
-      <div class="header">
-        <div class="buttons">
-          <button type="button" class="home-button">
-            <router-link to="/home">HOME</router-link>
-          </button>
-          <button type="button" class="table-button">
-            <router-link to="/table">予約表</router-link>
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="name">名前</label>
-        <input type="text" id="name" v-model="formData.name" required />
-      </div>
-      <div class="form-group">
-        <label for="people">人数</label>
-        <input type="text" id="people" v-model="formData.people" required />
-      </div>
-      <div class="form-group">
-        <label for="time">時間</label>
-        <input type="text" id="time" ref="datepicker" v-model="formData.time" required />
-      </div>
-      <div class="form-group">
-        <label for="info">詳細情報</label>
-        <textarea name="" id="info" v-model="formData.info"></textarea>
-      </div>
-      <div class="form-group">
-        <label for="phone">携帯電話番号</label>
-        <input type="tel" id="phone" v-model="formData.phone" required />
-      </div>
-      <div class="form-group">
-        <label for="seat">席番号</label>
-        <input type="text" id="seat" v-model="formData.seat" />
-      </div>
-      <div class="form-group">
-        <button type="submit" class="submit-button">予約</button>
-        <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
-      </div>
-    </form>
-  </div>
-</template>
-
 <script>
 import flatpickr from 'flatpickr'
 import 'flatpickr/dist/flatpickr.min.css'
@@ -88,6 +42,50 @@ export default {
 }
 </script>
 
+<template>
+  <div class="reservation-form">
+    <h1>新規受付</h1>
+    <form @submit.prevent="submitReservation">
+      <div class="header">
+        <div class="buttons">
+          <button type="button" class="home-button">
+            <!-- Homeページへ遷移 -->
+            <router-link to="/home">HOME</router-link>
+          </button>
+          <button type="button" class="table-button">
+            <!-- 予約表ページへ遷移 -->
+            <router-link to="/table">予約表</router-link>
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="name">名前</label>
+        <input type="text" id="name" v-model="formData.name" required />
+      </div>
+      <div class="form-group">
+        <label for="people">人数</label>
+        <input type="text" id="people" v-model="formData.people" required />
+      </div>
+      <div class="form-group">
+        <label for="time">時間</label>
+        <input type="text" id="time" ref="datepicker" v-model="formData.time" required />
+      </div>
+      <div class="form-group">
+        <label for="info">詳細情報</label>
+        <textarea name="" id="info" v-model="formData.info"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="phone">携帯電話番号</label>
+        <input type="tel" id="phone" v-model="formData.phone" required />
+      </div>
+      <div class="form-group">
+        <button type="submit" class="submit-button">予約</button>
+        <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
+      </div>
+    </form>
+  </div>
+</template>
+
 <style scoped>
 .reservation-form {
   max-width: 600px;
@@ -103,7 +101,7 @@ h1 {
 }
 
 .form-group {
-  margin-bottom: 17px;
+  margin-bottom: 15px;
 }
 
 .header {
@@ -113,10 +111,33 @@ h1 {
 
 .buttons {
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: -60px;
+  margin-bottom: auto;
+}
+
+.home-button,
+.table-button {
+  background-color: #f9ae35;
+}
+
+.home-button a,
+.table-button a {
+  text-decoration: none; /* 下線を無くす */
+  color: #000000;
+}
+
+/* ボタンにカーソルを合わせた時の動作 */
+.home-button a:hover,
+.table-button a:hover {
+  text-decoration: none; /* カーソルを合わせた時、下線をなくす */
+  color: #7d7a7a; /* カーソルを合わせた時、色を変える */
 }
 
 .form-group label {
   display: block;
+  margin-top: 10px;
   margin-bottom: 5px;
   font-weight: bold;
   font-size: 19px;
@@ -147,11 +168,13 @@ h1 {
   font-weight: bold;
 }
 
+/* ボタンにカーソルを合わせた時の動作 */
 .submit-button:hover {
   background-color: #f9a825;
 }
 
 .error-message {
+  /* 携帯番号が11桁以外の時のエラーメッセージのCSS */
   color: red;
   font-size: 14px;
   margin-left: 16px;
