@@ -1,45 +1,59 @@
-<script>
+<script setup>
 import flatpickr from 'flatpickr'
+import { Japanese } from 'flatpickr/dist/l10n/ja.js'
 import 'flatpickr/dist/flatpickr.min.css'
+import { reactive, ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-export default {
-  data() {
-    return {
-      formData: {
-        name: '',
-        people: '',
-        time: '',
-        info: '',
-        phone: '',
-        seat: '',
-      },
-      errorMessage: '',
-    }
-  },
-  computed: {
-    isPhoneNumberValid() {
-      return this.formData.phone.length === 11 && /^\d+$/.test(this.formData.phone)
-    },
-  },
-  methods: {
-    submitReservation() {
-      if (this.isPhoneNumberValid) {
-        this.errorMessage = ''
-        alert('予約が送信されました!')
-        this.$router.push('/table')
-      } else {
-        this.errorMessage = '携帯電話番号は11桁で入力してください!'
-      }
-    },
-  },
-  mounted() {
-    flatpickr(this.$refs.datepicker, {
-      enableTime: true,
-      dateFormat: 'Y-m-d H:i',
-      locale: 'ja',
-    })
-  },
+const formData = reactive({
+  name: '',
+  people: '',
+  time: '',
+  info: '',
+  phone: '',
+  seat: '',
+})
+
+/*
+const emit = defineEmits(['set:newData'])
+const setNewData = () => {
+  emit('set:newData', formData)
 }
+*/
+
+const errorMessage = ref('')
+
+// プロパティ
+const isPhoneNumberValid = computed(() => {
+   return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
+})
+
+const router = useRouter()
+
+// 関数（アロー関数）
+const submitReservation = () => {
+  const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
+  reservations.push(formData);
+  localStorage.setItem('reservations', JSON.stringify(reservations));
+
+  if (isPhoneNumberValid.value) {
+    errorMessage.value = ''
+    alert('予約が送信されました!')
+    router.push('/table')
+  } else {
+    errorMessage.value = '携帯電話番号は11桁で入力してください!'
+  }
+}
+
+const datepickerRef = ref(null);
+// 関数（ユーティリティ関数）
+onMounted(() => {
+  flatpickr(datepickerRef.value, {
+    enableTime: true,
+    dateFormat: 'Y-m-d H:i',
+    locale: Japanese,
+  })
+})
 </script>
 
 <template>
@@ -68,7 +82,7 @@ export default {
       </div>
       <div class="form-group">
         <label for="time">時間</label>
-        <input type="text" id="time" ref="datepicker" v-model="formData.time" required />
+        <input type="text" id="time" ref="datepickerRef" v-model="formData.time" required />
       </div>
       <div class="form-group">
         <label for="info">詳細情報</label>

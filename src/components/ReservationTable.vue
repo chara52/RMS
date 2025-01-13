@@ -1,3 +1,13 @@
+<script setup>
+import { reactive, onMounted } from 'vue';
+
+const reservations = reactive([]);
+
+onMounted(() => {
+  reservations.value = JSON.parse(localStorage.getItem('reservations')) || [];
+});
+</script>
+
 <template>
   <div class="reservation-table">
     <h1>予約表</h1>
@@ -14,21 +24,21 @@
       <tbody>
         <tr>
          <th>名前</th>
-         <td class="name-space">&nbsp;</td>
+         <td class="name-space">{{ reservations.name }}</td>
          <th>人数</th>
-         <td class="number-space">&nbsp;</td>
+         <td class="number-space">{{ reservations.people }}</td>
          <th>時間</th>
-         <td class="time-space">&nbsp;</td>
+         <td class="time-space">{{ reservations.time }}</td>
          <th>卓番号</th>
-         <td class="table-space">&nbsp;</td>
+         <td class="table-space"> {{ reservations.table }}</td>
         </tr>
         <tr>
           <th>詳細</th>
-          <td colspan="7">&nbsp;</td>
+          <td colspan="7">{{ reservations.info }}</td>
         </tr>
         <tr>
           <th>電話番号</th>
-          <td colspan="7">&nbsp;</td>
+          <td colspan="7">{{ reservations.phone }}</td>
         </tr>
       </tbody>
     </table>
@@ -53,5 +63,8 @@
   }
   body {
     margin-bottom: 40px;
+  }
+  p {
+    color: black;
   }
 </style>
