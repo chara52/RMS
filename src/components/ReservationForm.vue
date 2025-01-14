@@ -14,13 +14,6 @@ const formData = reactive({
   seat: '',
 })
 
-/*
-const emit = defineEmits(['set:newData'])
-const setNewData = () => {
-  emit('set:newData', formData)
-}
-*/
-
 const errorMessage = ref('')
 
 // プロパティ
@@ -64,7 +57,7 @@ onMounted(() => {
         <div class="buttons">
           <button type="button" class="home-button">
             <!-- Homeページへ遷移 -->
-            <router-link to="/home">HOME</router-link>
+            <router-link to="/">HOME</router-link>
           </button>
           <button type="button" class="table-button">
             <!-- 予約表ページへ遷移 -->
