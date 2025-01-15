@@ -64,7 +64,7 @@ onMounted(() => {
       <div class="buttons">
         <!-- Homeページへのリンク -->
         <button type="button" class="home-button">
-          <router-link to="/home">HOME</router-link>
+          <router-link to="/">HOME</router-link>
         </button>
         <!-- 予約表ページへのリンク -->
         <button type="button" class="table-button">

@@ -12,6 +12,7 @@ onMounted(() => {
 
   // 現在の配列の内容を置き換える
   reservations.push(...storedReservations);
+
 });
 </script>
 
@@ -20,7 +21,7 @@ onMounted(() => {
     <h1>予約表</h1>
     <!-- Homeや新規予約へのリンク -->
     <div>
-      <router-link to="/home">Homeに戻る</router-link>
+      <router-link to="/">Homeに戻る</router-link>
     </div>
     <div>
       <router-link to="/form">新規予約に戻る</router-link>
@@ -66,6 +67,7 @@ onMounted(() => {
       <p>現在、予約はありません。</p>
     </div>
   </div>
+
 </template>
 
 <style>
@@ -86,8 +88,5 @@ onMounted(() => {
   }
   body {
     margin-bottom: 40px;
-  }
-  p {
-    color: black;
   }
 </style>
