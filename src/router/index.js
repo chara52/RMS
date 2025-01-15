@@ -6,7 +6,7 @@ import ReservationForm from '../components/ReservationForm.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/home', component: HomePage },
+    { path: '/', component: HomePage },
     { path: '/table', component: ReservationTable },
     { path: '/form', component: ReservationForm },
   ],
