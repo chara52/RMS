@@ -7,9 +7,6 @@ const reservations = reactive([]);
 onMounted(() => {
   // ローカルストレージからデータを取得
   const storedReservations = JSON.parse(localStorage.getItem('reservations')) || [];
-
-  console.log(storedReservations)
-
   // 現在の配列の内容を置き換える
   reservations.push(...storedReservations);
 
@@ -33,21 +30,16 @@ onMounted(() => {
 
         <!-- 予約情報をテーブル形式で表示 -->
         <table border="1" width="100%">
-          <thead>
-            <tr>
-              <th colspan="8">予約 {{ index + 1 }}</th>
-            </tr>
-          </thead>
           <tbody>
             <tr>
               <th>名前</th>
-              <td class="name-space">{{ reservation.name || "未指定" }}</td>
+              <td class="name-space">{{ reservation.name }}</td>
               <th>人数</th>
-              <td class="number-space">{{ reservation.people || "未指定" }}</td>
+              <td class="number-space">{{ reservation.people }}</td>
               <th>時間</th>
-              <td class="time-space">{{ reservation.time || "未指定" }}</td>
+              <td class="time-space">{{ reservation.time }}</td>
               <th>卓番号</th>
-              <td class="table-space">{{ reservation.seat || "未指定" }}</td>
+              <td class="table-space">{{ reservation.seat }}</td>
             </tr>
             <tr>
               <th>詳細</th>
@@ -55,7 +47,7 @@ onMounted(() => {
             </tr>
             <tr>
               <th>電話番号</th>
-              <td colspan="7">{{ reservation.phone || "未指定" }}</td>
+              <td colspan="7">{{ reservation.phone }}</td>
             </tr>
           </tbody>
         </table>
