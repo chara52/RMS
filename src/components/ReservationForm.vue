@@ -63,13 +63,13 @@ onMounted(() => {
     <div class="header">
       <div class="buttons">
         <!-- Homeページへのリンク -->
-        <button type="button" class="home-button">
-          <router-link to="/">HOME</router-link>
-        </button>
+        <router-link to="/">
+          <button type="button" class="home-button">HOME</button>
+        </router-link>
         <!-- 予約表ページへのリンク -->
-        <button type="button" class="table-button">
-          <router-link to="/table">予約表</router-link>
-        </button>
+        <router-link to="/table">
+          <button type="button" class="table-button">予約表</button>
+        </router-link>
       </div>
     </div>
 
