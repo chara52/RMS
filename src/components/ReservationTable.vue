@@ -9,6 +9,7 @@ onMounted(() => {
   const storedReservations = JSON.parse(localStorage.getItem('reservations')) || [];
   // 現在の配列の内容を置き換える
   reservations.push(...storedReservations);
+
 });
 </script>
 
@@ -58,6 +59,7 @@ onMounted(() => {
       <p>現在、予約はありません。</p>
     </div>
   </div>
+
 </template>
 
 <style>
@@ -78,8 +80,5 @@ onMounted(() => {
   }
   body {
     margin-bottom: 40px;
-  }
-  p {
-    color: black;
   }
 </style>

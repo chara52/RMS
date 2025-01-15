@@ -19,6 +19,7 @@ const formData = reactive({
 const errorMessage = ref('');
 
 // プロパティ, 電話番号が11桁かつ数字のみかをチェック
+
 const isPhoneNumberValid = computed(() => {
    return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
 })
@@ -70,6 +71,7 @@ onMounted(() => {
         <button type="button" class="table-button">
           <router-link to="/table">予約表</router-link>
         </button>
+
       </div>
     </div>
 
