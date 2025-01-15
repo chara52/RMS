@@ -7,9 +7,6 @@ const reservations = reactive([]);
 onMounted(() => {
   // ローカルストレージからデータを取得
   const storedReservations = JSON.parse(localStorage.getItem('reservations')) || [];
-
-  console.log(storedReservations)
-
   // 現在の配列の内容を置き換える
   reservations.push(...storedReservations);
 });
