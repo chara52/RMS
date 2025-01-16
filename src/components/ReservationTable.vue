@@ -17,11 +17,13 @@ onMounted(() => {
   <div class="reservation-table">
     <h1>予約表</h1>
   </div>
-  <div>
-    <router-link to="/">Homeに戻る</router-link>
-  </div>
-  <div>
-    <router-link to="/form">新規予約に戻る</router-link>
+  <div class="button-container">
+        <router-link to="/" class="btn-link">
+          <button type="button" class="btn">Home</button>
+        </router-link>
+        <router-link to="/form" class="btn-link">
+          <button type="button" class="btn">新規入力</button>
+        </router-link>
   </div>
 
   <div v-if="reservations.length > 0">
@@ -75,4 +77,37 @@ onMounted(() => {
   body {
     margin-bottom: 40px;
   }
+
+  /* ボタンコンテナ */
+.button-container {
+  margin-top: 10px; /* 上部の余白を増やしてボタン間隔を広げる */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* ボタンの間に20pxの間隔を追加 */
+  align-items: left;
+}
+
+/* ボタンのスタイル */
+.btn {
+  padding: 10px 12px;
+  font-size: 1.2em;
+  color: white;
+  background-color: #ac7806b1;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #ac7806f9; /* ホバー時のオレンジ色を少し濃く */
+  transform: scale(1.05);
+}
+
+.btn:active {
+  background-color: #e03e00; /* クリック時のオレンジ色をさらに濃く */
+  transform: scale(1);
+}
 </style>
