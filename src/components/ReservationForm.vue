@@ -1,55 +1,71 @@
 <script setup>
-import flatpickr from 'flatpickr' //日付選択コンポーネント
-import { Japanese } from 'flatpickr/dist/l10n/ja.js' // 日本語ローカリゼーション
-import 'flatpickr/dist/flatpickr.min.css' // flatpickr のスタイルシート
-import { reactive, ref, computed, onMounted } from 'vue' // Vue の機能
-import { useRouter } from 'vue-router' // ルート制御用
+import flatpickr from 'flatpickr'
+import { Japanese } from 'flatpickr/dist/l10n/ja.js'
+import 'flatpickr/dist/flatpickr.min.css'
+import { reactive, ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { createClient } from 'microcms-js-sdk';
 
-// フォームデータの初期値をリアクティブなオブジェクトとして定義
 const formData = reactive({
-  name: '', // ユーザー名
-  people: '', // 予約人数
-  time: '', // 予約時間
-  info: '', // 詳細情報
-  phone: '', // 電話番号
-  seat: '', // 卓番号（未使用）
+  name: '',
+  people: '',
+  time: '',
+  info: '',
+  phone: '',
+  seat: '',
 });
 
-// エラーメッセージを保持するリアクティブ変数
 const errorMessage = ref('');
 
-// プロパティ, 電話番号が11桁かつ数字のみかをチェック
 const isPhoneNumberValid = computed(() => {
    return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
 })
 
-// Vue Router を利用
 const router = useRouter()
 
+const client = createClient({
+  serviceDomain: 'rms',
+  apiKey: 'utks82BKbpBzo3RxwDPLTbuj93Qj4J2T1sTU',
+})
+
 // 関数（アロー関数）
-// 予約データをローカルストレージに保存してページを遷移
 const submitReservation = () => {
+  /*
   const reservations = JSON.parse(localStorage.getItem('reservations')) || []; // 既存データ取得
-  reservations.push(formData); // 新しい予約を追加
+  reservations.push(formData);
   localStorage.setItem('reservations', JSON.stringify(reservations)); // 更新後のデータを保存
+  */
+
+  client
+    .create({
+      endpoint: 'data',
+      content: {
+        name: formData.name,
+        people: formData.people,
+        time: formData.time,
+        info: formData.info,
+        phone: parseInt(formData.phone)
+      }
+    })
+    .then((res) => console.log(res.id))
+    .catch((err) => console.error(err));
 
   if (isPhoneNumberValid.value) {
-    errorMessage.value = ''; // エラーをクリア
-    alert('予約が送信されました!'); // 確認メッセージ
-    router.push('/table'); // 予約表ページへ遷移
+    errorMessage.value = '';
+    alert('予約が送信されました!');
+    router.push('/table');
   } else {
     errorMessage.value = '携帯電話番号は11桁で入力してください!'; // エラーメッセージ
   }
 };
 
-const datepickerRef = ref(null); // flatpickr の参照
+const datepickerRef = ref(null);
 
 // 関数（ユーティリティ関数）
-// 日付ピッカーを初期化
 onMounted(() => {
   flatpickr(datepickerRef.value, {
     enableTime: true, // 時間選択を有効化
-    dateFormat: 'Y-m-d H:i', // 日付フォーマット
+    dateFormat: 'Y-m-d H:i',
     locale: Japanese, // 日本語ロケール
   });
 });
@@ -58,22 +74,18 @@ onMounted(() => {
 <template>
   <div class="reservation-form">
   <h1>新規受付</h1>
-  <form @submit.prevent="submitReservation"> <!-- フォーム送信時に submitReservation を呼び出し -->
-    <!-- ヘッダー部分 -->
+  <form @submit.prevent="submitReservation">
     <div class="header">
       <div class="buttons">
-        <!-- Homeページへのリンク -->
         <router-link to="/">
           <button type="button" class="home-button">HOME</button>
         </router-link>
-        <!-- 予約表ページへのリンク -->
         <router-link to="/table">
           <button type="button" class="table-button">予約表</button>
         </router-link>
       </div>
     </div>
 
-    <!-- 各フォームフィールド -->
     <div class="form-group">
       <label for="name">名前</label>
       <input type="text" id="name" v-model="formData.name" required />
@@ -95,7 +107,6 @@ onMounted(() => {
       <input type="tel" id="phone" v-model="formData.phone" required />
     </div>
 
-    <!-- サブミットボタンとエラーメッセージ -->
     <div class="form-group">
       <button type="submit" class="submit-button">予約</button>
       <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>

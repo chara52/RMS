@@ -1,16 +1,31 @@
 <script setup>
-import { reactive, onMounted } from 'vue';
+import { reactive } from 'vue';
+import { createClient } from 'microcms-js-sdk';
+
+const client = createClient({
+  serviceDomain: 'rms',
+  apiKey: 'utks82BKbpBzo3RxwDPLTbuj93Qj4J2T1sTU',
+})
 
 const reservations = reactive([]);
 
-// コンポーネントがマウントされたとき、一度だけ実行される関数
+client
+  .getList({
+    endpoint: 'data',
+  })
+  .then((res) => {
+    console.log(res)
+    reservations.push(...res.contents)
+  })
+  .catch((err) => console.error(err));
+
+/*
 onMounted(() => {
-  // ローカルストレージからデータを取得
   const storedReservations = JSON.parse(localStorage.getItem('reservations')) || [];
-  // 現在の配列の内容を置き換える
   reservations.push(...storedReservations);
 
 });
+*/
 </script>
 
 <template>
