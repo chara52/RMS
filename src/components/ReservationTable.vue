@@ -1,6 +1,7 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref, computed } from 'vue';
 import { createClient } from 'microcms-js-sdk';
+import FilteredComponent from './FilteredReservation.vue'
 
 const client = createClient({
   serviceDomain: 'rms',
@@ -19,13 +20,24 @@ client
   })
   .catch((err) => console.error(err));
 
-/*
-onMounted(() => {
-  const storedReservations = JSON.parse(localStorage.getItem('reservations')) || [];
-  reservations.push(...storedReservations);
+const inputDate = ref(null)
+const recordDate = (date) => {
+  inputDate.value = date
+  console.log("これは設定した日付です\n", inputDate.value)
+  console.log("これはCMSから持ってきた日付です\n", reservations[0].time)
+}
 
+const filteredReservations = computed(() => {
+  if (!inputDate.value) {
+    return reservations;
+  }
+  return reservations.filter((reservation) => {
+    const reservationDate = reservation.time.split('T')[0]
+    console.log(reservationDate)
+    return inputDate.value === reservationDate;
+  });
 });
-*/
+
 </script>
 
 <template>
@@ -33,16 +45,18 @@ onMounted(() => {
     <h1>予約表</h1>
   </div>
   <div class="button-container">
-        <router-link to="/" class="btn-link">
-          <button type="button" class="btn">Home</button>
-        </router-link>
-        <router-link to="/form" class="btn-link">
-          <button type="button" class="btn">新規入力</button>
-        </router-link>
+    <router-link to="/" class="btn-link">
+      <button type="button" class="btn">Home</button>
+    </router-link>
+    <router-link to="/form" class="btn-link">
+      <button type="button" class="btn">新規入力</button>
+    </router-link>
   </div>
 
+  <FilteredComponent v-on:input-Date="recordDate"/>
+
   <div v-if="reservations.length > 0">
-  <body v-for="(reservation, index) in reservations" :key="index">
+  <body v-for="(reservation, index) in filteredReservations" :key="index">
     <table border="1" width="100%">
       <tbody>
         <tr>
@@ -100,6 +114,8 @@ onMounted(() => {
   flex-direction: column;
   gap: 10px; /* ボタンの間に20pxの間隔を追加 */
   align-items: left;
+  width: 120px;
+  height: 100px;
 }
 
 /* ボタンのスタイル */
