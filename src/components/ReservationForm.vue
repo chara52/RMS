@@ -44,7 +44,7 @@ const submitReservation = () => {
         people: formData.people,
         time: formData.time,
         info: formData.info,
-        phone: parseInt(formData.phone)
+        phone: formData.phone
       }
     })
     .then((res) => console.log(res.id))
