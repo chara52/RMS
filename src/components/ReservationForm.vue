@@ -4,7 +4,7 @@ import { Japanese } from 'flatpickr/dist/l10n/ja.js'
 import 'flatpickr/dist/flatpickr.min.css'
 import { reactive, ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { createClient } from 'microcms-js-sdk';
+import { createClient } from 'microcms-js-sdk'
 
 const formData = reactive({
   name: '',
@@ -13,12 +13,12 @@ const formData = reactive({
   info: '',
   phone: '',
   seat: '',
-});
+})
 
-const errorMessage = ref('');
+const errorMessage = ref('')
 
 const isPhoneNumberValid = computed(() => {
-   return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
+  return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
 })
 
 const router = useRouter()
@@ -44,22 +44,22 @@ const submitReservation = () => {
         people: formData.people,
         time: formData.time,
         info: formData.info,
-        phone: formData.phone
-      }
+        phone: formData.phone,
+      },
     })
     .then((res) => console.log(res.id))
-    .catch((err) => console.error(err));
+    .catch((err) => console.error(err))
 
   if (isPhoneNumberValid.value) {
-    errorMessage.value = '';
-    alert('予約が送信されました!');
-    router.push('/table');
+    errorMessage.value = ''
+    alert('予約が送信されました!')
+    router.push('/table')
   } else {
-    errorMessage.value = '携帯電話番号は11桁で入力してください!'; // エラーメッセージ
+    errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
   }
-};
+}
 
-const datepickerRef = ref(null);
+const datepickerRef = ref(null)
 
 // 関数（ユーティリティ関数）
 onMounted(() => {
@@ -67,52 +67,52 @@ onMounted(() => {
     enableTime: true, // 時間選択を有効化
     dateFormat: 'Y-m-d H:i',
     locale: Japanese, // 日本語ロケール
-  });
-});
+  })
+})
 </script>
 
 <template>
   <div class="reservation-form">
-  <h1>新規受付</h1>
-  <form @submit.prevent="submitReservation">
-    <div class="header">
-      <div class="buttons">
-        <router-link to="/">
-          <button type="button" class="home-button">HOME</button>
-        </router-link>
-        <router-link to="/table">
-          <button type="button" class="table-button">予約表</button>
-        </router-link>
+    <h1>新規受付</h1>
+    <form @submit.prevent="submitReservation">
+      <div class="header">
+        <div class="buttons">
+          <router-link to="/">
+            <button type="button" class="home-button">HOME</button>
+          </router-link>
+          <router-link to="/table">
+            <button type="button" class="table-button">予約表</button>
+          </router-link>
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label for="name">名前</label>
-      <input type="text" id="name" v-model="formData.name" required />
-    </div>
-    <div class="form-group">
-      <label for="people">人数</label>
-      <input type="text" id="people" v-model="formData.people" required />
-    </div>
-    <div class="form-group">
-      <label for="time">時間</label>
-      <input type="text" id="time" ref="datepickerRef" v-model="formData.time" required />
-    </div>
-    <div class="form-group">
-      <label for="info">詳細情報</label>
-      <textarea id="info" v-model="formData.info"></textarea>
-    </div>
-    <div class="form-group">
-      <label for="phone">携帯電話番号</label>
-      <input type="tel" id="phone" v-model="formData.phone" required />
-    </div>
+      <div class="form-group">
+        <label for="name">名前</label>
+        <input type="text" id="name" v-model="formData.name" required />
+      </div>
+      <div class="form-group">
+        <label for="people">人数</label>
+        <input type="text" id="people" v-model="formData.people" required />
+      </div>
+      <div class="form-group">
+        <label for="time">時間</label>
+        <input type="text" id="time" ref="datepickerRef" v-model="formData.time" required />
+      </div>
+      <div class="form-group">
+        <label for="info">詳細情報</label>
+        <textarea id="info" v-model="formData.info"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="phone">携帯電話番号</label>
+        <input type="tel" id="phone" v-model="formData.phone" required />
+      </div>
 
-    <div class="form-group">
-      <button type="submit" class="submit-button">予約</button>
-      <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
-    </div>
-  </form>
-</div>
+      <div class="form-group">
+        <button type="submit" class="submit-button">予約</button>
+        <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
+      </div>
+    </form>
+  </div>
 </template>
 
 <style scoped>
