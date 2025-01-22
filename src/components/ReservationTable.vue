@@ -72,33 +72,6 @@ const deleteReservation = (id) => {
 
   <FilteredComponent v-on:input-Date="recordDate" />
 
-  <!--
-  <div v-if="reservations.length > 0">
-    <body v-for="(reservation, index) in filteredReservations" :key="index">
-      <table border="1" width="100%">
-        <tbody>
-          <tr>
-            <th>名前</th>
-            <td class="name-space">{{ reservation.name }}</td>
-            <th>人数</th>
-            <td class="number-space">{{ reservation.people }}</td>
-            <th>時間</th>
-            <td class="time-space">{{ reservation.time }}</td>
-            <th>卓番号</th>
-            <td class="table-space">{{ reservation.table }}</td>
-          </tr>
-          <tr>
-            <th>詳細</th>
-            <td colspan="7">{{ reservation.info }}</td>
-          </tr>
-          <tr>
-            <th>電話番号</th>
-            <td colspan="7">{{ reservation.phone }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </body>
-  -->
   <div v-if="reservations.length > 0">
     <body v-for="reservation in filteredReservations" :key="reservation.id">
       <table border="1" width="100%">
