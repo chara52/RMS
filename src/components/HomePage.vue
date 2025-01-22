@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
- <div class="app-container">
+  <div class="app-container">
     <header>
       <h1>居酒屋 壱</h1>
     </header>
@@ -58,7 +58,6 @@ header h1 {
 
 /* ボタンのスタイル */
 .btn {
-  padding: 12px 24px;
   font-size: 1.2em;
   color: white;
   background-color: #ff5733; /* オレンジ色に変更 */
