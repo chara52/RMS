@@ -84,7 +84,7 @@ const deleteReservation = (id) => {
             <th>時間</th>
             <td class="time-space">{{ reservation.time }}</td>
             <th>卓番号</th>
-            <td class="table-space">{{ reservation.table }}</td>
+            <td class="seat-space">{{ reservation.seat }}</td>
           </tr>
           <tr>
             <th>詳細</th>
