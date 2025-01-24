@@ -45,6 +45,7 @@ const submitReservation = () => {
         time: formData.time,
         info: formData.info,
         phone: formData.phone,
+        seat: formData.seat,
       },
     })
     .then((res) => console.log(res.id))
@@ -105,6 +106,10 @@ onMounted(() => {
       <div class="form-group">
         <label for="phone">携帯電話番号</label>
         <input type="tel" id="phone" v-model="formData.phone" required />
+      </div>
+      <div class="form-group">
+        <label for="seat">席番号</label>
+        <input type="text" id="seat" v-model="formData.seat" required />
       </div>
 
       <div class="form-group">
