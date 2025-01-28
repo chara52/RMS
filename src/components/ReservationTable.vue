@@ -3,6 +3,7 @@ import { reactive, ref, computed } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from './FilteredReservation.vue'
 import MenuButtonComponent from './MenuButton.vue'
+import DeleteReservation from './DeleteReservation.vue'
 
 const client = createClient({
   serviceDomain: 'rms',
@@ -39,22 +40,11 @@ const filteredReservations = computed(() => {
   })
 })
 
-const deleteReservation = (id) => {
-  client
-    .delete({
-      endpoint: 'data',
-      contentId: id,
-    })
-    .then(() => {
-      console.log(`${id}を削除`)
-      const index = reservations.findIndex((reservation) => reservation.id === id)
-      if (index !== -1) {
-        reservations.splice(index, 1)
-      }
-    })
-    .catch((err) => {
-      console.error('削除失敗: ', err)
-    })
+const handleDelete = (id) => {
+  const index = reservations.findIndex((reservation) => reservation.id === id)
+  if (index !== -1) {
+    reservations.splice(index, 1)
+  }
 }
 </script>
 
@@ -91,7 +81,7 @@ const deleteReservation = (id) => {
           </tr>
         </tbody>
       </table>
-      <button @click="deleteReservation(reservation.id)">削除</button>
+      <DeleteReservation :id="reservation.id" @delete="handleDelete" />
     </body>
   </div>
 
