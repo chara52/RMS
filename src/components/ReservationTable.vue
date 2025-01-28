@@ -81,7 +81,7 @@ const handleDelete = (id) => {
           </tr>
         </tbody>
       </table>
-      <DeleteReservation :id="reservation.id" @delete="handleDelete" />
+      <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
     </body>
   </div>
 
