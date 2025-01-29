@@ -30,9 +30,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: url('https://tblg.k-img.com/restaurant/images/Rvw/154487/640x640_rect_154487046.jpg')
-    no-repeat center center; /* 背景画像 */
-  background-size: cover; /* 画像をページ全体にフィット */
+  background-color: #fff9e6;
 }
 
 /* ヘッダーのスタイル */
@@ -58,9 +56,11 @@ header h1 {
 
 /* ボタンのスタイル */
 .btn {
-  font-size: 1.2em;
+  font-size: 1.5em;
+  width: 150px;
+  height: 60px;
   color: white;
-  background-color: #ff5733; /* オレンジ色に変更 */
+  background-color: #f9ae35; /* オレンジ色に変更 */
   border: none;
   border-radius: 5px;
   cursor: pointer;
