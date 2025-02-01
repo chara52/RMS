@@ -103,7 +103,7 @@ table {
 @media (max-width: 768px) {
   table {
     border-collapse: collapse;
-    width: 270px;
+    width: 350px;
   }
   .name-space {
     font-size: 10px;
