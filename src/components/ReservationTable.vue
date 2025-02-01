@@ -98,20 +98,25 @@ table {
   border-collapse: collapse;
 }
 
+
 /* スマホ向けのスタイル */
 @media (max-width: 768px) {
+  table {
+    border-collapse: collapse;
+    width: 270px;
+  }
   .name-space {
-    padding: 12px;
+    font-size: 10px;
     white-space: nowrap; /* 自動改行を防ぐ */
   }
   .number-space {
-    padding: 12px;
+    font-size: 10px;
   }
   .time-space {
-    padding: 12px;
+    font-size: 10px; /* 卓番号が見えるように文字の大きさを調整 */
   }
   .table-space {
-    padding: 12px;
+    font-size: 10px;
   }
 }
 
