@@ -91,22 +91,29 @@ const handleDelete = (id) => {
 </template>
 
 <style>
-table {
-  border-collapse: collapse;
-}
-.name-space {
-  padding-left: 48px;
-}
-.number-space {
-  padding-left: 24px;
-}
-.time-space {
-  padding-left: 40px;
-}
-.table-space {
-  padding-left: 16px;
-}
-body {
-  margin-bottom: 40px;
+/* スマホ向けのスタイル */
+@media (max-width: 768px) {
+  body {
+    margin-bottom: 40px;
+  }
+  table {
+    border-collapse: collapse;
+  }
+  th {
+    writing-mode: vertical-rl; /* 縦書きに設定 */
+  }
+  .name-space {
+    font-size: 12px;
+    white-space: nowrap; /* 自動改行を防ぐ */
+  }
+  .number-space {
+    font-size: 12px;
+  }
+  .time-space {
+    font-size: 10px; /* 卓番号が見えるように文字の大きさを調整 */
+  }
+  .table-space {
+    font-size: 10px;
+  }
 }
 </style>
