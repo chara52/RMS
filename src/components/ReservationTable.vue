@@ -67,7 +67,7 @@ const handleDelete = (id) => {
             <th>人数</th>
             <td class="number-space">{{ reservation.people }}</td>
             <th>時間</th>
-            <td class="time-space">{{ reservation.time }}</td>
+            <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
             <th>卓番号</th>
             <td class="seat-space">{{ reservation.seat }}</td>
           </tr>
@@ -77,7 +77,7 @@ const handleDelete = (id) => {
           </tr>
           <tr>
             <th>電話番号</th>
-            <td colspan="7">{{ reservation.phone }}</td>
+            <td colspan="7" class="phone-space">{{ reservation.phone }}</td>
           </tr>
         </tbody>
       </table>
@@ -110,10 +110,13 @@ const handleDelete = (id) => {
     font-size: 12px;
   }
   .time-space {
-    font-size: 10px; /* 卓番号が見えるように文字の大きさを調整 */
+    font-size: 12px; /* 卓番号が見えるように文字の大きさを調整 */
   }
-  .table-space {
-    font-size: 10px;
+  .seat-space {
+    font-size: 12px;
+  }
+  .phone-space {
+    font-size: 12px;
   }
 }
 </style>
