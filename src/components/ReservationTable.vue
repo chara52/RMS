@@ -59,7 +59,7 @@ const handleDelete = (id) => {
         <div class="reservation-table">
           <p><strong>名前 :</strong> {{ reservation.name }}</p>
           <p><strong>人数 :</strong> {{ reservation.people }}</p>
-          <p><strong>時間 :</strong> {{ reservation.time }}</p>
+          <p><strong>時間 :</strong> {{ reservation.time.split('T')[1].slice(0,5) }}</p>
           <p><strong>卓番号 :</strong> {{ reservation.seat }}</p>
           <p><strong>詳細 :</strong> {{ reservation.info }}</p>
           <p><strong>電話番号 :</strong> {{ reservation.phone }}</p>
