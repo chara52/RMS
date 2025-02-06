@@ -11,7 +11,7 @@ const emitDate = () => {
 <template>
   <div class="button-filter">
     <button class="filtered-button" v-on:click="emitDate">検索</button>
-    <VueDatePicker class="css"
+    <VueDatePicker
       v-model="inputDate"
       format="yyyy/MM/dd"
       model-type="yyyy-MM-dd"
