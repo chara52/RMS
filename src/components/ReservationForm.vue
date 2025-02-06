@@ -5,6 +5,8 @@ import 'flatpickr/dist/flatpickr.min.css'
 import { reactive, ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { createClient } from 'microcms-js-sdk'
+import MenuButtonComponent from './MenuButton.vue'
+
 
 const formData = reactive({
   name: '',
@@ -73,20 +75,10 @@ onMounted(() => {
 </script>
 
 <template>
+  <MenuButtonComponent />
   <div class="reservation-form">
     <h1>新規受付</h1>
     <form @submit.prevent="submitReservation">
-      <div class="header">
-        <div class="buttons">
-          <router-link to="/">
-            <button type="button" class="home-button">HOME</button>
-          </router-link>
-          <router-link to="/table">
-            <button type="button" class="table-button">予約表</button>
-          </router-link>
-        </div>
-      </div>
-
       <div class="form-group">
         <label for="name">名前</label>
         <input type="text" id="name" v-model="formData.name" required />
@@ -126,6 +118,7 @@ onMounted(() => {
   margin: 40px auto;
   padding: 20px;
   background-color: #fff9e6;
+  min-height: 100vh;
 }
 
 h1 {

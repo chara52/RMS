@@ -49,45 +49,28 @@ const handleDelete = (id) => {
 </script>
 
 <template>
-  <div class="reservation-table">
-    <h1>予約表</h1>
-  </div>
+  <h1>予約表</h1>
 
   <MenuButtonComponent />
-
   <FilteredComponent v-on:input-Date="recordDate" />
 
-  <div v-if="reservations.length > 0">
-    <body v-for="reservation in filteredReservations" :key="reservation.id">
-      <table border="1" width="100%">
-        <tbody>
-          <tr>
-            <th>名前</th>
-            <td class="name-space">{{ reservation.name }}</td>
-            <th>人数</th>
-            <td class="number-space">{{ reservation.people }}</td>
-            <th>時間</th>
-            <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
-            <th>卓番号</th>
-            <td class="seat-space">{{ reservation.seat }}</td>
-          </tr>
-          <tr>
-            <th>詳細</th>
-            <td colspan="7">{{ reservation.info }}</td>
-          </tr>
-          <tr>
-            <th>電話番号</th>
-            <td colspan="7" class="phone-space">{{ reservation.phone }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
-    </body>
-  </div>
+    <div v-if="reservations.length > 0">
+      <body v-for="reservation in filteredReservations" :key="reservation.id">
+        <div class="reservation-table">
+          <p><strong>名前 :</strong> {{ reservation.name }}</p>
+          <p><strong>人数 :</strong> {{ reservation.people }}</p>
+          <p><strong>時間 :</strong> {{ reservation.time }}</p>
+          <p><strong>卓番号 :</strong> {{ reservation.seat }}</p>
+          <p><strong>詳細 :</strong> {{ reservation.info }}</p>
+          <p><strong>電話番号 :</strong> {{ reservation.phone }}</p>
+        </div>
+        <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
+      </body>
+    </div>
 
-  <div v-else>
-    <p>現在、予約はありません。</p>
-  </div>
+    <div v-else>
+      <p>現在、予約はありません。</p>
+    </div>
 </template>
 
 <style>
@@ -118,5 +101,11 @@ const handleDelete = (id) => {
   .phone-space {
     font-size: 12px;
   }
+}
+
+.reservation-table {
+  background-color: #fff9e6;
+  padding: 0.5em 1em;
+  border-left: solid 10px #ffc06e;
 }
 </style>
