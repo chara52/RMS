@@ -80,6 +80,7 @@ const handleDelete = (id) => {
 @media (max-width: 768px) {
   table {
     border-collapse: collapse;
+    background-color: #fff9e6;
   }
   th {
     writing-mode: vertical-rl; /* 縦書きに設定 */
