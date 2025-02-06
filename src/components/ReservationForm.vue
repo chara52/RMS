@@ -32,12 +32,6 @@ const client = createClient({
 
 // 関数（アロー関数）
 const submitReservation = () => {
-  /*
-  const reservations = JSON.parse(localStorage.getItem('reservations')) || []; // 既存データ取得
-  reservations.push(formData);
-  localStorage.setItem('reservations', JSON.stringify(reservations)); // 更新後のデータを保存
-  */
-
   client
     .create({
       endpoint: 'data',

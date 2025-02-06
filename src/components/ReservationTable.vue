@@ -4,6 +4,7 @@ import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from './FilteredReservation.vue'
 import MenuButtonComponent from './MenuButton.vue'
 import DeleteReservation from './DeleteReservation.vue'
+import EditReservation from './EditReservation.vue'
 
 const client = createClient({
   serviceDomain: 'rms',
@@ -54,23 +55,23 @@ const handleDelete = (id) => {
   <MenuButtonComponent />
   <FilteredComponent v-on:input-Date="recordDate" />
 
-    <div v-if="reservations.length > 0">
-      <body v-for="reservation in filteredReservations" :key="reservation.id">
-        <div class="reservation-table">
-          <p><strong>名前 :</strong> {{ reservation.name }}</p>
-          <p><strong>人数 :</strong> {{ reservation.people }}</p>
-          <p><strong>時間 :</strong> {{ reservation.time.split('T')[1].slice(0,5) }}</p>
-          <p><strong>卓番号 :</strong> {{ reservation.seat }}</p>
-          <p><strong>詳細 :</strong> {{ reservation.info }}</p>
-          <p><strong>電話番号 :</strong> {{ reservation.phone }}</p>
-        </div>
-        <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
-      </body>
-    </div>
-
-    <div v-else>
-      <p>現在、予約はありません。</p>
-    </div>
+  <div v-if="reservations.length > 0">
+    <body v-for="reservation in filteredReservations" :key="reservation.id">
+      <div class="reservation-table">
+        <p><strong>名前 :</strong> {{ reservation.name }}</p>
+        <p><strong>人数 :</strong> {{ reservation.people }}</p>
+        <p><strong>時間 :</strong> {{ reservation.time.split('T')[1].slice(0, 5) }}</p>
+        <p><strong>卓番号 :</strong> {{ reservation.seat }}</p>
+        <p><strong>詳細 :</strong> {{ reservation.info }}</p>
+        <p><strong>電話番号 :</strong> {{ reservation.phone }}</p>
+      </div>
+      <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
+      <EditReservation :id="reservation.id" />
+    </body>
+  </div>
+  <div v-else>
+    <p>現在、予約はありません。</p>
+  </div>
 </template>
 
 <style>
