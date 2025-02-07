@@ -108,7 +108,7 @@ onMounted(() => {
 
 <style scoped>
 .reservation-form {
-  max-width: 600px;
+  max-width: 100%;
   margin: 40px auto;
   padding: 20px;
   background-color: #fff9e6;
@@ -145,15 +145,18 @@ h1 {
 
 .home-button a,
 .table-button a {
-  text-decoration: none; /* 下線を無くす */
+  text-decoration: none;
+  /* 下線を無くす */
   color: #000000;
 }
 
 /* ボタンにカーソルを合わせた時の動作 */
 .home-button a:hover,
 .table-button a:hover {
-  text-decoration: none; /* カーソルを合わせた時、下線をなくす */
-  color: #7d7a7a; /* カーソルを合わせた時、色を変える */
+  text-decoration: none;
+  /* カーソルを合わせた時、下線をなくす */
+  color: #7d7a7a;
+  /* カーソルを合わせた時、色を変える */
 }
 
 .form-group label {

@@ -1,7 +1,7 @@
 <script setup>
 import flatpickr from 'flatpickr'
 import { Japanese } from 'flatpickr/dist/l10n/ja.js'
-import { reactive, ref, onMounted, watch } from 'vue';
+import { reactive, ref, onMounted, computed, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { createClient } from 'microcms-js-sdk';
 
@@ -9,6 +9,11 @@ const router = useRouter();
 const route = useRoute();
 const datepickerRef = ref(null)
 let datepickerInstance = null;
+const errorMessage = ref('')
+
+const isPhoneNumberValid = computed(() => {
+  return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
+})
 
 const client = createClient({
   serviceDomain: 'rms',
@@ -73,14 +78,14 @@ const submitForm = () => {
     }
     return response.json();
   })
-  .then((data) => {
-    console.log("更新成功:", data);
-    alert("予約が更新されました！");
-    router.push("/table");
-  })
-  .catch((err) => {
-    console.error("更新失敗", err);
-  });
+
+  if (isPhoneNumberValid.value) {
+    errorMessage.value = ''
+    alert('予約が更新されました!')
+    router.push('/table')
+  } else {
+    errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
+  }
 };
 
 function initFlatpicker() {
@@ -102,7 +107,7 @@ watch(() => formData.time, (newTime) => {
 
 <template>
   <div class="reservation-form">
-    <h2>予約表</h2>
+    <h2>予約編集</h2>
 
     <form @submit.prevent="submitForm">
       <div>
@@ -136,6 +141,7 @@ watch(() => formData.time, (newTime) => {
       </div>
       <div class="form-group">
         <button type="submit" class="submit-button">更新</button>
+        <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
       </div>
     </form>
   </div>
@@ -145,33 +151,96 @@ watch(() => formData.time, (newTime) => {
 
 <style scoped>
 .reservation-form {
-  max-width: 400px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 40px auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  background-color: #fff9e6;
+  min-height: 100vh;
 }
-.reservation-form div {
-  margin-bottom: 10px;
+
+h1 {
+  font-size: 30px;
+  text-align: center;
+  margin-top: 0px;
 }
-.reservation-form label {
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: -60px;
+  margin-bottom: auto;
+}
+
+.home-button,
+.table-button {
+  background-color: #f9ae35;
+}
+
+.home-button a,
+.table-button a {
+  text-decoration: none; /* 下線を無くす */
+  color: #000000;
+}
+
+/* ボタンにカーソルを合わせた時の動作 */
+.home-button a:hover,
+.table-button a:hover {
+  text-decoration: none; /* カーソルを合わせた時、下線をなくす */
+  color: #7d7a7a; /* カーソルを合わせた時、色を変える */
+}
+
+.form-group label {
   display: block;
+  margin-top: 10px;
   margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 19px;
 }
-.reservation-form input {
+
+.form-group input,
+.form-group textarea .submit-button {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
+  border: 2px solid rgb(187, 182, 182);
+  border-radius: 4px;
   box-sizing: border-box;
 }
-.reservation-form button {
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+
+.form-group textarea {
+  height: 80px;
+  width: 100%;
+  resize: none;
 }
-.reservation-form button:hover {
-  background-color: #0056b3;
+
+.submit-button {
+  background-color: #fbc02d;
+  border: 2px solid #565655;
+  border-radius: 12px;
+  padding: 7px 50px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+/* ボタンにカーソルを合わせた時の動作 */
+.submit-button:hover {
+  background-color: #f9a825;
+}
+
+.error-message {
+  /* 携帯番号が11桁以外の時のエラーメッセージのCSS */
+  color: red;
+  font-size: 14px;
+  margin-left: 16px;
 }
 </style>
