@@ -1,17 +1,32 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const isActive = ref(false)
-const toggleMenu = () => {
+const toggleMenu = (event) => {
+  event.stopPropagation();
   isActive.value = !isActive.value;
 };
+
+const menuRef = ref(null);
+const onClickOutside = (event) => {
+  if (isActive.value && menuRef.value && !menuRef.value.contains(event.target)) {
+    isActive.value = false;
+  }
+};
+onMounted(() => {
+  document.addEventListener('click', onClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', onClickOutside);
+});
 </script>
 
 <template>
   <button type="button" class="menu-btn" v-on:click="toggleMenu">
     <span class="icon">&#9776;</span>
   </button>
-  <div class="menu" :class="{ 'is-active': isActive }">
+  <div ref="menuRef" class="menu" v-bind:class="{ 'is-active': isActive }">
     <router-link to="/" class="btn-link">
       <div class="menu__item">ホーム</div>
     </router-link>
