@@ -1,12 +1,24 @@
 <script setup>
 import flatpickr from 'flatpickr'
 import { Japanese } from 'flatpickr/dist/l10n/ja.js'
-import 'flatpickr/dist/flatpickr.min.css'
-import { reactive, ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { createClient } from 'microcms-js-sdk'
-import MenuButtonComponent from './MenuButton.vue'
+import { reactive, ref, onMounted, computed, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { createClient } from 'microcms-js-sdk';
 
+const router = useRouter();
+const route = useRoute();
+const datepickerRef = ref(null)
+let datepickerInstance = null;
+const errorMessage = ref('')
+
+const isPhoneNumberValid = computed(() => {
+  return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
+})
+
+const client = createClient({
+  serviceDomain: 'rms',
+  apiKey: 'utks82BKbpBzo3RxwDPLTbuj93Qj4J2T1sTU',
+});
 
 const formData = reactive({
   name: '',
@@ -15,64 +27,94 @@ const formData = reactive({
   info: '',
   phone: '',
   seat: '',
-})
+});
 
-const errorMessage = ref('')
+onMounted(() => {
+  // route.query.idで予約IDを取得
+  const reservationId = route.query.id;
 
-const isPhoneNumberValid = computed(() => {
-  return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
-})
-
-const router = useRouter()
-
-const client = createClient({
-  serviceDomain: 'rms',
-  apiKey: 'utks82BKbpBzo3RxwDPLTbuj93Qj4J2T1sTU',
-})
-
-// 関数（アロー関数）
-const submitReservation = () => {
   client
-    .create({
-      endpoint: 'data',
-      content: {
-        name: formData.name,
-        people: formData.people,
-        time: formData.time,
-        info: formData.info,
-        phone: formData.phone,
-        seat: formData.seat,
-      },
-    })
-    .then((res) => console.log(res.id))
-    .catch((err) => console.error(err))
+  .get({
+    endpoint: 'data',
+    contentId: reservationId,
+  })
+  .then((res) => {
+    Object.assign(formData, res);
+    // 日付のフォーマット調整
+    formData.time = new Date(res.time).toISOString().slice(0, 16).replace('T', ' ');
+    initFlatpicker();
+  })
+  .catch((err) => console.error(err));
+})
+
+const submitForm = () => {
+  // route.query.idで予約IDを取得
+  const reservationId = route.query.id;
+
+  if (!reservationId) {
+    console.error("予約IDが取得できませんでした");
+    return;
+  }
+
+  // fetchはHTTPリクエストを送信するための関数
+  fetch(`https://rms.microcms.io/api/v1/data/${reservationId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "X-MICROCMS-API-KEY": "utks82BKbpBzo3RxwDPLTbuj93Qj4J2T1sTU",
+    },
+    body: JSON.stringify({
+      name: formData.name,
+      people: formData.people,
+      time: formData.time,
+      info: formData.info,
+      phone: formData.phone,
+      seat: formData.seat,
+    }),
+  })
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`HTTPエラー: ${response.status}`);
+    }
+    return response.json();
+  })
 
   if (isPhoneNumberValid.value) {
     errorMessage.value = ''
-    alert('予約が送信されました!')
+    alert('予約が更新されました!')
     router.push('/table')
   } else {
     errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
   }
+};
+
+function initFlatpicker() {
+  datepickerInstance = flatpickr(datepickerRef.value, {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    locale: Japanese,
+    defaultDate: formData.time,
+  })
 }
 
-const datepickerRef = ref(null)
+watch(() => formData.time, (newTime) => {
+  if (datepickerInstance) {
+    datepickerInstance.setDate(newTime, false);
+  }
+});
 
-// 関数（ユーティリティ関数）
-onMounted(() => {
-  flatpickr(datepickerRef.value, {
-    enableTime: true, // 時間選択を有効化
-    dateFormat: 'Y-m-d H:i',
-    locale: Japanese, // 日本語ロケール
-  })
-})
 </script>
 
 <template>
-  <MenuButtonComponent />
   <div class="reservation-form">
-    <h1>新規受付</h1>
-    <form @submit.prevent="submitReservation">
+    <h2>予約編集</h2>
+
+    <form @submit.prevent="submitForm">
+      <div>
+        <router-link to="/table">戻る</router-link>
+      </div>
+
+
       <div class="form-group">
         <label for="name">名前</label>
         <input type="text" id="name" v-model="formData.name" required />
@@ -97,14 +139,15 @@ onMounted(() => {
         <label for="seat">席番号</label>
         <input type="text" id="seat" v-model="formData.seat" required />
       </div>
-
       <div class="form-group">
-        <button type="submit" class="submit-button">予約</button>
+        <button type="submit" class="submit-button">更新</button>
         <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
       </div>
     </form>
   </div>
 </template>
+
+
 
 <style scoped>
 .reservation-form {
@@ -145,18 +188,15 @@ h1 {
 
 .home-button a,
 .table-button a {
-  text-decoration: none;
-  /* 下線を無くす */
+  text-decoration: none; /* 下線を無くす */
   color: #000000;
 }
 
 /* ボタンにカーソルを合わせた時の動作 */
 .home-button a:hover,
 .table-button a:hover {
-  text-decoration: none;
-  /* カーソルを合わせた時、下線をなくす */
-  color: #7d7a7a;
-  /* カーソルを合わせた時、色を変える */
+  text-decoration: none; /* カーソルを合わせた時、下線をなくす */
+  color: #7d7a7a; /* カーソルを合わせた時、色を変える */
 }
 
 .form-group label {
