@@ -4,6 +4,7 @@ import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from './FilteredReservation.vue'
 import MenuButtonComponent from './MenuButton.vue'
 import DeleteReservation from './DeleteReservation.vue'
+import EditReservation from './EditReservation.vue'
 
 const client = createClient({
   serviceDomain: 'rms',
@@ -78,9 +79,10 @@ const handleDelete = (id) => {
           <td class="info-space">{{ reservation.info }}</td>
           <td class="phone-space">{{ reservation.phone }}</td>
           <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
+            <EditReservation :id="reservation.id" />
         </tr>
-        </tbody>
-      </table>
+      </tbody>
+    </table>
   </div>
 
   <div v-else>
@@ -88,16 +90,12 @@ const handleDelete = (id) => {
   </div>
 </template>
 
-<style>
+<style scoped>
 .reservation-table-name {
   text-align: center;
 }
 
 @media (max-width: 768px) {
-  body {
-    margin-bottom: 40px;
-  }
-
   table {
     border-collapse: collapse;
     table-layout: fixed; /* 幅を決める */
@@ -135,6 +133,7 @@ const handleDelete = (id) => {
 
   table tr {
     height: 70px;  /* 枠の縦幅を調整 */
+    background-color: #fff9e6;
   }
 
   .name-space,
@@ -145,6 +144,7 @@ const handleDelete = (id) => {
   .phone-space {
     font-size: 13px;
     text-align: center;
+    white-space: normal; /* 枠の中に入らなかった場合自動で改行 */
   }
 }
 </style>

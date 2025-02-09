@@ -75,7 +75,7 @@ const handleDelete = (id) => {
   </div>
 </template>
 
-<style>
+<style scoped>
 /* スマホ向けのスタイル */
 @media (max-width: 768px) {
   table {
