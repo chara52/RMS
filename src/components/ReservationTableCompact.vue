@@ -97,6 +97,7 @@ const handleDelete = (id) => {
 
 @media (max-width: 768px) {
   table {
+    width: auto;
     border-collapse: collapse;
     table-layout: fixed; /* 幅を決める */
   }
