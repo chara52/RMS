@@ -15,6 +15,12 @@ const client = createClient({
   apiKey: 'utks82BKbpBzo3RxwDPLTbuj93Qj4J2T1sTU',
 })
 
+const confirmDelete = () => {
+  if (confirm('本当に削除しますか？')) {
+    deleteReservation()
+  }
+}
+
 const deleteReservation = () => {
   client
     .delete({ endpoint: 'data', contentId: props.id })
@@ -29,5 +35,5 @@ const deleteReservation = () => {
 </script>
 
 <template>
-  <button @click="deleteReservation">削除</button>
+  <button @click="confirmDelete">削除</button>
 </template>

@@ -5,6 +5,7 @@ import FilteredComponent from './FilteredReservation.vue'
 import MenuButtonComponent from './MenuButton.vue'
 import DeleteReservation from './DeleteReservation.vue'
 import EditReservation from './EditReservation.vue'
+import { sortReservationsByTime } from '../utils/sortReservations.js'
 
 const client = createClient({
   serviceDomain: 'rms',
@@ -19,7 +20,7 @@ client
   })
   .then((res) => {
     console.log(res)
-    reservations.push(...res.contents)
+    reservations.push(...sortReservationsByTime(res.contents))
   })
   .catch((err) => console.error(err))
 
@@ -56,6 +57,7 @@ const handleDelete = (id) => {
   <FilteredComponent v-on:input-Date="recordDate" />
 
   <div v-if="reservations.length > 0">
+
     <body v-for="reservation in filteredReservations" :key="reservation.id">
       <div class="reservation-table">
         <p><strong>名前 :</strong> {{ reservation.name }}</p>
@@ -80,25 +82,35 @@ const handleDelete = (id) => {
   body {
     margin-bottom: 40px;
   }
+
   table {
     border-collapse: collapse;
   }
+
   th {
-    writing-mode: vertical-rl; /* 縦書きに設定 */
+    writing-mode: vertical-rl;
+    /* 縦書きに設定 */
   }
+
   .name-space {
     font-size: 12px;
-    white-space: nowrap; /* 自動改行を防ぐ */
+    white-space: nowrap;
+    /* 自動改行を防ぐ */
   }
+
   .number-space {
     font-size: 12px;
   }
+
   .time-space {
-    font-size: 12px; /* 卓番号が見えるように文字の大きさを調整 */
+    font-size: 12px;
+    /* 卓番号が見えるように文字の大きさを調整 */
   }
+
   .seat-space {
     font-size: 12px;
   }
+
   .phone-space {
     font-size: 12px;
   }
