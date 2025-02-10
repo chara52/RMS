@@ -10,6 +10,12 @@ const props = defineProps({
 
 const emit = defineEmits(['delete'])
 
+const confirmDelete = () => {
+  if (confirm('本当に削除しますか？')) {
+    deleteReservation()
+  }
+}
+
 const client = createClient({
   serviceDomain: 'rms',
   apiKey: 'utks82BKbpBzo3RxwDPLTbuj93Qj4J2T1sTU',
@@ -29,5 +35,5 @@ const deleteReservation = () => {
 </script>
 
 <template>
-  <button @click="deleteReservation">削除</button>
+  <button @click="confirmDelete">削除</button>
 </template>
