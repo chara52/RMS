@@ -36,6 +36,9 @@ onUnmounted(() => {
     <router-link to="/table" class="btn-link">
       <div class="menu__item">予約表</div>
     </router-link>
+    <router-link to="/table-compact" class="btn-link">
+      <div class="menu__item">レイアウト切り替え</div>
+    </router-link>
   </div>
 </template>
 

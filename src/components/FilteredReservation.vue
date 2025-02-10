@@ -25,6 +25,7 @@ const emitDate = () => {
     display: flex;
     justify-content: center;
     margin-top: 10px;
+    margin-bottom: 30px;
   }
 
   .filtered-button {

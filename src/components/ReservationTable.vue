@@ -65,6 +65,7 @@ const handleDelete = (id) => {
         <p><strong>詳細 :</strong> {{ reservation.info }}</p>
         <p><strong>電話番号 :</strong> {{ reservation.phone }}</p>
       </div>
+
       <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
       <EditReservation :id="reservation.id" />
     </body>
@@ -74,14 +75,12 @@ const handleDelete = (id) => {
   </div>
 </template>
 
-<style>
+<style scoped>
 /* スマホ向けのスタイル */
 @media (max-width: 768px) {
-  body {
-    margin-bottom: 40px;
-  }
   table {
     border-collapse: collapse;
+    background-color: #fff9e6;
   }
   th {
     writing-mode: vertical-rl; /* 縦書きに設定 */
