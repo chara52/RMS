@@ -1,15 +1,15 @@
 <script setup>
-import flatpickr from 'flatpickr'
-import { Japanese } from 'flatpickr/dist/l10n/ja.js'
+import flatpickr from 'flatpickr';
+import { Japanese } from 'flatpickr/dist/l10n/ja.js';
 import { reactive, ref, onMounted, computed, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { createClient } from 'microcms-js-sdk';
 
 const router = useRouter();
 const route = useRoute();
-const datepickerRef = ref(null)
+const datepickerRef = ref(null);
 let datepickerInstance = null;
-const errorMessage = ref('')
+const errorMessage = ref('');
 
 const isPhoneNumberValid = computed(() => {
   return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
@@ -34,17 +34,17 @@ onMounted(() => {
   const reservationId = route.query.id;
 
   client
-  .get({
-    endpoint: 'data',
-    contentId: reservationId,
-  })
-  .then((res) => {
-    Object.assign(formData, res);
-    // 日付のフォーマット調整
-    formData.time = new Date(res.time).toISOString().slice(0, 16).replace('T', ' ');
-    initFlatpicker();
-  })
-  .catch((err) => console.error(err));
+    .get({
+      endpoint: 'data',
+      contentId: reservationId,
+    })
+    .then((res) => {
+      Object.assign(formData, res);
+      // 日付のフォーマット調整
+      formData.time = new Date(res.time).toISOString().slice(0, 16).replace('T', ' ');
+      initFlatpicker();
+    })
+    .catch((err) => console.error(err));
 })
 
 const submitForm = () => {
@@ -72,12 +72,12 @@ const submitForm = () => {
       seat: formData.seat,
     }),
   })
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`HTTPエラー: ${response.status}`);
-    }
-    return response.json();
-  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTPエラー: ${response.status}`);
+      }
+      return response.json();
+    })
 
   if (isPhoneNumberValid.value) {
     errorMessage.value = ''
@@ -188,15 +188,18 @@ h1 {
 
 .home-button a,
 .table-button a {
-  text-decoration: none; /* 下線を無くす */
+  text-decoration: none;
+  /* 下線を無くす */
   color: #000000;
 }
 
 /* ボタンにカーソルを合わせた時の動作 */
 .home-button a:hover,
 .table-button a:hover {
-  text-decoration: none; /* カーソルを合わせた時、下線をなくす */
-  color: #7d7a7a; /* カーソルを合わせた時、色を変える */
+  text-decoration: none;
+  /* カーソルを合わせた時、下線をなくす */
+  color: #7d7a7a;
+  /* カーソルを合わせた時、色を変える */
 }
 
 .form-group label {
