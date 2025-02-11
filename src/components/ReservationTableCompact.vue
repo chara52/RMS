@@ -5,6 +5,7 @@ import FilteredComponent from './FilteredReservation.vue'
 import MenuButtonComponent from './MenuButton.vue'
 import DeleteReservation from './DeleteReservation.vue'
 import EditReservation from './EditReservation.vue'
+import { sortReservations } from '../utils/sortReservations.js'
 
 const client = createClient({
   serviceDomain: 'rms',
@@ -20,6 +21,7 @@ client
   .then((res) => {
     console.log(res)
     reservations.push(...res.contents)
+    sortReservations(reservations)
   })
   .catch((err) => console.error(err))
 
@@ -79,7 +81,7 @@ const handleDelete = (id) => {
           <td class="info-space">{{ reservation.info }}</td>
           <td class="phone-space">{{ reservation.phone }}</td>
           <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
-            <EditReservation :id="reservation.id" />
+          <EditReservation :id="reservation.id" />
         </tr>
       </tbody>
     </table>
@@ -99,12 +101,14 @@ const handleDelete = (id) => {
   table {
     width: auto;
     border-collapse: collapse;
-    table-layout: fixed; /* 幅を決める */
+    table-layout: fixed;
+    /* 幅を決める */
   }
 
   table th.name {
     width: 15%;
-    writing-mode: horizontal-tb;  /* 横書きに変換 */
+    writing-mode: horizontal-tb;
+    /* 横書きに変換 */
   }
 
   table th.people {
@@ -133,7 +137,8 @@ const handleDelete = (id) => {
   }
 
   table tr {
-    height: 70px;  /* 枠の縦幅を調整 */
+    height: 70px;
+    /* 枠の縦幅を調整 */
     background-color: #fff9e6;
   }
 
@@ -145,7 +150,8 @@ const handleDelete = (id) => {
   .phone-space {
     font-size: 13px;
     text-align: center;
-    white-space: normal; /* 枠の中に入らなかった場合自動で改行 */
+    white-space: normal;
+    /* 枠の中に入らなかった場合自動で改行 */
   }
 }
 </style>
