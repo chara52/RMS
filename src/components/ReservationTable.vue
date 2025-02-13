@@ -15,7 +15,6 @@ const client = createClient({
 const reservations = reactive([])
 const inputDate = ref(null)
 
-
 client
   .getList({
     endpoint: 'data',
