@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from './FilteredReservation.vue'
 import MenuButtonComponent from './MenuButton.vue'
@@ -26,6 +26,12 @@ client
   .catch((err) => console.error(err))
 
 const inputDate = ref(null)
+
+onMounted(() => {
+  const now = new Date()
+  inputDate.value = new Date(now.getTime() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
+})
+
 const recordDate = (date) => {
   inputDate.value = date
   console.log('これは設定した日付です\n', inputDate.value)
