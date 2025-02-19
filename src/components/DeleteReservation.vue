@@ -18,7 +18,7 @@ const confirmDelete = () => {
 
 const client = createClient({
   serviceDomain: 'rms',
-  apiKey: 'utks82BKbpBzo3RxwDPLTbuj93Qj4J2T1sTU',
+  apiKey: import.meta.env.VITE_API_KEY,
 })
 
 const deleteReservation = () => {
