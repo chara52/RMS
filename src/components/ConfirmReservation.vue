@@ -29,30 +29,31 @@ onMounted(() => {
 })
 
 const submitReservation = () => {
-  client
-    .create({
-      endpoint: 'data',
-      content: {
-        name: formData.name,
-        people: formData.people,
-        time: new Date(formData.time).toISOString(),
-        course: Array.isArray(formData.course) ? formData.course : [formData.course],
-        drink: Array.isArray(formData.drink) ? formData.drink : [formData.drink],
-        info: formData.info,
-        phone: formData.phone,
-        seat: formData.seat,
-      },
-    })
-    .then((res) => {
-      console.log('予約送信完了', res);
-      if (confirm('予約を確定しますか？')) {
+  if (confirm('予約を確定しますか？')) {
+    console.log("送信前データ", formData.course)
+    client
+      .create({
+        endpoint: 'data',
+        content: {
+          name: formData.name,
+          people: formData.people,
+          time: new Date(formData.time).toISOString(),
+          course: Array.isArray(formData.course) ? formData.course : [formData.course],
+          drink: Array.isArray(formData.drink) ? formData.drink : [formData.drink],
+          info: formData.info,
+          phone: formData.phone,
+          seat: formData.seat,
+        },
+      })
+      .then((res) => {
+        console.log('予約送信完了', res);
         router.push('/table');
-      }
-    })
-    .catch((error) => {
-      console.error('送信エラー:', error);
-    });
-};
+      })
+      .catch((error) => {
+        console.error('送信エラー:', error);
+      });
+  };
+}
 
 </script>
 
@@ -65,7 +66,7 @@ const submitReservation = () => {
     <p><strong>名前 :</strong> {{ formData.name }}</p>
     <p><strong>人数 :</strong> {{ formData.people }}</p>
     <p><strong>時間 :</strong> {{ formData.time }}</p>
-    <p><strong>コース :</strong> {{ formData.course }}円</p>
+    <p><strong>コース :</strong> {{ formData.course }}</p>
     <p><strong>飲み放題 :</strong> {{ formData.drink }}</p>
     <p><strong>詳細 :</strong> {{ formData.info }}</p>
     <p><strong>電話番号 :</strong> {{ formData.phone }}</p>
