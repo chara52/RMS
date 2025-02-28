@@ -67,30 +67,32 @@ const handleDelete = (id) => {
   <FilteredComponent v-on:input-Date="recordDate" />
 
   <div v-if="reservations.length > 0">
-    <table border="1" width="100%">
-      <tbody>
-        <tr>
-          <th class="name">名前</th>
-          <th class="people">人数</th>
-          <th class="time">時間</th>
-          <th class="seat">卓</th>
-          <th class="info">詳細</th>
-          <th class="phone">電話番号</th>
-        </tr>
-      </tbody>
-      <tbody>
-        <tr v-for="reservation in filteredReservations" :key="reservation.id">
-          <td class="name-space">{{ reservation.name }}</td>
-          <td class="number-space">{{ reservation.people }}</td>
-          <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
-          <td class="seat-space">{{ reservation.seat }}</td>
-          <td class="info-space">{{ reservation.info }}</td>
-          <td class="phone-space">{{ reservation.phone }}</td>
-          <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
-          <EditReservation :id="reservation.id" />
-        </tr>
-      </tbody>
-    </table>
+    <router-link to="/table" class="btn-link">
+      <table border="1" width="100%">
+        <tbody>
+          <tr>
+            <th class="name">名前</th>
+            <th class="people">人数</th>
+            <th class="time">時間</th>
+            <th class="seat">卓</th>
+            <th class="info">詳細</th>
+            <th class="phone">電話番号</th>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr v-for="reservation in filteredReservations" :key="reservation.id">
+            <td class="name-space">{{ reservation.name }}</td>
+            <td class="number-space">{{ reservation.people }}</td>
+            <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
+            <td class="seat-space">{{ reservation.seat }}</td>
+            <td class="info-space">{{ reservation.info }}</td>
+            <td class="phone-space">{{ reservation.phone }}</td>
+            <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
+            <EditReservation :id="reservation.id" />
+          </tr>
+        </tbody>
+      </table>
+    </router-link>
   </div>
 
   <div v-else>
