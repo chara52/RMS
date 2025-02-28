@@ -77,7 +77,7 @@ onMounted(() => {
           <label for="course">コース</label>
           <select id="course" v-model="formData.course">
             <option v-for="price in courseOptions" :key="price" :value="price.toString()">
-              {{ price }}円
+              {{ price }}
             </option>
           </select>
         </div>
