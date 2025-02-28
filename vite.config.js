@@ -21,7 +21,7 @@ export default defineConfig({
         description: '予約管理アプリです。予約内容を管理できます。',
         theme_color: '#e6eeff', // テーマカラー最低限指定が必要
         display: 'standalone', // 表示モード standaloneにするとネイティブアプリっぽくなる
-        icons: [ // 先ほどコンソールに出力されたものをコピペでOK
+        icons: [
           {
             src: "/pwa-64x64.png",
             sizes: "64x64",
