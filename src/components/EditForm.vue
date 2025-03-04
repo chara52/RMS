@@ -86,7 +86,7 @@ const submitForm = () => {
   if (isPhoneNumberValid.value) {
     errorMessage.value = ''
     alert('予約が更新されました!')
-    router.push('/table')
+    router.push('/table-compact')
   } else {
     errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
   }
@@ -115,7 +115,7 @@ watch(() => formData.time, (newTime) => {
 
     <form @submit.prevent="submitForm">
       <div>
-        <router-link to="/table">戻る</router-link>
+        <router-link to="/detail">戻る</router-link>
       </div>
 
 
