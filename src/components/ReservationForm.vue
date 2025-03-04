@@ -92,7 +92,7 @@ onMounted(() => {
       </div>
 
       <div class="form-group">
-        <button type="botton" class="detail-button" @click="showDetailInput = !showDetailInput">詳細⌄</button>
+        <button type="button" class="detail-button" @click="showDetailInput = !showDetailInput">詳細⌄</button>
         <textarea v-if="showDetailInput" id="info" v-model="formData.info"></textarea>
       </div>
 

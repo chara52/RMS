@@ -30,7 +30,6 @@ onMounted(() => {
 
 const submitReservation = () => {
   if (confirm('予約を確定しますか？')) {
-    console.log("送信前データ", formData.course)
     client
       .create({
         endpoint: 'data',
