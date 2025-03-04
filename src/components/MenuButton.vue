@@ -42,7 +42,7 @@ onUnmounted(() => {
   </div>
 </template>
 
-<style>
+<style scoped>
 .menu-btn{
   position: fixed;
   top: 20px;
