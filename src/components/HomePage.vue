@@ -13,6 +13,9 @@
         <router-link to="/form" class="btn-link">
           <button type="button" class="btn">新規入力</button>
         </router-link>
+        <router-link to="/table-compact" class="btn-link">
+          <button type="button" class="btn">コンパクト予約表</button>
+        </router-link>
       </div>
     </main>
   </div>
@@ -58,7 +61,7 @@ header h1 {
 .btn {
   font-size: 1.5em;
   width: 150px;
-  height: 60px;
+  height: 80px;
   color: white;
   background-color: #f9ae35; /* オレンジ色に変更 */
   border: none;

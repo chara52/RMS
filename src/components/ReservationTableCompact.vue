@@ -6,6 +6,17 @@ import MenuButtonComponent from './MenuButton.vue'
 import DeleteReservation from './DeleteReservation.vue'
 import EditReservation from './EditReservation.vue'
 import { sortReservations } from '../utils/sortReservations.js'
+import { defineProps } from 'vue';
+import { useRouter } from 'vue-router';
+
+defineProps({ reservationsDitail: Array });
+
+const router = useRouter();
+
+const goToDetail = (reservation) => {
+  localStorage.setItem('selectedReservation', JSON.stringify(reservation)); // 予約情報を保存
+  router.push('/detail'); // /detail に遷移
+};
 
 const client = createClient({
   serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
@@ -79,15 +90,15 @@ const handleDelete = (id) => {
         </tr>
       </tbody>
       <tbody>
-        <tr v-for="reservation in filteredReservations" :key="reservation.id">
-          <td class="name-space">{{ reservation.name }}</td>
-          <td class="number-space">{{ reservation.people }}</td>
-          <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
-          <td class="seat-space">{{ reservation.seat }}</td>
-          <td class="info-space">{{ reservation.info }}</td>
-          <td class="phone-space">{{ reservation.phone }}</td>
-          <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
-          <EditReservation :id="reservation.id" />
+        <tr v-for="reservation in filteredReservations" :key="reservation.id" @click="goToDetail(reservation)">
+            <td class="name-space">{{ reservation.name }}</td>
+            <td class="number-space">{{ reservation.people }}</td>
+            <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
+            <td class="seat-space">{{ reservation.seat }}</td>
+            <td class="info-space">{{ reservation.info }}</td>
+            <td class="phone-space">{{ reservation.phone }}</td>
+            <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
+            <EditReservation :id="reservation.id" />
         </tr>
       </tbody>
     </table>
