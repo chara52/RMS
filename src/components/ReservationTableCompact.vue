@@ -3,9 +3,7 @@ import { reactive, ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from './FilteredReservation.vue'
 import MenuButtonComponent from './MenuButton.vue'
-import EditReservation from './EditReservation.vue'
 import { sortReservations } from '../utils/sortReservations.js'
-import { defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 
 defineProps({ reservationsDitail: Array });
@@ -89,7 +87,6 @@ const filteredReservations = computed(() => {
             <td class="seat-space">{{ reservation.seat }}</td>
             <td class="info-space">{{ reservation.info }}</td>
             <td class="phone-space">{{ reservation.phone }}</td>
-            <EditReservation :id="reservation.id" />
         </tr>
       </tbody>
     </table>

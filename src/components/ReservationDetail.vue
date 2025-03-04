@@ -3,6 +3,7 @@ import { onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import MenuButtonComponent from './MenuButton.vue'
 import DeleteReservation from './DeleteReservation.vue'
+import EditReservation from './EditReservation.vue'
 
 const formData = reactive({
   name: '',
@@ -34,6 +35,7 @@ const handleDelete = () => {
   <h1>予約詳細</h1>
 </div>
 
+<EditReservation :id="formData.id" />
 <DeleteReservation :id="formData.id" @delete="handleDelete" />
 <MenuButtonComponent />
 
