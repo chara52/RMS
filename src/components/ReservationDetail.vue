@@ -35,8 +35,8 @@ const handleDelete = () => {
   <h1>予約詳細</h1>
 </div>
 
-<EditReservation :id="formData.id" />
 <DeleteReservation :id="formData.id" @delete="handleDelete" />
+<EditReservation :id="formData.id" />
 <MenuButtonComponent />
 
 <div class="reservation-table">

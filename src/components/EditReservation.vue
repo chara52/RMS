@@ -24,7 +24,7 @@ const editReservation = () => {
 
 <style scoped>
 .edit-button {
-  margin-left: 300px;
+  float: right;
   background: none;
   border: none;
   cursor: pointer;
