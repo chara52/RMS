@@ -1,6 +1,8 @@
 <script setup>
 import { onMounted, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 import MenuButtonComponent from './MenuButton.vue'
+import DeleteReservation from './DeleteReservation.vue'
 
 const formData = reactive({
   name: '',
@@ -18,12 +20,23 @@ onMounted(() => {
   }
   console.log("予約ID:", reservationId);
 });
+
+const router = useRouter();
+
+const handleDelete = () => {
+  localStorage.removeItem('selectedReservation'); // ローカルストレージから削除
+  router.push('/table-compact');
+};
 </script>
 
 <template>
-<h2>予約詳細</h2>
+<div class="reservation-detail-name">
+  <h1>予約詳細</h1>
+</div>
 
+<DeleteReservation :id="formData.id" @delete="handleDelete" />
 <MenuButtonComponent />
+
 <div class="reservation-table">
   <p><strong>名前 :</strong> {{ formData.name }}</p>
   <p><strong>人数 :</strong> {{ formData.people }}</p>
@@ -71,7 +84,9 @@ onMounted(() => {
     font-size: 12px;
   }
 }
-
+.reservation-detail-name {
+  text-align: center;
+}
 .reservation-table {
   background-color: #fff9e6;
   padding: 0.5em 1em;
