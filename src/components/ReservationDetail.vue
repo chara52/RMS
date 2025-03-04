@@ -90,6 +90,7 @@ const handleDelete = () => {
   text-align: center;
 }
 .reservation-table {
+  margin-top: 50px;
   background-color: #fff9e6;
   padding: 0.5em 1em;
   border-left: solid 10px #ffc06e;
