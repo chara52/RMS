@@ -44,7 +44,7 @@ const deleteReservation = () => {
 
 <style scoped>
 .delete-button {
-  margin-left: 300px;
+  float: right;
   background: none;
   border: none;
   cursor: pointer;
