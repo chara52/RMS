@@ -77,7 +77,7 @@ onMounted(() => {
           <label for="course">コース</label>
           <select id="course" v-model="formData.course">
             <option v-for="price in courseOptions" :key="price" :value="price.toString()">
-              {{ price }}
+              {{ price }}円
             </option>
           </select>
         </div>
@@ -117,10 +117,10 @@ onMounted(() => {
 <style scoped>
 .reservation-form {
   max-width: 100%;
-  margin: 40px auto;
+  height: 95vh;
+  margin: -10px -7px;
   padding: 20px;
   background-color: #fff9e6;
-  min-height: 100vh;
 }
 
 h1 {

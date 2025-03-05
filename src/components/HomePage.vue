@@ -26,9 +26,10 @@
 .app-container {
   font-family: Arial, sans-serif;
   text-align: center;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh; /* ページ全体を覆う */
+  max-width: 100%;
+  height: 95vh;
+  margin: -10px -7px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;

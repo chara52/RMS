@@ -156,10 +156,10 @@ watch(() => formData.time, (newTime) => {
 <style scoped>
 .reservation-form {
   max-width: 100%;
-  margin: 40px auto;
+  height: 95vh;
+  margin: -10px -7px;
   padding: 20px;
   background-color: #fff9e6;
-  min-height: 100vh;
 }
 
 h1 {

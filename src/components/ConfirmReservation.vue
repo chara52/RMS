@@ -36,7 +36,7 @@ const submitReservation = () => {
         content: {
           name: formData.name,
           people: formData.people,
-          time: new Date(formData.time).toISOString(),
+          time: formData.time,
           course: Array.isArray(formData.course) ? formData.course : [formData.course],
           drink: Array.isArray(formData.drink) ? formData.drink : [formData.drink],
           info: formData.info,
@@ -65,8 +65,22 @@ const submitReservation = () => {
     <p><strong>名前 :</strong> {{ formData.name }}</p>
     <p><strong>人数 :</strong> {{ formData.people }}</p>
     <p><strong>時間 :</strong> {{ formData.time }}</p>
-    <p><strong>コース :</strong> {{ formData.course }}</p>
-    <p><strong>飲み放題 :</strong> {{ formData.drink }}</p>
+    <p><strong>コース :</strong>
+          <span v-if="formData.course && formData.course.length > 0">
+            {{ formData.course }}円
+          </span>
+          <span v-else>
+            コースなし
+          </span>
+        </p>
+        <p><strong>飲み放題 :</strong>
+          <span v-if="formData.drink && formData.drink.length > 0">
+            {{ formData.drink }}
+          </span>
+          <span v-else>
+            飲み放題なし
+          </span>
+        </p>
     <p><strong>詳細 :</strong> {{ formData.info }}</p>
     <p><strong>電話番号 :</strong> {{ formData.phone }}</p>
     <p><strong>席番号 :</strong> {{ formData.seat }}</p>
