@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import MenuButtonComponent from './MenuButton.vue'
 import DeleteReservation from './DeleteReservation.vue'
@@ -14,12 +14,16 @@ const formData = reactive({
   seat: '',
 });
 
+const reservationId = ref("");
+
 onMounted(() => {
-  const reservationId = localStorage.getItem('selectedReservation');
-  if (reservationId) {
-    Object.assign(formData, JSON.parse(reservationId));
+  const storedReservation = localStorage.getItem('selectedReservation');
+  if (storedReservation) {
+    const parsedReservation = JSON.parse(storedReservation)
+    Object.assign(formData, parsedReservation);
+    reservationId.value = parsedReservation.id;
   }
-  console.log("予約ID:", reservationId);
+  console.log("予約ID:", reservationId.value);
 });
 
 const router = useRouter();
@@ -35,8 +39,8 @@ const handleDelete = () => {
   <h1>予約詳細</h1>
 </div>
 
-<DeleteReservation :id="formData.id" @delete="handleDelete" />
-<EditReservation :id="formData.id" />
+<DeleteReservation :id="reservationId" @delete="handleDelete" />
+<EditReservation :id="reservationId" />
 <MenuButtonComponent />
 
 <div class="reservation-table">
