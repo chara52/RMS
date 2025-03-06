@@ -5,6 +5,7 @@ import ReservationTableCompact from '../components/ReservationTableCompact.vue'
 import ReservationForm from '../components/ReservationForm.vue'
 import EditForm from '../components/EditForm.vue'
 import ReservationDetail from '@/components/ReservationDetail.vue'
+import ConfirmReservation from '../components/ConfirmReservation.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -15,6 +16,7 @@ const router = createRouter({
     { path: '/form', component: ReservationForm },
     { path: '/editform', component: EditForm },
     { path: '/detail', component: ReservationDetail },
+    { path: '/confirm', component: ConfirmReservation },
   ],
 })
 
