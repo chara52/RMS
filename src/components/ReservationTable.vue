@@ -3,8 +3,6 @@ import { reactive, ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from './FilteredReservation.vue'
 import MenuButtonComponent from './MenuButton.vue'
-import DeleteReservation from './DeleteReservation.vue'
-import EditReservation from './EditReservation.vue'
 import { sortReservations } from '../utils/sortReservations.js'
 
 const client = createClient({
@@ -48,12 +46,6 @@ const filteredReservations = computed(() => {
   })
 })
 
-const handleDelete = (id) => {
-  const index = reservations.findIndex((reservation) => reservation.id === id)
-  if (index !== -1) {
-    reservations.splice(index, 1)
-  }
-}
 </script>
 
 <template>
@@ -63,7 +55,6 @@ const handleDelete = (id) => {
   <FilteredComponent v-on:input-Date="recordDate" />
 
   <div v-if="reservations.length > 0">
-
     <body v-for="reservation in filteredReservations" :key="reservation.id">
       <div class="reservation-table">
         <p><strong>名前 :</strong> {{ reservation.name }}</p>
@@ -89,9 +80,6 @@ const handleDelete = (id) => {
         <p><strong>詳細 :</strong> {{ reservation.info }}</p>
         <p><strong>電話番号 :</strong> {{ reservation.phone }}</p>
       </div>
-
-      <DeleteReservation :id="reservation.id" @delete="(id) => handleDelete(id)" />
-      <EditReservation :id="reservation.id" />
     </body>
   </div>
   <div v-else>

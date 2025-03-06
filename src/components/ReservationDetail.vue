@@ -1,6 +1,9 @@
 <script setup>
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import MenuButtonComponent from './MenuButton.vue'
+import DeleteReservation from './DeleteReservation.vue'
+import EditReservation from './EditReservation.vue'
 
 const formData = reactive({
   name: '',
@@ -11,19 +14,35 @@ const formData = reactive({
   seat: '',
 });
 
+const reservationId = ref("");
+
 onMounted(() => {
-  const reservationId = localStorage.getItem('selectedReservation');
-  if (reservationId) {
-    Object.assign(formData, JSON.parse(reservationId));
+  const storedReservation = localStorage.getItem('selectedReservation');
+  if (storedReservation) {
+    const parsedReservation = JSON.parse(storedReservation)
+    Object.assign(formData, parsedReservation);
+    reservationId.value = parsedReservation.id;
   }
-  console.log("予約ID:", reservationId);
+  console.log("予約ID:", reservationId.value);
 });
+
+const router = useRouter();
+
+const handleDelete = () => {
+  localStorage.removeItem('selectedReservation'); // ローカルストレージから削除
+  router.push('/table-compact');
+};
 </script>
 
 <template>
-<h2>予約詳細</h2>
+<div class="reservation-detail-name">
+  <h1>予約詳細</h1>
+</div>
 
+<DeleteReservation :id="reservationId" @delete="handleDelete" />
+<EditReservation :id="reservationId" />
 <MenuButtonComponent />
+
 <div class="reservation-table">
   <p><strong>名前 :</strong> {{ formData.name }}</p>
   <p><strong>人数 :</strong> {{ formData.people }}</p>
@@ -71,8 +90,11 @@ onMounted(() => {
     font-size: 12px;
   }
 }
-
+.reservation-detail-name {
+  text-align: center;
+}
 .reservation-table {
+  margin-top: 50px;
   background-color: #fff9e6;
   padding: 0.5em 1em;
   border-left: solid 10px #ffc06e;

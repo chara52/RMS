@@ -17,5 +17,18 @@ const editReservation = () => {
 </script>
 
 <template>
-  <button @click="editReservation">編集</button>
+  <button @click="editReservation" class="edit-button">
+    <i class="fa-solid fa-pen"></i>
+  </button>
 </template>
+
+<style scoped>
+.edit-button {
+  float: right;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: grey;
+  font-size: 1.5rem; /* アイコンサイズ */
+}
+</style>

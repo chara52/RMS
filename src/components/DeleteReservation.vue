@@ -35,5 +35,20 @@ const deleteReservation = () => {
 </script>
 
 <template>
-  <button @click="confirmDelete">削除</button>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <button @click="confirmDelete" class="delete-button">
+    <i class="fa-regular fa-trash-can"></i>
+  </button>
 </template>
+
+
+<style scoped>
+.delete-button {
+  float: right;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: grey;
+  font-size: 1.5rem; /* アイコンサイズ */
+}
+</style>
