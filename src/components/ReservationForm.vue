@@ -7,7 +7,6 @@ import { useRouter } from 'vue-router'
 import MenuButtonComponent from './MenuButton.vue'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 
-
 const formData = reactive({
   name: '',
   people: '',
