@@ -33,11 +33,8 @@ onUnmounted(() => {
     <router-link to="/form" class="btn-link">
       <div class="menu__item">新規入力</div>
     </router-link>
-    <router-link to="/table" class="btn-link">
-      <div class="menu__item">予約表</div>
-    </router-link>
     <router-link to="/table-compact" class="btn-link">
-      <div class="menu__item">レイアウト切り替え</div>
+      <div class="menu__item">予約表</div>
     </router-link>
   </div>
 </template>
