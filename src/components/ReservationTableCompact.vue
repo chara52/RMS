@@ -4,7 +4,7 @@ import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from './FilteredReservation.vue'
 import MenuButtonComponent from './MenuButton.vue'
 import { sortReservations } from '../utils/sortReservations.js'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 
 defineProps({ reservationsDetail: Array });
 
