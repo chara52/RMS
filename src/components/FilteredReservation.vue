@@ -16,6 +16,7 @@ const emitDate = () => {
       format="yyyy/MM/dd"
       model-type="yyyy-MM-dd"
       locale="ja"
+      :enable-time-picker="false"
       @update:model-value="emitDate"
     />
   </div>
