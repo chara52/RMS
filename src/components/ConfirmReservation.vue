@@ -46,7 +46,7 @@ const submitReservation = () => {
       })
       .then((res) => {
         console.log('予約送信完了', res);
-        router.push('/table');
+        router.push('/table-compact');
       })
       .catch((error) => {
         console.error('送信エラー:', error);
