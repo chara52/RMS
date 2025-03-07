@@ -24,11 +24,17 @@ const editReservation = () => {
 
 <style scoped>
 .edit-button {
+  display: flex;
+  justify-content: center; /* 横方向の中央ぞろえ */
+  align-items: center; /* 縦方向の中央ぞろえ */
   float: right;
   background: none;
   border: none;
   cursor: pointer;
   color: grey;
   font-size: 1.5rem; /* アイコンサイズ */
+  width: 30px;
+  height: 30px;
+  margin-right: 15px;
 }
 </style>
