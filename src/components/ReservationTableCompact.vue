@@ -130,12 +130,7 @@ const filteredReservations = computed(() => {
   }
 
   table th.info {
-    width: 25%;
-    writing-mode: horizontal-tb;
-  }
-
-  table th.phone {
-    width: 25%;
+    width: 50%;
     writing-mode: horizontal-tb;
   }
 
@@ -149,8 +144,7 @@ const filteredReservations = computed(() => {
   .number-space,
   .time-space,
   .seat-space,
-  .inf-space,
-  .phone-space {
+  .info-space {
     font-size: 13px;
     text-align: center;
     white-space: normal;
