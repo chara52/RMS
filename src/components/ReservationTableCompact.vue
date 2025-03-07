@@ -66,7 +66,7 @@ const filteredReservations = computed(() => {
 
   <MenuButtonComponent />
 
-  <FilteredComponent v-on:input-Date="recordDate" />
+  <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
 
   <div v-if="reservations.length > 0">
     <table border="1" width="100%">
