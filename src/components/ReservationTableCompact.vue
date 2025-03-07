@@ -144,7 +144,7 @@ const filteredReservations = computed(() => {
   .number-space,
   .time-space,
   .seat-space,
-  .inf-space {
+  .info-space {
     font-size: 13px;
     text-align: center;
     white-space: normal;
