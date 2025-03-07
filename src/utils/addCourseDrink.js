@@ -1,5 +1,4 @@
 export function addCourseDrink(course, drink) {
-  console.log("ドリンク", drink);
 
   const CP = course.map(price => Number(price));
   const sumCP = CP.reduce((acc, cur) => acc + cur, 0);
@@ -12,8 +11,6 @@ export function addCourseDrink(course, drink) {
       DP = 2500;
     } else if (trimmedDrink === "3000円（3h）") {
       DP = 3000;
-    } else {
-      console.log("該当するドリンクがありません");
     }
   }
 
