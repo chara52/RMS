@@ -130,7 +130,7 @@ const filteredReservations = computed(() => {
   }
 
   table th.info {
-    width: 65%;
+    width: 50%;
     writing-mode: horizontal-tb;
   }
 
