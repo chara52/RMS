@@ -63,7 +63,7 @@ const submitForm = () => {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      "X-MICROCMS-API-KEY": "utks82BKbpBzo3RxwDPLTbuj93Qj4J2T1sTU",
+      "X-MICROCMS-API-KEY": import.meta.env.VITE_API_KEY,
     },
     body: JSON.stringify({
       name: formData.name,
