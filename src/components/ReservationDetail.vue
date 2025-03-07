@@ -9,6 +9,8 @@ const formData = reactive({
   name: '',
   people: '',
   time: '',
+  course: '',
+  drink: '',
   info: '',
   phone: '',
   seat: '',
@@ -21,6 +23,7 @@ onMounted(() => {
   if (storedReservation) {
     const parsedReservation = JSON.parse(storedReservation)
     Object.assign(formData, parsedReservation);
+    formData.time = new Date(formData.time).toISOString().slice(0, 16).replace('T', ' ');
     reservationId.value = parsedReservation.id;
   }
   console.log("予約ID:", reservationId.value);
@@ -44,12 +47,28 @@ const handleDelete = () => {
 <MenuButtonComponent />
 
 <div class="reservation-table">
-  <p><strong>名前 :</strong> {{ formData.name }}</p>
-  <p><strong>人数 :</strong> {{ formData.people }}</p>
-  <p><strong>時間 :</strong> {{ formData.time ? formData.time.split('T')[1].slice(0, 5) : '時間未設定' }}</p>
-  <p><strong>卓番号 :</strong> {{ formData.seat }}</p>
-  <p><strong>詳細 :</strong> {{ formData.info }}</p>
-  <p><strong>電話番号 :</strong> {{ formData.phone }}</p>
+    <p><strong>名前 :</strong> {{ formData.name }}</p>
+    <p><strong>人数 :</strong> {{ formData.people }}</p>
+    <p><strong>時間 :</strong> {{ formData.time }}</p>
+    <p><strong>コース :</strong>
+      <span v-if="formData.course && formData.course.length > 0">
+        {{ formData.course.join(", ") }}円
+      </span>
+      <span v-else>
+        コースなし
+      </span>
+    </p>
+    <p><strong>飲み放題 :</strong>
+      <span v-if="formData.drink && formData.drink.length > 0">
+        {{ formData.drink.join(", ") }}
+      </span>
+      <span v-else>
+        飲み放題なし
+      </span>
+    </p>
+    <p><strong>詳細 :</strong> {{ formData.info }}</p>
+    <p><strong>電話番号 :</strong> {{ formData.phone }}</p>
+    <p><strong>席番号 :</strong> {{ formData.seat }}</p>
   </div>
   <router-link to="/table-compact">戻る</router-link>
 </template>
