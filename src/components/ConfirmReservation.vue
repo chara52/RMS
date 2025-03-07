@@ -17,7 +17,7 @@ const formData = reactive({
 })
 
 const client = createClient({
-  serviceDomain: 'rms',
+  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
   apiKey: import.meta.env.VITE_API_KEY,
 })
 
