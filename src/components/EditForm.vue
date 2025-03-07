@@ -59,7 +59,7 @@ const submitForm = () => {
   }
 
   // fetchはHTTPリクエストを送信するための関数
-  fetch(`https://rms.microcms.io/api/v1/data/${reservationId}`, {
+  fetch(`https://${import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1/data/${reservationId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
