@@ -1,12 +1,18 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
-const inputDate = ref()
-const emit = defineEmits(['input-Date'])
+const props = defineProps({ inputDate: String })
+const emit = defineEmits(['update:inputDate'])
+
+const inputDate = ref(props.inputDate)
 
 const emitDate = () => {
-  emit('input-Date', inputDate.value)
+  emit('update:input-Date', inputDate.value)
 }
+
+watch(() => props.inputDate, (newVal) => {
+  inputDate.value = newVal
+})
 </script>
 
 <template>
@@ -16,6 +22,7 @@ const emitDate = () => {
       format="yyyy/MM/dd"
       model-type="yyyy-MM-dd"
       locale="ja"
+      :enable-time-picker="false"
       @update:model-value="emitDate"
     />
   </div>
