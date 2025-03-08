@@ -4,6 +4,7 @@ import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from './FilteredReservation.vue'
 import MenuButtonComponent from './MenuButton.vue'
 import { sortReservations } from '../utils/sortReservations.js'
+import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter } from 'vue-router'
 
 defineProps({ reservationsDetail: Array });
@@ -84,7 +85,14 @@ const filteredReservations = computed(() => {
             <td class="number-space">{{ reservation.people }}</td>
             <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
             <td class="seat-space">{{ reservation.seat }}</td>
-            <td class="info-space">{{ reservation.info }}</td>
+            <td class="info-space">
+              <div v-if="addCourseDrink(reservation.course, reservation.drink) !== '0込'">
+                {{ addCourseDrink(reservation.course, reservation.drink) }}
+              </div>
+              <div>
+                {{ reservation.info }}
+              </div>
+            </td>
         </tr>
       </tbody>
     </table>

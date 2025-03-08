@@ -4,12 +4,14 @@ import { Japanese } from 'flatpickr/dist/l10n/ja.js';
 import { reactive, ref, onMounted, computed, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { createClient } from 'microcms-js-sdk';
+import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 
 const router = useRouter();
 const route = useRoute();
 const datepickerRef = ref(null);
 let datepickerInstance = null;
 const errorMessage = ref('');
+const courseOptions = computed(() => generateCourseOptions());
 
 const isPhoneNumberValid = computed(() => {
   return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
@@ -44,6 +46,9 @@ onMounted(() => {
       Object.assign(formData, res);
       // 日付のフォーマット調整
       formData.time = new Date(res.time).toISOString().slice(0, 16).replace('T', ' ');
+
+      formData.course = String(res.course || '');
+      formData.drink = String(res.drink || '');
       initFlatpicker();
     })
     .catch((err) => console.error(err));
@@ -69,8 +74,8 @@ const submitForm = () => {
       name: formData.name,
       people: formData.people,
       time: formData.time,
-      course: formData.course,
-      drink: formData.drink,
+      course: Array.isArray(formData.course) ? formData.course : [formData.course],
+      drink: Array.isArray(formData.drink) ? formData.drink : [formData.drink],
       info: formData.info,
       phone: formData.phone,
       seat: formData.seat,
@@ -131,6 +136,26 @@ watch(() => formData.time, (newTime) => {
         <label for="time">時間</label>
         <input type="text" id="time" ref="datepickerRef" v-model="formData.time" required />
       </div>
+
+      <div class="form-group row">
+        <div class="course">
+          <label for="course">コース</label>
+          <select id="course" v-model="formData.course">
+            <option v-for="price in courseOptions" :key="price" :value="price.toString()">
+              {{ price }}円
+            </option>
+          </select>
+        </div>
+
+        <div class="drink">
+          <label for="drink">飲み放題</label>
+          <select id="drink" v-model="formData.drink">
+            <option value="2500円（2h）">2500円（2h）</option>
+            <option value="3000円（3h）">3000円（3h）</option>
+          </select>
+        </div>
+      </div>
+
       <div class="form-group">
         <label for="info">詳細情報</label>
         <textarea id="info" v-model="formData.info"></textarea>
@@ -177,6 +202,18 @@ h1 {
   justify-content: flex-start;
 }
 
+.row {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.course,
+.drink {
+  flex: 1;
+  min-width: 50px;
+}
+
 .buttons {
   display: flex;
   flex-direction: column;
@@ -215,7 +252,8 @@ h1 {
 }
 
 .form-group input,
-.form-group textarea .submit-button {
+.form-group textarea .submit-button,
+select{
   width: 100%;
   padding: 10px;
   border: 2px solid rgb(187, 182, 182);
