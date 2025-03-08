@@ -46,6 +46,9 @@ onMounted(() => {
       Object.assign(formData, res);
       // 日付のフォーマット調整
       formData.time = new Date(res.time).toISOString().slice(0, 16).replace('T', ' ');
+
+      formData.course = String(res.course || '');
+      formData.drink = String(res.drink || '');
       initFlatpicker();
     })
     .catch((err) => console.error(err));
@@ -71,8 +74,8 @@ const submitForm = () => {
       name: formData.name,
       people: formData.people,
       time: formData.time,
-      course: formData.course,
-      drink: formData.drink,
+      course: Array.isArray(formData.course) ? formData.course : [formData.course],
+      drink: Array.isArray(formData.drink) ? formData.drink : [formData.drink],
       info: formData.info,
       phone: formData.phone,
       seat: formData.seat,
