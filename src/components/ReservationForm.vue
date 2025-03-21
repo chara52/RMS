@@ -121,10 +121,11 @@ onMounted(() => {
         <input type="text" id="seat" v-model="formData.seat" />
       </div>
 
+      <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
+
       <div class="button-container">
         <button type="button" @click="router.push('/before')" class="backbutton">戻る</button>
         <button type="submit" class="reservebutton">確認</button>
-        <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
       </div>
     </form>
   </div>
@@ -242,6 +243,6 @@ select {
   /* 携帯番号が11桁以外の時のエラーメッセージのCSS */
   color: red;
   font-size: 14px;
-  margin-left: 16px;
+  margin-left: 40px;
 }
 </style>
