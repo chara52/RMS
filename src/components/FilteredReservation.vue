@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
+import { defineEmits } from 'vue'
 
 const props = defineProps({ inputDate: String })
 const emit = defineEmits(['update:inputDate'])
@@ -7,7 +8,7 @@ const emit = defineEmits(['update:inputDate'])
 const inputDate = ref(props.inputDate)
 
 const emitDate = () => {
-  emit('update:input-Date', inputDate.value)
+  emit('update:inputDate', inputDate.value)
 }
 
 watch(() => props.inputDate, (newVal) => {

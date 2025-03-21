@@ -3,6 +3,7 @@ import flatpickr from 'flatpickr'
 import { Japanese } from 'flatpickr/dist/l10n/ja.js'
 import 'flatpickr/dist/flatpickr.min.css'
 import { reactive, ref, computed, onMounted } from 'vue'
+import { createClient } from 'microcms-js-sdk'
 import { useRouter } from 'vue-router'
 import MenuButtonComponent from './MenuButton.vue'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
@@ -19,11 +20,17 @@ const formData = reactive({
 })
 
 const errorMessage = ref('')
+const reservations = reactive([])
 const showDetailInput = ref(false)
 const courseOptions = computed(() => generateCourseOptions())
 
 const isPhoneNumberValid = computed(() => {
   return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
+})
+
+const client = createClient({
+  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
+  apiKey: import.meta.env.VITE_API_KEY,
 })
 
 const router = useRouter()
@@ -48,7 +55,16 @@ onMounted(() => {
     dateFormat: 'Y-m-d H:i',
     locale: Japanese, // 日本語ロケール
   })
+  client
+  .getList({
+    endpoint: 'data'
+  })
+  .then((res) => {
+    reservations.push(...res.contents)
+  })
+  .catch ((err) => console.error(err))
 })
+
 </script>
 
 <template>
@@ -102,11 +118,12 @@ onMounted(() => {
 
       <div class="form-group">
         <label for="seat">席番号</label>
-        <input type="text" id="seat" v-model="formData.seat" required />
+        <input type="text" id="seat" v-model="formData.seat" />
       </div>
 
-      <div class="form-group">
-        <button type="submit" class="submit-button">予約</button>
+      <div class="button-container">
+        <button type="button" @click="router.push('/before')" class="backbutton">戻る</button>
+        <button type="submit" class="reservebutton">確認</button>
         <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
       </div>
     </form>
@@ -171,7 +188,7 @@ h1 {
 }
 
 .form-group input,
-.form-group textarea .submit-button,
+.form-group textarea,
 select {
   width: 100%;
   padding: 10px;
@@ -186,7 +203,14 @@ select {
   resize: none;
 }
 
-.submit-button {
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 37px;
+  margin-top: 40px;
+}
+
+.backbutton {
   background-color: #fbc02d;
   border: 2px solid #565655;
   border-radius: 12px;
@@ -196,8 +220,21 @@ select {
   font-weight: bold;
 }
 
-/* ボタンにカーソルを合わせた時の動作 */
-.submit-button:hover {
+.reservebutton {
+  background-color: #fbc02d;
+  border: 2px solid #565655;
+  border-radius: 12px;
+  padding: 7px 50px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.backbutton:hover {
+  background-color: #f9a825;
+}
+
+.reservebutton:hover {
   background-color: #f9a825;
 }
 
