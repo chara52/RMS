@@ -3,7 +3,7 @@ import { reactive, ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from './FilteredReservation.vue'
 import MenuButtonComponent from './MenuButton.vue'
-import { sortReservations } from '../utils/sortReservations.js'
+import { sortTime } from '../utils/sortTime.js'
 
 const client = createClient({
   serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
@@ -20,7 +20,7 @@ client
   .then((res) => {
     console.log(res)
     reservations.push(...res.contents)
-    sortReservations(reservations)
+    sortTime(reservations)
   })
   .catch((err) => console.error(err))
 
@@ -31,8 +31,6 @@ onMounted(() => {
 
 const recordDate = (date) => {
   inputDate.value = date
-  console.log('これは設定した日付です\n', inputDate.value)
-  console.log('これはCMSから持ってきた日付です\n', reservations[0].time)
 }
 
 const filteredReservations = computed(() => {
