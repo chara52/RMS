@@ -87,7 +87,7 @@ const submitReservation = () => {
   </div>
   <div class="button-container">
     <button @click="router.push('/ReservationForm')">戻る</button>
-    <button @click="submitReservation">確定</button>
+    <button @click="submitReservation">予約</button>
   </div>
 
 </template>

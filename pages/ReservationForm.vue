@@ -102,12 +102,14 @@ onMounted(() => {
 
       <div class="form-group">
         <label for="seat">席番号</label>
-        <input type="text" id="seat" v-model="formData.seat" required />
+        <input type="text" id="seat" v-model="formData.seat" />
       </div>
 
-      <div class="form-group">
-        <button type="submit" class="submit-button">予約</button>
-        <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
+      <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
+
+      <div class="button-container">
+        <button type="button" @click="router.push('/BeforeForm')" class="backbutton">戻る</button>
+        <button type="submit" class="reservebutton">確認</button>
       </div>
     </form>
   </div>
@@ -171,7 +173,7 @@ h1 {
 }
 
 .form-group input,
-.form-group textarea .submit-button,
+.form-group textarea,
 select {
   width: 100%;
   padding: 10px;
@@ -186,7 +188,14 @@ select {
   resize: none;
 }
 
-.submit-button {
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 37px;
+  margin-top: 40px;
+}
+
+.backbutton {
   background-color: #fbc02d;
   border: 2px solid #565655;
   border-radius: 12px;
@@ -196,8 +205,21 @@ select {
   font-weight: bold;
 }
 
-/* ボタンにカーソルを合わせた時の動作 */
-.submit-button:hover {
+.reservebutton {
+  background-color: #fbc02d;
+  border: 2px solid #565655;
+  border-radius: 12px;
+  padding: 7px 50px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.backbutton:hover {
+  background-color: #f9a825;
+}
+
+.reservebutton:hover {
   background-color: #f9a825;
 }
 
@@ -205,6 +227,6 @@ select {
   /* 携帯番号が11桁以外の時のエラーメッセージのCSS */
   color: red;
   font-size: 14px;
-  margin-left: 16px;
+  margin-left: 40px;
 }
 </style>
