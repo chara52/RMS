@@ -3,7 +3,7 @@ import { reactive, ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from '../components/FilteredReservation.vue'
 import MenuButtonComponent from '../components/MenuButton.vue'
-import { sortReservations } from '../utils/sortReservations.js'
+import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter } from 'vue-router'
 
@@ -12,8 +12,8 @@ defineProps({ reservationsDetail: Array });
 const router = useRouter();
 
 const goToDetail = (reservation) => {
-  localStorage.setItem('selectedReservation', JSON.stringify(reservation)); // 予約情報を保存
-  router.push('/ReservationDetail'); // /detail に遷移
+  localStorage.setItem('selectedReservation', JSON.stringify(reservation));
+  router.push('/ReservationDetail');
 };
 
 const client = createClient({
@@ -30,7 +30,7 @@ client
   .then((res) => {
     console.log(res)
     reservations.push(...res.contents)
-    sortReservations(reservations)
+    sortTime(reservations)
   })
   .catch((err) => console.error(err))
 
@@ -43,8 +43,6 @@ onMounted(() => {
 
 const recordDate = (date) => {
   inputDate.value = date
-  console.log('これは設定した日付です\n', inputDate.value)
-  console.log('これはCMSから持ってきた日付です\n', reservations[0].time)
 }
 
 const filteredReservations = computed(() => {
@@ -53,7 +51,6 @@ const filteredReservations = computed(() => {
   }
   return reservations.filter((reservation) => {
     const reservationDate = reservation.time.split('T')[0]
-    console.log(reservationDate)
     return inputDate.value === reservationDate
   })
 })
