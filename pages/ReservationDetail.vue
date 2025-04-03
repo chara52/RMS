@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import MenuButtonComponent from './MenuButton.vue'
-import DeleteReservation from './DeleteReservation.vue'
-import EditReservation from './EditReservation.vue'
+import MenuButtonComponent from '../components/MenuButton.vue'
+import DeleteReservation from '../components/DeleteReservation.vue'
+import EditReservation from '../components/EditReservation.vue'
 
 const formData = reactive({
   name: '',
@@ -33,7 +33,7 @@ const router = useRouter();
 
 const handleDelete = () => {
   localStorage.removeItem('selectedReservation'); // ローカルストレージから削除
-  router.push('/table-compact');
+  router.push('/ReservationTableCompact');
 };
 </script>
 
@@ -70,7 +70,7 @@ const handleDelete = () => {
     <p><strong>電話番号 :</strong> {{ formData.phone }}</p>
     <p><strong>席番号 :</strong> {{ formData.seat }}</p>
   </div>
-  <router-link to="/table-compact">戻る</router-link>
+  <router-link to="/ReservationTableCompact">戻る</router-link>
 </template>
 
 <style scoped>

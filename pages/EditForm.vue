@@ -1,6 +1,7 @@
 <script setup>
 import flatpickr from 'flatpickr';
 import { Japanese } from 'flatpickr/dist/l10n/ja.js';
+import 'flatpickr/dist/flatpickr.min.css'
 import { reactive, ref, onMounted, computed, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { createClient } from 'microcms-js-sdk';
@@ -83,7 +84,7 @@ const submitForm = () => {
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error(`HTTPエラー: ${response.status}`);
+        throw new Error('HTTPエラー: ${response.status}');
       }
       return response.json();
     })
@@ -91,7 +92,7 @@ const submitForm = () => {
   if (isPhoneNumberValid.value) {
     errorMessage.value = ''
     alert('予約が更新されました!')
-    router.push('/table-compact')
+    router.push('/ReservationTableCompact')
   } else {
     errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
   }
@@ -120,7 +121,7 @@ watch(() => formData.time, (newTime) => {
 
     <form @submit.prevent="submitForm">
       <div>
-        <router-link to="/detail">戻る</router-link>
+        <router-link to="/ReservationDetail">戻る</router-link>
       </div>
 
 

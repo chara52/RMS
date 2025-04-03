@@ -7,10 +7,10 @@
     </header>
     <main>
       <div class="button-container">
-        <router-link to="/table-compact" class="btn-link">
+        <router-link to="/ReservationTableCompact" class="btn-link">
           <button type="button" class="btn">予約表</button>
         </router-link>
-        <router-link to="/before" class="btn-link">
+        <router-link to="/BeforeForm" class="btn-link">
           <button type="button" class="btn">新規入力</button>
         </router-link>
       </div>

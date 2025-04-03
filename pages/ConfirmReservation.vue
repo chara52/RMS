@@ -2,7 +2,7 @@
 import { reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { createClient } from 'microcms-js-sdk'
-import MenuButtonComponent from './MenuButton.vue'
+import MenuButtonComponent from '../components/MenuButton.vue'
 
 const router = useRouter()
 const formData = reactive({
@@ -46,7 +46,7 @@ const submitReservation = () => {
       })
       .then((res) => {
         console.log('予約送信完了', res);
-        router.push('/table-compact');
+        router.push('/ReservationTableCompact');
       })
       .catch((error) => {
         console.error('送信エラー:', error);
@@ -86,7 +86,7 @@ const submitReservation = () => {
     <p><strong>席番号 :</strong> {{ formData.seat }}</p>
   </div>
   <div class="button-container">
-    <button @click="router.push('/form')">戻る</button>
+    <button @click="router.push('/ReservationForm')">戻る</button>
     <button @click="submitReservation">予約</button>
   </div>
 

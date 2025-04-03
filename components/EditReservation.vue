@@ -12,7 +12,7 @@ const props = defineProps({
 
 // 編集画面に遷移し、idをURLに付与
 const editReservation = () => {
-  router.push({ path: '/editform', query: { id: props.id } })
+  router.push({ path: '/EditForm', query: { id: props.id } })
 }
 </script>
 

@@ -1,6 +1,5 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { defineEmits } from 'vue'
 
 const props = defineProps({ inputDate: String })
 const emit = defineEmits(['update:inputDate'])

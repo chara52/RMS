@@ -3,9 +3,8 @@ import flatpickr from 'flatpickr'
 import { Japanese } from 'flatpickr/dist/l10n/ja.js'
 import 'flatpickr/dist/flatpickr.min.css'
 import { reactive, ref, computed, onMounted } from 'vue'
-import { createClient } from 'microcms-js-sdk'
 import { useRouter } from 'vue-router'
-import MenuButtonComponent from './MenuButton.vue'
+import MenuButtonComponent from '../components/MenuButton.vue'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 
 const formData = reactive({
@@ -20,17 +19,11 @@ const formData = reactive({
 })
 
 const errorMessage = ref('')
-const reservations = reactive([])
 const showDetailInput = ref(false)
 const courseOptions = computed(() => generateCourseOptions())
 
 const isPhoneNumberValid = computed(() => {
   return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
-})
-
-const client = createClient({
-  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
-  apiKey: import.meta.env.VITE_API_KEY,
 })
 
 const router = useRouter()
@@ -40,7 +33,7 @@ const submitReservation = () => {
   if (isPhoneNumberValid.value) {
     errorMessage.value = ''
     localStorage.setItem("formData", JSON.stringify(formData))
-    router.push('/confirm')
+    router.push('/ConfirmReservation')
   } else {
     errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
   }
@@ -55,16 +48,7 @@ onMounted(() => {
     dateFormat: 'Y-m-d H:i',
     locale: Japanese, // 日本語ロケール
   })
-  client
-  .getList({
-    endpoint: 'data'
-  })
-  .then((res) => {
-    reservations.push(...res.contents)
-  })
-  .catch ((err) => console.error(err))
 })
-
 </script>
 
 <template>
@@ -124,7 +108,7 @@ onMounted(() => {
       <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
 
       <div class="button-container">
-        <button type="button" @click="router.push('/before')" class="backbutton">戻る</button>
+        <button type="button" @click="router.push('/BeforeForm')" class="backbutton">戻る</button>
         <button type="submit" class="reservebutton">確認</button>
       </div>
     </form>

@@ -30,10 +30,10 @@ onUnmounted(() => {
     <router-link to="/" class="btn-link">
       <div class="menu__item">ホーム</div>
     </router-link>
-    <router-link to="/before" class="btn-link">
+    <router-link to="/BeforeForm" class="btn-link">
       <div class="menu__item">新規入力</div>
     </router-link>
-    <router-link to="/table-compact" class="btn-link">
+    <router-link to="/ReservationTableCompact" class="btn-link">
       <div class="menu__item">予約表</div>
     </router-link>
   </div>

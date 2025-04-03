@@ -1,8 +1,8 @@
 <script setup>
 import { reactive, ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
-import FilteredComponent from './FilteredReservation.vue'
-import MenuButtonComponent from './MenuButton.vue'
+import FilteredComponent from '../components/FilteredReservation.vue'
+import MenuButtonComponent from '../components/MenuButton.vue'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter } from 'vue-router'
@@ -13,7 +13,7 @@ const router = useRouter();
 
 const goToDetail = (reservation) => {
   localStorage.setItem('selectedReservation', JSON.stringify(reservation));
-  router.push('/detail');
+  router.push('/ReservationDetail');
 };
 
 const client = createClient({
@@ -65,7 +65,7 @@ const filteredReservations = computed(() => {
 
   <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
 
-  <div v-if="reservations.length > 0">
+  <div v-if="filteredReservations.length > 0">
     <table border="1" width="100%">
       <tbody>
         <tr>
@@ -96,7 +96,7 @@ const filteredReservations = computed(() => {
   </div>
 
   <div v-else>
-    <p>現在、予約はありません。</p>
+    <p class="no-reservations-message">現在、予約はありません。</p>
   </div>
 </template>
 
@@ -154,6 +154,9 @@ const filteredReservations = computed(() => {
     text-align: center;
     white-space: normal;
     /* 枠の中に入らなかった場合自動で改行 */
+  }
+  .no-reservations-message {
+    text-align: center;
   }
 }
 </style>

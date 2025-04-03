@@ -2,8 +2,8 @@
 import { reactive, ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import { useRouter } from 'vue-router'
-import FilteredComponent from './FilteredReservation.vue'
-import MenuButtonComponent from './MenuButton.vue'
+import FilteredComponent from '../components/FilteredReservation.vue'
+import MenuButtonComponent from '../components/MenuButton.vue'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { sortPeople } from '../utils/sortPeople.js'
 import { sortSeat } from '../utils/sortSeat.js'
@@ -101,7 +101,7 @@ const filteredReservations = computed(() => {
 
   <div class="button-container2">
     <button @click="router.push('/')" class="bc2">戻る</button>
-    <button @click="router.push('form')" class="bc2">予約へ</button>
+    <button @click="router.push('ReservationForm')" class="bc2">予約へ</button>
   </div>
 </template>
 
