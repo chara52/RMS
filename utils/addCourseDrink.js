@@ -18,12 +18,12 @@ export function addCourseDrink(course, drink) {
 
     if (trimmedDrink === "2500円（2h）") {
       DP = 2500;
-      return `飲放 (2h)`;
+      return `飲み放題(2h)`;
     } else if (trimmedDrink === "3000円（3h）") {
       DP = 3000;
-      return `飲放 (3h)`;
+      return `飲み放題(3h)`;
     }
   } else {
-    return `${sumCP}`;
+    return `${sumCP}別`;
   }
 }
