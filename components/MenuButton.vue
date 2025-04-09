@@ -36,6 +36,9 @@ onUnmounted(() => {
     <router-link to="/ReservationTableCompact" class="btn-link">
       <div class="menu__item">予約表</div>
     </router-link>
+    <router-link to="/Shift" class="btn-link">
+      <div class="menu__item">シフト作成</div>
+    </router-link>
   </div>
 </template>
 
