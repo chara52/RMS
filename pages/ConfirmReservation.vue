@@ -66,19 +66,19 @@ const submitReservation = () => {
     <p><strong>人数 :</strong> {{ formData.people }}</p>
     <p><strong>時間 :</strong> {{ formData.time }}</p>
     <p><strong>コース :</strong>
-      <span v-if="formData.course && formData.course.length > 0">
-        {{ formData.course }}円
+      <span v-if="formData.course === 'なし'">
+        なし
       </span>
-      <span v-else>
-        コースなし
+      <span v-else-if="formData.course">
+        {{ formData.course }}円
       </span>
     </p>
     <p><strong>飲み放題 :</strong>
-      <span v-if="formData.drink && formData.drink.length > 0">
-        {{ formData.drink }}
+      <span v-if="formData.drink === 'なし'">
+        なし
       </span>
-      <span v-else>
-        飲み放題なし
+      <span v-else-if="formData.drink && formData.drink.length > 0">
+        {{ formData.drink }}
       </span>
     </p>
     <p><strong>詳細 :</strong> {{ formData.info }}</p>

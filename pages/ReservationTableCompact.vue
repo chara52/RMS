@@ -83,7 +83,7 @@ const filteredReservations = computed(() => {
             <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
             <td class="seat-space">{{ reservation.seat }}</td>
             <td class="info-space">
-              <div v-if="addCourseDrink(reservation.course, reservation.drink) !== '0込'">
+              <div>
                 {{ addCourseDrink(reservation.course, reservation.drink) }}
               </div>
               <div>
