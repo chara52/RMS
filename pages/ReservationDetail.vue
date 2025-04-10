@@ -51,11 +51,11 @@ const handleDelete = () => {
     <p><strong>人数 :</strong> {{ formData.people }}</p>
     <p><strong>時間 :</strong> {{ formData.time }}</p>
     <p><strong>コース :</strong>
-      <span v-if="formData.course && formData.course.length > 0">
-        {{ formData.course.join(", ") }}円
+      <span v-if="formData.course[0] === 'なし'">
+        なし
       </span>
-      <span v-else>
-        コースなし
+      <span v-else-if="formData.course && formData.course.length > 0">
+        {{ formData.course.join(", ") }}円
       </span>
     </p>
     <p><strong>飲み放題 :</strong>
@@ -63,7 +63,7 @@ const handleDelete = () => {
         {{ formData.drink.join(", ") }}
       </span>
       <span v-else>
-        飲み放題なし
+        なし
       </span>
     </p>
     <p><strong>詳細 :</strong> {{ formData.info }}</p>
