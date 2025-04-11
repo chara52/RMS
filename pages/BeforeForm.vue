@@ -63,8 +63,8 @@ const filteredReservations = computed(() => {
   <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
 
   <div class="button-container1">
-    <button @click="sortPeople(reservations)" class="bc1">人数順</button>
-    <button @click="sortSeat(reservations)" class="bc1">卓順</button>
+    <button @click="sortPeople(reservations)" class="bc1">👫🏻人数順</button>
+    <button @click="sortSeat(reservations)" class="bc1">🪑卓順</button>
   </div>
 
   <div v-if="reservations.length > 0">
@@ -158,25 +158,25 @@ const filteredReservations = computed(() => {
 
   .button-container1 {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 13px;
+    justify-content: flex-start;
+    gap: 10px;
   }
 
   .button-container2 {
     display: flex;
     justify-content: center;
-    gap: 19px;
+    gap: 10px;
     margin-top: 18px;
   }
 
   .bc1 {
-    width: 180px;
+    width: 90px;
     height: 40px;
-    background-color: #ffcb46;
-    border: 2px solid #565655;
-    border-radius: 12px;
-    padding: 4px 60px;
+    background-color: #faf8f5;
+    border: 1.5px solid #7c7c7c;
+    border-radius: 10px;
+    margin: 10px 0;
+    padding: 0px 10px;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
@@ -184,13 +184,13 @@ const filteredReservations = computed(() => {
 
   .bc2 {
     width: 180px;
-    height: 63px;
+    height: 50px;
     background-color: #fbc02d;
     border: 2px solid #565655;
     border-radius: 12px;
     padding: 5px 20px;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
   }
 
