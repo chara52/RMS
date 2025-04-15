@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-04-04",
   devtools: { enabled: true },
+  plugins: ['~/plugins/firebase'],
   modules: ['@vite-pwa/nuxt'],
   pwa: {
     registerType: 'autoUpdate',

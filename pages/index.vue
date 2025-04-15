@@ -1,82 +1,110 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuth } from '../composables/useAuth'
+
+const email = ref('')
+const password = ref('')
+
+const { login } = useAuth()
+const router = useRouter()
+
+
+const handleLogin = async () => {
+  try {
+    await login(email.value, password.value)
+    alert('ログイン成功！')
+    router.push('/HomePage')
+  } catch (e) {
+    alert('ログイン失敗: ' + e.message)
+  }
+}
+</script>
 
 <template>
-  <div class="app-container">
-    <header>
-      <h1>居酒屋 壱</h1>
-    </header>
-    <main>
-      <div class="button-container">
-        <router-link to="/ReservationTableCompact" class="btn-link">
-          <button type="button" class="btn">予約表</button>
-        </router-link>
-        <router-link to="/BeforeForm" class="btn-link">
-          <button type="button" class="btn">新規入力</button>
-        </router-link>
-      </div>
-    </main>
+  <div class="container">
+    <h1 class="title">居酒屋 壱</h1>
+    <form @submit.prevent="handleLogin">
+      <input v-model="email" placeholder="Email" class="input-email" />
+      <input v-model="password" type="password" placeholder="Password" class="input-password" />
+      <button class="login-button">ログイン</button>
+    </form>
+    <p class="link-text">
+      アカウントをお持ちでない方は
+      <NuxtLink to="/HomePage" class="link">作成</NuxtLink>
+    </p>
   </div>
 </template>
 
 <style scoped>
-/* 全体のスタイル */
-.app-container {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  max-width: 100%;
-  height: 95vh;
-  margin: -10px -7px;
-  padding: 20px;
+.container {
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  background-color: #fff9e6;
+  height: 80vh;
+  background-color: #ffffff;
+  padding: 16px;
 }
 
-/* ヘッダーのスタイル */
-header h1 {
-  font-size: 2.5em;
-  color: white;
-  margin: 20px 0;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* テキストを読みやすくする影 */
-  background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒背景 */
-  padding: 10px 20px; /* 背景色が文字を囲むように調整 */
-  border-radius: 10px; /* 背景の角を丸める */
-  display: inline-block; /* 背景色を文字幅に合わせる */
+.container * {
+  box-sizing: border-box;
 }
 
-/* ボタンコンテナ */
-.button-container {
-  margin-top: 30px; /* 上部の余白を増やしてボタン間隔を広げる */
+.title {
+  font-size: 35px;
+  font-weight: bold;
+  margin-bottom: 60px;
+}
+
+form {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* ボタンの間に20pxの間隔を追加 */
   align-items: center;
 }
 
-/* ボタンのスタイル */
-.btn {
-  font-size: 1.5em;
-  width: 150px;
-  height: 80px;
-  color: white;
-  background-color: #f9ae35; /* オレンジ色に変更 */
+.input-email,
+.input-password {
+  width: 270px;
+  padding: 14px 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  font-size: 16px;
+  outline: none;
+  display: block;
+}
+
+.login-button {
+  width: 270px;
+  padding: 14px;
+  background-color: #f5a623;
+  color: #000;
+  font-weight: bold;
+  font-size: 16px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+  margin-top: 35px;
+  transition: background-color 0.3s;
+  display: block;
 }
 
-.btn:hover {
-  background-color: #ff4500; /* ホバー時のオレンジ色を少し濃く */
-  transform: scale(1.05);
+.login-button:hover {
+  background-color: #f29c1f;
 }
 
-.btn:active {
-  background-color: #e03e00; /* クリック時のオレンジ色をさらに濃く */
-  transform: scale(1);
+.link-text {
+  margin-top: 40px;
+  font-size: 15px;
+  color: #444;
+  text-align: center;
+}
+
+.link {
+  color: blue;
+  text-decoration: underline;
+  margin-left: 4px;
 }
 </style>
