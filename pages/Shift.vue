@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import MenuButtonComponent from '../components/MenuButton.vue'
 
 const startDate = ref('')
 const shiftData = ref([])
@@ -46,12 +47,13 @@ const removeRow = (dayIndex, rowIndex) => {
 </script>
 
 <template>
+  <MenuButtonComponent />
   <div class="shift-page">
     <h1>シフト作成</h1>
     <p>週の開始日（次の月曜）: {{ startDate }}</p>
 
     <div v-for="(day, index) in shiftData" :key="index" class="day-section">
-      <h2>{{ getWeekdayLabel(index) }}曜（{{ getDateWithOffset(index) }}）</h2>
+      <h2>{{ getDateWithOffset(index) }} ({{ getWeekdayLabel(index) }}曜)</h2>
 
       <div
         v-for="(row, rowIndex) in day"
