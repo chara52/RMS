@@ -1,8 +1,8 @@
 export function generateCourseOptions() {
-  const prices = []
+  const options = [{value: "なし", label: "なし"}]
 
-  for (let start = 2500; start <= 12000; start += 500) {
-    prices.push(start)
+  for (let start = 2500; start <= 10000; start += 500) {
+    options.push({value: start.toString(), label: `${start}円`})
   }
-  return prices
+  return options
 }
