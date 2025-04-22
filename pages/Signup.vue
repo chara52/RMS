@@ -20,7 +20,7 @@ const handleSignup = async () => {
   try {
     await signup(email.value, password.value, username.value)
     alert('アカウント作成成功！')
-    router.push('/') // 登録後のリダイレクト先
+    router.push('/')
   } catch (e) {
     if (e.code === 'auth/email-already-in-use') {
       alert('このメールアドレスはすでに使用されています')
@@ -49,7 +49,6 @@ const handleSignup = async () => {
 </template>
 
 <style scoped>
-/* index.vue と同様のスタイルを再利用 */
 .container {
   display: flex;
   flex-direction: column;
