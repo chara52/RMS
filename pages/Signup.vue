@@ -3,20 +3,30 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 
-const username = ref('')
+const email = ref('')
 const password = ref('')
+const username = ref('')
+const confirmPassword = ref('')
 
-const { loginWithUsername } = useAuth()
+const { signup } = useAuth()
 const router = useRouter()
 
+const handleSignup = async () => {
+  if(password.value !== confirmPassword.value){
+    alert('パスワードが一致しません')
+    return
+  }
 
-const handleLogin = async () => {
   try {
-    await loginWithUsername(username.value, password.value)
-    alert('ログイン成功！')
-    router.push('/HomePage')
+    await signup(email.value, password.value, username.value)
+    alert('アカウント作成成功！')
+    router.push('/') // 登録後のリダイレクト先
   } catch (e) {
-    alert('ログイン失敗: ' + e.message)
+    if (e.code === 'auth/email-already-in-use') {
+      alert('このメールアドレスはすでに使用されています')
+    } else {
+      alert('アカウント作成失敗: ' + e.message)
+    }
   }
 }
 </script>
@@ -24,19 +34,22 @@ const handleLogin = async () => {
 <template>
   <div class="container">
     <h1 class="title">居酒屋 壱</h1>
-    <form @submit.prevent="handleLogin">
-      <input v-model="username" placeholder="ユーザーネーム" class="input-email" />
+    <form @submit.prevent="handleSignup">
+      <input v-model="email" placeholder="メールアドレス" class="input-email" />
+      <input v-model="username" placeholder="ユーザーネーム" class="input-username" />
       <input v-model="password" type="password" placeholder="パスワード" class="input-password" />
-      <button class="login-button">ログイン</button>
+      <input v-model="confirmPassword" type="password" placeholder="パスワード（確認用）" class="input-password" />
+      <button class="signup-button">アカウント作成</button>
     </form>
     <p class="link-text">
-      アカウントをお持ちでない方は
-      <NuxtLink to="/Signup" class="link">作成</NuxtLink>
+      すでにアカウントをお持ちの方は
+      <NuxtLink to="/" class="link">ログイン</NuxtLink>
     </p>
   </div>
 </template>
 
 <style scoped>
+/* index.vue と同様のスタイルを再利用 */
 .container {
   display: flex;
   flex-direction: column;
@@ -64,7 +77,8 @@ form {
 }
 
 .input-email,
-.input-password {
+.input-password,
+.input-username {
   width: 270px;
   padding: 14px 12px;
   margin-bottom: 16px;
@@ -73,14 +87,13 @@ form {
   background-color: #f9f9f9;
   font-size: 16px;
   outline: none;
-  display: block;
 }
 
-.login-button {
+.signup-button {
   width: 270px;
   padding: 14px;
   background-color: #f5a623;
-  color: #000;
+  color: black;
   font-weight: bold;
   font-size: 16px;
   border: none;
@@ -88,11 +101,10 @@ form {
   cursor: pointer;
   margin-top: 35px;
   transition: background-color 0.3s;
-  display: block;
 }
 
-.login-button:hover {
-  background-color: #f29c1f;
+.signup-button:hover {
+  background-color: #f5a623;
 }
 
 .link-text {
