@@ -6,8 +6,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from 'firebase/auth'
-import { doc, setDoc, getDoc } from 'firebase/firestore'
-import { query, collection, where, getDocs } from 'firebase/firestore'  //後でまとめる
+import { doc, setDoc, getDoc, query, collection, where, getDocs } from 'firebase/firestore'
 
 export const useAuth = () => {
   const user = useState('user', () => null)
@@ -17,7 +16,7 @@ export const useAuth = () => {
     //Firebase Authenticationにアカウントを作成している
     const cred = await createUserWithEmailAndPassword(auth, email, password)
     user.value = cred.user
-    // Firestore にユーザーデータを保存（必要なら）
+    // Firestore にユーザーデータを保存
     await setDoc(doc(db, 'users', cred.user.uid), {
       email: cred.user.email,
       username: username,
@@ -25,13 +24,7 @@ export const useAuth = () => {
     })
   }
 
-  /*
-  const login = async (email: string, password: string) => {
-    const cred = await signInWithEmailAndPassword(auth, email, password)
-    user.value = cred.user
-  }
-  */
-
+  //Firestoreのユーザーネームからメールアドレスを取得
   const getEmailByUsername = async (username: string): Promise<string | null> => {
     const q = query(collection(db, 'users'), where('username', '==', username))
     const snapshot = await getDocs(q)
@@ -39,6 +32,7 @@ export const useAuth = () => {
     return snapshot.docs[0].data().email || null
   }
 
+  //Firestoreから取得してきたメールアドレスでFirebase Authenticationにログイン
   const loginWithUsername = async (username: string, password: string) => {
     const email = await getEmailByUsername(username)
     if (!email) throw new Error('ユーザーネームが存在しません')
