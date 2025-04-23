@@ -63,8 +63,8 @@ const filteredReservations = computed(() => {
   <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
 
   <div class="button-container1">
-    <button @click="sortPeople(reservations)" class="bc1">👫🏻人数順</button>
-    <button @click="sortSeat(reservations)" class="bc1">🪑卓順</button>
+    <button @click="sortPeople(reservations)" class="bc1">人数順</button>
+    <button @click="sortSeat(reservations)" class="bc1">卓順</button>
   </div>
 
   <div v-if="reservations.length > 0">
@@ -172,13 +172,13 @@ const filteredReservations = computed(() => {
   .bc1 {
     width: 90px;
     height: 40px;
-    background-color: #faf8f5;
-    border: 1.5px solid #7c7c7c;
-    border-radius: 10px;
+    background-color: #ececec;
+    border: 0px;
+    border-radius: 25px;
     margin: 10px 0;
     padding: 0px 10px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14.5px;
     font-weight: bold;
   }
 
