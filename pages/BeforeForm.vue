@@ -158,7 +158,7 @@ const filteredReservations = computed(() => {
 
   .button-container1 {
     display: flex;
-    justify-content: flex-start;
+    justify-content: flex-end;
     gap: 10px;
   }
 
