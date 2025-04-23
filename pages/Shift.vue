@@ -4,8 +4,8 @@ import { createClient } from 'microcms-js-sdk'
 import MenuButtonComponent from '../components/MenuButton.vue'
 
 const client = createClient({
-  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
-  apiKey: import.meta.env.VITE_API_KEY,
+  serviceDomain: import.meta.env.VITE_SHIFT_DOMAIN,
+  apiKey: import.meta.env.VITE_SHIFT_API_KEY,
 })
 
 const startDate = ref('')
