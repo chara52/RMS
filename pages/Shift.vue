@@ -1,6 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { createClient } from 'microcms-js-sdk'
 import MenuButtonComponent from '../components/MenuButton.vue'
+
+const client = createClient({
+  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
+  apiKey: import.meta.env.VITE_API_KEY,
+})
 
 const startDate = ref('')
 const shiftData = ref([])
@@ -19,12 +25,9 @@ onMounted(() => {
   const jstNow = new Date(now.getTime() + 9 * 60 * 60 * 1000)
   const dayOfWeek = jstNow.getDay()
   const daysUntilMonday = (8 - dayOfWeek) % 7 || 7
-
   const nextMonday = new Date(jstNow)
   nextMonday.setDate(jstNow.getDate() + daysUntilMonday)
-
   startDate.value = formatDate(nextMonday)
-
   shiftData.value = Array.from({ length: 7 }, () => [{ name: '', group: '' }])
 })
 
@@ -39,9 +42,30 @@ const addRow = (dayIndex) => {
 }
 
 const removeRow = (dayIndex, rowIndex) => {
-  // 最低1行は残す
   if (shiftData.value[dayIndex].length > 1) {
     shiftData.value[dayIndex].splice(rowIndex, 1)
+  }
+}
+
+const postShiftData = async () => {
+  try {
+    for (let i = 0; i < shiftData.value.length; i++) {
+      const date = getDateWithOffset(i)
+      for (const entry of shiftData.value[i]) {
+        if (!entry.name) continue
+        await client.create({
+          endpoint: 'shiftdata',
+          content: {
+            name: entry.name,
+            date: new Date(date).toISOString(),
+          },
+        })
+      }
+    }
+    alert('シフトデータを送信しました！')
+  } catch (error) {
+    console.error(error)
+    alert('送信に失敗しました')
   }
 }
 </script>
@@ -51,24 +75,15 @@ const removeRow = (dayIndex, rowIndex) => {
   <div class="shift-page">
     <h1>シフト作成</h1>
     <p>週の開始日（次の月曜）: {{ startDate }}</p>
-
     <div v-for="(day, index) in shiftData" :key="index" class="day-section">
       <h2>{{ getDateWithOffset(index) }} ({{ getWeekdayLabel(index) }}曜)</h2>
-
-      <div
-        v-for="(row, rowIndex) in day"
-        :key="rowIndex"
-        class="shift-row"
-      >
+      <div v-for="(row, rowIndex) in day" :key="rowIndex" class="shift-row">
         <input v-model="row.name" placeholder="名前" />
-        <button class="remove-btn" @click="removeRow(index, rowIndex)" :disabled="day.length === 1">
-          🗑
-        </button>
+        <button class="remove-btn" @click="removeRow(index, rowIndex)" :disabled="day.length === 1">🗑</button>
       </div>
-
       <button class="add-btn" @click="addRow(index)">＋ 行を追加</button>
     </div>
-    <button>確認</button>
+    <button @click="postShiftData">確認</button>
   </div>
 </template>
 
