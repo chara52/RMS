@@ -158,39 +158,39 @@ const filteredReservations = computed(() => {
 
   .button-container1 {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 13px;
+    justify-content: flex-end;
+    gap: 10px;
   }
 
   .button-container2 {
     display: flex;
     justify-content: center;
-    gap: 19px;
+    gap: 10px;
     margin-top: 18px;
   }
 
   .bc1 {
-    width: 180px;
+    width: 90px;
     height: 40px;
-    background-color: #ffcb46;
-    border: 2px solid #565655;
-    border-radius: 12px;
-    padding: 4px 60px;
+    background-color: #ececec;
+    border: 0px;
+    border-radius: 25px;
+    margin: 10px 0;
+    padding: 0px 10px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14.5px;
     font-weight: bold;
   }
 
   .bc2 {
     width: 180px;
-    height: 63px;
+    height: 50px;
     background-color: #fbc02d;
     border: 2px solid #565655;
     border-radius: 12px;
     padding: 5px 20px;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
   }
 
