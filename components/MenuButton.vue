@@ -27,7 +27,7 @@ onUnmounted(() => {
     <span class="icon">&#9776;</span>
   </button>
   <div ref="menuRef" class="menu" v-bind:class="{ 'is-active': isActive }">
-    <router-link to="/" class="btn-link">
+    <router-link to="/HomePage" class="btn-link">
       <div class="menu__item">ホーム</div>
     </router-link>
     <router-link to="/BeforeForm" class="btn-link">

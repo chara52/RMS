@@ -24,18 +24,7 @@ export const useAuth = () => {
     })
   }
 
-  //Firestoreのユーザーネームからメールアドレスを取得
-  const getEmailByUsername = async (username: string): Promise<string | null> => {
-    const q = query(collection(db, 'users'), where('username', '==', username))
-    const snapshot = await getDocs(q)
-    if (snapshot.empty) return null
-    return snapshot.docs[0].data().email || null
-  }
-
-  //Firestoreから取得してきたメールアドレスでFirebase Authenticationにログイン
-  const loginWithUsername = async (username: string, password: string) => {
-    const email = await getEmailByUsername(username)
-    if (!email) throw new Error('ユーザーネームが存在しません')
+  const login = async (email: string, password: string) => {
     const cred = await signInWithEmailAndPassword(auth, email, password)
     user.value = cred.user
   }
@@ -53,7 +42,7 @@ export const useAuth = () => {
   return {
     user,
     signup,
-    loginWithUsername,
+    login,
     logout,
   }
 }
