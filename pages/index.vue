@@ -3,16 +3,16 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 
-const username = ref('')
+const email = ref('')
 const password = ref('')
 
-const { loginWithUsername } = useAuth()
+const { login } = useAuth()
 const router = useRouter()
 
 
 const handleLogin = async () => {
   try {
-    await loginWithUsername(username.value, password.value)
+    await login(email.value, password.value)
     alert('ログイン成功！')
     router.push('/HomePage')
   } catch (e) {
@@ -25,7 +25,7 @@ const handleLogin = async () => {
   <div class="container">
     <h1 class="title">居酒屋 壱</h1>
     <form @submit.prevent="handleLogin">
-      <input v-model="username" placeholder="ユーザーネーム" class="input-email" />
+      <input v-model="email" placeholder="メールアドレス" class="input-email" />
       <input v-model="password" type="password" placeholder="パスワード" class="input-password" />
       <button class="login-button">ログイン</button>
     </form>
