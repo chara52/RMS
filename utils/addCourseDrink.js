@@ -23,7 +23,7 @@ export function addCourseDrink(course, drink) {
       DP = 3000;
       return `飲み放題(3h)`;
     }
-  } else if (Array.isArray(course) && course.length > 0 && drink[0] === "なし") {
+  } else if (Array.isArray(course) && course.length > 0 && drink[0] === "なし" || drink.length === 0) {
     return `${sumCP}別`;
   }
 }
