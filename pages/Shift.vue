@@ -1,17 +1,21 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { createClient } from 'microcms-js-sdk'
+import { ref, reactive, onMounted } from 'vue'
 import MenuButtonComponent from '../components/MenuButton.vue'
+import { useRouter } from 'vue-router'
 
-const client = createClient({
-  serviceDomain: import.meta.env.VITE_SHIFT_DOMAIN,
-  apiKey: import.meta.env.VITE_SHIFT_API_KEY,
-})
+const router = useRouter()
 
 const startDate = ref('')
-const shiftData = ref([])
+const shiftData = reactive({
+  name: '',
+  date: '',
+  days: [],
+})
 
 const formatDate = (date) => {
+  if (!date) return ''
+  if (!(date instanceof Date)) date = new Date(date)
+  if (isNaN(date)) return ''
   return date.toISOString().split('T')[0]
 }
 
@@ -28,7 +32,7 @@ onMounted(() => {
   const nextMonday = new Date(jstNow)
   nextMonday.setDate(jstNow.getDate() + daysUntilMonday)
   startDate.value = formatDate(nextMonday)
-  shiftData.value = Array.from({ length: 7 }, () => [{ name: '', group: '' }])
+  shiftData.days = Array.from({ length: 7 }, () => [{ name: ''}])
 })
 
 const getDateWithOffset = (offset) => {
@@ -38,35 +42,19 @@ const getDateWithOffset = (offset) => {
 }
 
 const addRow = (dayIndex) => {
-  shiftData.value[dayIndex].push({ name: '', group: '' })
+  shiftData.days[dayIndex].push({ name: '' })
 }
 
 const removeRow = (dayIndex, rowIndex) => {
-  if (shiftData.value[dayIndex].length > 1) {
-    shiftData.value[dayIndex].splice(rowIndex, 1)
+  if (shiftData.days[dayIndex].length > 1) {
+    shiftData.days[dayIndex].splice(rowIndex, 1)
   }
 }
 
-const postShiftData = async () => {
-  try {
-    for (let i = 0; i < shiftData.value.length; i++) {
-      const date = getDateWithOffset(i)
-      for (const entry of shiftData.value[i]) {
-        if (!entry.name) continue
-        await client.create({
-          endpoint: 'shiftdata',
-          content: {
-            name: entry.name,
-            date: new Date(date).toISOString(),
-          },
-        })
-      }
-    }
-    alert('シフトデータを送信しました！')
-  } catch (error) {
-    console.error(error)
-    alert('送信に失敗しました')
-  }
+function goToConfirm() {
+  localStorage.setItem('startDate', startDate.value)
+  localStorage.setItem('shiftData', JSON.stringify(shiftData.days))
+  router.push('/ConfirmShift')
 }
 </script>
 
@@ -75,7 +63,7 @@ const postShiftData = async () => {
   <div class="shift-page">
     <h1>シフト作成</h1>
     <p>週の開始日（次の月曜）: {{ startDate }}</p>
-    <div v-for="(day, index) in shiftData" :key="index" class="day-section">
+    <div v-for="(day, index) in shiftData.days" :key="index" class="day-section">
       <h2>{{ getDateWithOffset(index) }} ({{ getWeekdayLabel(index) }}曜)</h2>
       <div v-for="(row, rowIndex) in day" :key="rowIndex" class="shift-row">
         <input v-model="row.name" placeholder="名前" />
@@ -83,7 +71,7 @@ const postShiftData = async () => {
       </div>
       <button class="add-btn" @click="addRow(index)">＋ 行を追加</button>
     </div>
-    <button @click="postShiftData">確認</button>
+    <button @click="goToConfirm">確認</button>
   </div>
 </template>
 
@@ -118,8 +106,8 @@ button.add-btn {
   margin-top: 6px;
   padding: 4px 10px;
   border: none;
-  background-color: #4caf50;
-  color: white;
+  background-color: #fbc02d;
+  color: black;
   border-radius: 4px;
   cursor: pointer;
 }
