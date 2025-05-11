@@ -16,11 +16,15 @@ export const useAuth = () => {
     //Firebase Authenticationにアカウントを作成している
     const cred = await createUserWithEmailAndPassword(auth, email, password)
     user.value = cred.user
-    // Firestore にユーザーデータを保存
-    await setDoc(doc(db, 'users', cred.user.uid), {
-      email: cred.user.email,
-      username: username,
-      createdAt: new Date(),
+
+    // サーバー側からFirestoreへ保存をしている
+    await $fetch('/api/SaveUser', {
+      method: 'POST',
+      body: {
+        uid: cred.user.uid,
+        email: cred.user.email,
+        username,
+      },
     })
   }
 
