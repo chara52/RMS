@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, computed, onMounted, watch } from 'vue'
+import { reactive, ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from '../components/FilteredReservation.vue'
 import MenuButtonComponent from '../components/MenuButton.vue'
@@ -26,7 +26,11 @@ const shiftClient = createClient({
   apiKey: import.meta.env.VITE_SHIFT_API_KEY,
 })
 
-const reservations = reactive([])
+const reservations = reactive([]);
+const shiftList = ref([]);
+const inputDate = ref('');
+
+// 予約データを取得
 reservationClient.getList({
   endpoint: 'data',
 })
@@ -37,45 +41,46 @@ reservationClient.getList({
 })
 .catch((err) => console.error(err))
 
-const inputDate = ref('')
-const shiftList = ref([])
-
+// 初期値設定
 onMounted(() => {
   const now = new Date()
   inputDate.value = new Date(now.getTime() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
-})
+});
 
+// 日付を記録する関数
 const recordDate = (date) => {
-  inputDate.value = date
-}
+  inputDate.value = date;
+};
+
+//シフトデータの取得
+shiftClient.getList({
+  endpoint: 'shiftdata',
+})
+.then((res) => {
+  console.log(res)
+  shiftList.value = res.contents
+})
+.catch((err) => console.error(err))
 
 const filteredReservations = computed(() => {
   if (!inputDate.value) {
-    return reservations
+    return reservations;
   }
   return reservations.filter((reservation) => {
-    const reservationDate = reservation.time.split('T')[0]
-    return inputDate.value === reservationDate
-  })
-})
+    const reservationDate = reservation.time.split('T')[0];
+    return inputDate.value === reservationDate;
+  });
+});
 
-// 日付が変更されたらシフト情報を取得
-watch(inputDate, async (newDate) => {
-  if (!newDate) return
-  try {
-    const res = await shiftClient.getList({
-      endpoint: 'shiftdata',
-      queries: {
-        filters: `date[equals]${newDate}`,
-        limit: 100,
-      },
-    })
-    shiftList.value = res.contents
-    console.log('取得したシフト:', shiftList.value)
-  } catch (error) {
-    console.error('シフトデータ取得エラー:', error)
+const filteredShiftList = computed(() => {
+  if (!inputDate.value) {
+    return shiftList.value;
   }
-}, { immediate: true })
+  return shiftList.value.filter((shift) => {
+    const shiftDate = shift.date.split('T')[0]; // 日付フォーマットに合わせて調整してください
+    return inputDate.value === shiftDate;
+  });
+});
 </script>
 
 <template>
@@ -88,13 +93,13 @@ watch(inputDate, async (newDate) => {
   <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
 
   <div>
-    <ul v-if="shiftList.length > 0">
-      <li v-for="(shift, index) in shiftList" :key="index">
-        {{ shift.name }}
-      </li>
-    </ul>
-    <p v-else>シフトはありません。</p>
-  </div>
+  <ul v-if="filteredShiftList.length > 0">
+    <li v-for="(shift, index) in filteredShiftList" :key="index">
+      {{ shift.name }}
+    </li>
+  </ul>
+  <p v-else>シフトはありません。</p>
+</div>
 
   <div v-if="filteredReservations.length > 0">
     <table border="1" width="100%">
@@ -141,13 +146,11 @@ watch(inputDate, async (newDate) => {
     width: auto;
     border-collapse: collapse;
     table-layout: fixed;
-    /* 幅を決める */
   }
 
   table th.name {
     width: 15%;
     writing-mode: horizontal-tb;
-    /* 横書きに変換 */
   }
 
   table th.people {
@@ -172,7 +175,6 @@ watch(inputDate, async (newDate) => {
 
   table tr {
     height: 70px;
-    /* 枠の縦幅を調整 */
     background-color: #fff9e6;
   }
 
@@ -184,7 +186,6 @@ watch(inputDate, async (newDate) => {
     font-size: 13px;
     text-align: center;
     white-space: normal;
-    /* 枠の中に入らなかった場合自動で改行 */
   }
   .no-reservations-message {
     text-align: center;

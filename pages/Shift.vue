@@ -26,13 +26,14 @@ const getWeekdayLabel = (index) => {
 
 onMounted(() => {
   const now = new Date()
-  const jstNow = new Date(now.getTime() + 9 * 60 * 60 * 1000)
-  const dayOfWeek = jstNow.getDay()
-  const daysUntilMonday = (8 - dayOfWeek) % 7 || 7
-  const nextMonday = new Date(jstNow)
-  nextMonday.setDate(jstNow.getDate() + daysUntilMonday)
-  startDate.value = formatDate(nextMonday)
-  shiftData.days = Array.from({ length: 7 }, () => [{ name: ''}])
+  const jst = new Date(now.getTime() + 9 * 60 * 60 * 1000)
+  const day = jst.getDay() // JSTの曜日（0:日曜, ..., 6:土曜）
+
+  const daysToAdd = (8 - day) % 7 || 7
+  jst.setDate(jst.getDate() + daysToAdd)
+
+  startDate.value = jst.toISOString().split('T')[0]
+  shiftData.days = Array.from({ length: 7 }, () => [{ name: '' }])
 })
 
 const getDateWithOffset = (offset) => {
