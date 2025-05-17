@@ -1,5 +1,12 @@
 export function addCourseDrink(course, drink) {
 
+  if (
+    (!Array.isArray(course) || course.length === 0 || course[0] === "なし") &&
+    (!Array.isArray(drink) || drink.length === 0 || drink[0] === "なし")
+  ) {
+    return "";
+  }
+
   const CP = course.map(price => Number(price));
   const sumCP = CP.reduce((acc, cur) => acc + cur, 0);
 
@@ -13,7 +20,7 @@ export function addCourseDrink(course, drink) {
       DP = 3000;
     }
     return `${sumCP + DP}込`;
-  } else if (Array.isArray(drink) && drink.length > 0 && course[0] === "なし") {
+  } else if (Array.isArray(drink) && drink.length > 0 && course[0] === "なし" || course.length === 0) {
     const trimmedDrink = drink[0].trim();
 
     if (trimmedDrink === "2500円（2h）") {
