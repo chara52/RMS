@@ -132,7 +132,7 @@ const filteredShiftList = computed(() => {
   </div>
 
   <div v-else>
-    <p class="no-reservations-message">現在、予約はありません。</p>
+    <p class="no-reservations-message">予約はありません</p>
   </div>
 </template>
 
@@ -189,6 +189,8 @@ const filteredShiftList = computed(() => {
   }
   .no-reservations-message {
     text-align: center;
+    font-size: 22px;
+    margin-top: 45px;
   }
 }
 
