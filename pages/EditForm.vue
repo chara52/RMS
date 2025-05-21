@@ -168,7 +168,7 @@ watch(() => formData.time, (newTime) => {
       </div>
       <div class="form-group">
         <label for="seat">席番号</label>
-        <input type="text" id="seat" v-model="formData.seat" required />
+        <input type="text" id="seat" v-model="formData.seat" />
       </div>
       <div class="form-group">
         <button type="submit" class="submit-button">更新</button>
