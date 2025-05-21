@@ -16,44 +16,71 @@ const goToDetail = (reservation) => {
   router.push('/ReservationDetail');
 };
 
-const client = createClient({
+const reservationClient = createClient({
   serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
   apiKey: import.meta.env.VITE_API_KEY,
 })
 
-const reservations = reactive([])
+const shiftClient = createClient({
+  serviceDomain: import.meta.env.VITE_SHIFT_DOMAIN,
+  apiKey: import.meta.env.VITE_SHIFT_API_KEY,
+})
 
-client
-  .getList({
-    endpoint: 'data',
-  })
-  .then((res) => {
-    console.log(res)
-    reservations.push(...res.contents)
-    sortTime(reservations)
-  })
-  .catch((err) => console.error(err))
+const reservations = reactive([]);
+const shiftList = ref([]);
+const inputDate = ref('');
 
-const inputDate = ref(null)
+// 予約データを取得
+reservationClient.getList({
+  endpoint: 'data',
+})
+.then((res) => {
+  console.log(res)
+  reservations.push(...res.contents)
+  sortTime(reservations)
+})
+.catch((err) => console.error(err))
 
+// 初期値設定
 onMounted(() => {
   const now = new Date()
   inputDate.value = new Date(now.getTime() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
-})
+});
 
+// 日付を記録する関数
 const recordDate = (date) => {
-  inputDate.value = date
-}
+  inputDate.value = date;
+};
+
+//シフトデータの取得
+shiftClient.getList({
+  endpoint: 'shiftdata',
+})
+.then((res) => {
+  console.log(res)
+  shiftList.value = res.contents
+})
+.catch((err) => console.error(err))
 
 const filteredReservations = computed(() => {
   if (!inputDate.value) {
-    return reservations
+    return reservations;
   }
   return reservations.filter((reservation) => {
-    const reservationDate = reservation.time.split('T')[0]
-    return inputDate.value === reservationDate
-  })
-})
+    const reservationDate = reservation.time.split('T')[0];
+    return inputDate.value === reservationDate;
+  });
+});
+
+const filteredShiftList = computed(() => {
+  if (!inputDate.value) {
+    return shiftList.value;
+  }
+  return shiftList.value.filter((shift) => {
+    const shiftDate = shift.date.split('T')[0]; // 日付フォーマットに合わせて調整してください
+    return inputDate.value === shiftDate;
+  });
+});
 </script>
 
 <template>
@@ -64,6 +91,15 @@ const filteredReservations = computed(() => {
   <MenuButtonComponent />
 
   <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
+
+  <div>
+  <ul v-if="filteredShiftList.length > 0">
+    <li v-for="(shift, index) in filteredShiftList" :key="index">
+      {{ shift.name }}
+    </li>
+  </ul>
+  <p v-else>シフトはありません。</p>
+</div>
 
   <div v-if="filteredReservations.length > 0">
     <table border="1" width="100%">
@@ -110,13 +146,11 @@ const filteredReservations = computed(() => {
     width: auto;
     border-collapse: collapse;
     table-layout: fixed;
-    /* 幅を決める */
   }
 
   table th.name {
     width: 15%;
     writing-mode: horizontal-tb;
-    /* 横書きに変換 */
   }
 
   table th.people {
@@ -141,7 +175,6 @@ const filteredReservations = computed(() => {
 
   table tr {
     height: 70px;
-    /* 枠の縦幅を調整 */
     background-color: #fff9e6;
   }
 
@@ -153,10 +186,28 @@ const filteredReservations = computed(() => {
     font-size: 13px;
     text-align: center;
     white-space: normal;
-    /* 枠の中に入らなかった場合自動で改行 */
   }
   .no-reservations-message {
     text-align: center;
   }
+}
+
+.shift-info {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+.shift-info h2 {
+  margin-bottom: 5px;
+}
+.shift-info ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.shift-info li {
+  margin: 2px 0;
 }
 </style>
