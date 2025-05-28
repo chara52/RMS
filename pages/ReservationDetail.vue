@@ -52,19 +52,20 @@ const handleDelete = () => {
     <p><strong>時間 :</strong> {{ formData.time }}</p>
     <p><strong>コース :</strong>
       <span v-if="formData.course[0] === 'なし'">
-        なし
+
       </span>
       <span v-else-if="formData.course && formData.course.length > 0">
         {{ formData.course.join(", ") }}円
       </span>
     </p>
     <p><strong>飲み放題 :</strong>
-      <span v-if="formData.drink && formData.drink.length > 0">
+      <span v-if="formData.drink[0] === 'なし'">
+
+      </span>
+      <span v-else-if="formData.drink && formData.drink.length > 0">
         {{ formData.drink.join(", ") }}
       </span>
-      <span v-else>
-        なし
-      </span>
+
     </p>
     <p><strong>詳細 :</strong> {{ formData.info }}</p>
     <p><strong>電話番号 :</strong> {{ formData.phone }}</p>
