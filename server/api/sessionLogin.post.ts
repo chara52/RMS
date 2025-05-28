@@ -14,7 +14,7 @@ if (!getApps().length) {
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const idToken = body.idToken
-  const expiresIn = 5 * 60 * 1000 // 5分
+  const expiresIn = 24 * 60 * 60 * 1000 // 5分
 
   try {
     // クッキーのセッションを生成
