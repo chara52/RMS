@@ -93,12 +93,13 @@ const filteredShiftList = computed(() => {
   <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
 
   <div>
-  <ul v-if="filteredShiftList.length > 0">
-    <li v-for="(shift, index) in filteredShiftList" :key="index">
+    <div v-if="filteredShiftList.length > 0" class="shift-list">
+      <div v-for="(shift, index) in filteredShiftList" :key="index" class="shift-name">
       {{ shift.name }}
-    </li>
-  </ul>
+    </div>
+  </div>
   <p v-else>シフトはありません。</p>
+
 </div>
 
   <div v-if="filteredReservations.length > 0">
@@ -211,5 +212,17 @@ const filteredShiftList = computed(() => {
 }
 .shift-info li {
   margin: 2px 0;
+}
+
+.shift-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.shift-name {
+  padding: 5px 10px;
+  border-radius: 4px;
 }
 </style>
