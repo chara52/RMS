@@ -12,13 +12,6 @@ const shiftData = reactive({
   days: [],
 })
 
-const formatDate = (date) => {
-  if (!date) return ''
-  if (!(date instanceof Date)) date = new Date(date)
-  if (isNaN(date)) return ''
-  return date.toISOString().split('T')[0]
-}
-
 const getWeekdayLabel = (index) => {
   const weekdays = ['月', '火', '水', '木', '金', '土', '日']
   return weekdays[index]
@@ -39,7 +32,9 @@ onMounted(() => {
 const getDateWithOffset = (offset) => {
   const base = new Date(startDate.value)
   base.setDate(base.getDate() + offset)
-  return formatDate(base)
+  const month = base.getMonth() + 1
+  const day = base.getDate()
+  return `${month}月${day}日`
 }
 
 const addRow = (dayIndex) => {
@@ -63,16 +58,18 @@ function goToConfirm() {
   <MenuButtonComponent />
   <div class="shift-page">
     <h1>シフト作成</h1>
-    <p>週の開始日（次の月曜）: {{ startDate }}</p>
     <div v-for="(day, index) in shiftData.days" :key="index" class="day-section">
-      <h2>{{ getDateWithOffset(index) }} ({{ getWeekdayLabel(index) }}曜)</h2>
+      <h2>{{ getDateWithOffset(index) }} ({{ getWeekdayLabel(index) }})</h2>
       <div v-for="(row, rowIndex) in day" :key="rowIndex" class="shift-row">
         <input v-model="row.name" placeholder="名前" />
-        <button class="remove-btn" @click="removeRow(index, rowIndex)" :disabled="day.length === 1">🗑</button>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <button class="remove-btn" @click="removeRow(index, rowIndex)" :disabled="day.length === 1">
+          <i class="fa-regular fa-trash-can"></i>
+        </button>
       </div>
       <button class="add-btn" @click="addRow(index)">＋ 行を追加</button>
     </div>
-    <button @click="goToConfirm">確認</button>
+    <button class="go-btn" @click="goToConfirm">確認</button>
   </div>
 </template>
 
@@ -103,6 +100,15 @@ input {
   flex: 1;
 }
 
+button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #fbc02d;
+  color: black;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 button.add-btn {
   margin-top: 6px;
   padding: 4px 10px;
@@ -125,5 +131,16 @@ button.remove-btn {
 button.remove-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+button.go-btn {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+button:hover {
+  background-color: #f29c1f;
 }
 </style>
