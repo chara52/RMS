@@ -31,11 +31,25 @@ export const useAuth = () => {
   const login = async (email: string, password: string) => {
     const cred = await signInWithEmailAndPassword(auth, email, password)
     user.value = cred.user
+
+    // サーバーサイドからIDトークンを取得
+    const idToken = await cred.user.getIdToken()
+
+    // APIにセッション作成をリクエスト、IDトークンをPOST
+    await $fetch('/api/sessionLogin', {
+      method: 'POST',
+      body: { idToken },
+    })
   }
 
   const logout = async () => {
     await signOut(auth)
     user.value = null
+
+    //以下を追加
+    await $fetch('/api/sessionLogout', {
+      method: 'POST',
+    })
   }
 
   // 認証状態の保持
