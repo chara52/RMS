@@ -1,4 +1,3 @@
-// server/api/sessionLogin.post.ts
 import { auth as adminAuth } from 'firebase-admin'
 import { parseCookies, setCookie } from 'h3'
 import { getAuth } from 'firebase-admin/auth'

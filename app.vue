@@ -20,7 +20,7 @@ onMounted(() => {
     }
   }
 
-  // 24時間ごとに確認（必要に応じて調整）
+  // 24時間ごとに確認
   setInterval(checkSession, 24 * 60 * 60 * 1000)
 })
 </script>
