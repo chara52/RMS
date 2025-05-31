@@ -1,4 +1,3 @@
-// server/api/sessionLogout.post.ts
 import { setCookie } from 'h3'
 
 export default defineEventHandler(async (event) => {
