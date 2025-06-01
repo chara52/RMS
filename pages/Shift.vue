@@ -137,7 +137,7 @@ button.go-btn {
   display: flex;
   gap: 20px;
   margin-top: 20px;
-  justify-content: center;
+  justify-content: right;
 }
 
 button:hover {
