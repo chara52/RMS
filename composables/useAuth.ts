@@ -1,4 +1,3 @@
-// composables/useAuth.ts
 import { auth, db } from '../plugins/firebase'
 import {
   createUserWithEmailAndPassword,
