@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
+import { isValidBirthdayFormat } from '../composables/passwordValidator'
 
 const email = ref('')
 const password = ref('')
@@ -12,6 +13,11 @@ const { signup } = useAuth()
 const router = useRouter()
 
 const handleSignup = async () => {
+  if (!isValidBirthdayFormat(password.value)) {
+    alert('パスワードの形式が正しくありません')
+    return
+  }
+
   if(password.value !== confirmPassword.value){
     alert('パスワードが一致しません')
     return
