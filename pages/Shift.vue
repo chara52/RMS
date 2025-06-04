@@ -69,7 +69,9 @@ function goToConfirm() {
       </div>
       <button class="add-btn" @click="addRow(index)">＋ 行を追加</button>
     </div>
-    <button class="go-btn" @click="goToConfirm">確認</button>
+    <div class="go-btn-wrapper">
+      <button class="go-btn" @click="goToConfirm">確認</button>
+    </div>
   </div>
 </template>
 
@@ -133,11 +135,15 @@ button.remove-btn:disabled {
   cursor: not-allowed;
 }
 
-button.go-btn {
+.go-btn-wrapper {
   display: flex;
-  gap: 20px;
+  justify-content: center;
   margin-top: 20px;
-  justify-content: right;
+}
+
+button.go-btn {
+  padding: 10px 20px;
+  font-size: 20px;
 }
 
 button:hover {
