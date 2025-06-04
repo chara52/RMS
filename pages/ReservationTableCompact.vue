@@ -94,13 +94,12 @@ const filteredShiftList = computed(() => {
 
   <div>
     <div v-if="filteredShiftList.length > 0" class="shift-list">
-      <div v-for="(shift, index) in filteredShiftList" :key="index" class="shift-name">
-      {{ shift.name }}
+      <div class="shift-name">
+        {{ filteredShiftList.map(shift => shift.name).join(', ') }}
+      </div>
     </div>
+    <p v-else class="shift-list">シフトはありません。</p>
   </div>
-  <p v-else>シフトはありません。</p>
-
-</div>
 
   <div v-if="filteredReservations.length > 0">
     <table border="1" width="100%">

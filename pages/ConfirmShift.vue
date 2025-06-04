@@ -83,8 +83,8 @@ const submitShift = async () => {
       <p>シフトデータがありません。</p>
     </div>
     <div class="button-container">
-      <button @click="router.push('/Shift')">戻る</button>
-      <button @click="submitShift">送信</button>
+      <button @click="router.push('/Shift')" class="go-back-btn">戻る</button>
+      <button @click="submitShift" class="go-back-btn">送信</button>
     </div>
   </div>
 </template>
@@ -95,27 +95,32 @@ const submitShift = async () => {
   max-width: 600px;
   margin: auto;
 }
+
 .day-section {
   margin-bottom: 30px;
   border-bottom: 1px solid #ccc;
   padding-bottom: 10px;
 }
+
 ul {
   list-style: none;
   padding: 0;
 }
+
 li {
   background: #f5f5f5;
   margin: 6px 0;
   padding: 6px;
   border-radius: 5px;
 }
+
 .button-container {
   display: flex;
   gap: 20px;
   margin-top: 20px;
   justify-content: center;
 }
+
 button {
   padding: 10px 20px;
   border: none;
@@ -124,7 +129,12 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
+
 button:hover {
   background-color: #f29c1f;
+}
+.go-back-btn {
+  padding: 10px 20px;
+  font-size: 20px;
 }
 </style>
