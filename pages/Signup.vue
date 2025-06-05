@@ -13,6 +13,26 @@ const { signup } = useAuth()
 const router = useRouter()
 
 const handleSignup = async () => {
+  if (!email.value) {
+    alert('メールアドレスが入力されていません')
+    return
+  }
+
+  if (!username.value) {
+    alert('ユーザーネームが入力されていません')
+    return
+  }
+
+  if (!password.value) {
+    alert('パスワードが入力されていません')
+    return
+  }
+
+  if (!confirmPassword.value) {
+    alert('パスワード(確認用)が入力されていません')
+    return
+  }
+
   if (!isValidBirthdayFormat(password.value)) {
     alert('パスワードの形式が正しくありません')
     return
@@ -25,13 +45,13 @@ const handleSignup = async () => {
 
   try {
     await signup(email.value, password.value, username.value)
-    alert('アカウント作成成功！')
+    alert('アカウント作成に成功しました')
     router.push('/')
   } catch (e) {
     if (e.code === 'auth/email-already-in-use') {
       alert('このメールアドレスはすでに使用されています')
     } else {
-      alert('アカウント作成失敗: ' + e.message)
+      alert('アカウント作成に失敗しました')
     }
   }
 }
