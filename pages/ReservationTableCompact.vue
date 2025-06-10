@@ -7,14 +7,22 @@ import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter } from 'vue-router'
 
-defineProps({ reservationsDetail: Array });
+const showShift = ref(false)
 
-const router = useRouter();
+const toggleShift = () => {
+  showShift.value = !showShift.value
+}
+
+/* テスト用 */
+
+defineProps({ reservationsDetail: Array })
+
+const router = useRouter()
 
 const goToDetail = (reservation) => {
-  localStorage.setItem('selectedReservation', JSON.stringify(reservation));
-  router.push('/ReservationDetail');
-};
+  localStorage.setItem('selectedReservation', JSON.stringify(reservation))
+  router.push('/ReservationDetail')
+}
 
 const reservationClient = createClient({
   serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
@@ -26,9 +34,9 @@ const shiftClient = createClient({
   apiKey: import.meta.env.VITE_SHIFT_API_KEY,
 })
 
-const reservations = reactive([]);
-const shiftList = ref([]);
-const inputDate = ref('');
+const reservations = reactive([])
+const shiftList = ref([])
+const inputDate = ref('')
 
 // 予約データを取得
 reservationClient.getList({
@@ -46,12 +54,12 @@ reservationClient.getList({
 onMounted(() => {
   const now = new Date()
   inputDate.value = new Date(now.getTime() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
-});
+})
 
 // 日付を記録する関数
 const recordDate = (date) => {
-  inputDate.value = date;
-};
+  inputDate.value = date
+}
 
 //シフトデータの取得
 shiftClient.getList({
@@ -66,23 +74,23 @@ shiftClient.getList({
 
 const filteredReservations = computed(() => {
   if (!inputDate.value) {
-    return reservations;
+    return reservations
   }
   return reservations.filter((reservation) => {
-    const reservationDate = reservation.time.split('T')[0];
-    return inputDate.value === reservationDate;
-  });
-});
+    const reservationDate = reservation.time.split('T')[0]
+    return inputDate.value === reservationDate
+  })
+})
 
 const filteredShiftList = computed(() => {
   if (!inputDate.value) {
-    return shiftList.value;
+    return shiftList.value
   }
   return shiftList.value.filter((shift) => {
-    const shiftDate = shift.date.split('T')[0]; // 日付フォーマットに合わせて調整してください
-    return inputDate.value === shiftDate;
-  });
-});
+    const shiftDate = shift.date.split('T')[0] // 日付フォーマットに合わせて調整してください
+    return inputDate.value === shiftDate
+  })
+})
 </script>
 
 <template>
@@ -92,15 +100,33 @@ const filteredShiftList = computed(() => {
 
   <MenuButtonComponent />
 
-  <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
+  <div class="shift-section">
+  <!-- 左上にボタン配置 -->
+  <div class="shift-controls">
+    <button @click="goToShiftEdit" class="edit-button">シフト編集</button>
+    <button @click="toggleShift" class="toggle-button">
+      {{ showShift ? 'シフトを隠す' : 'シフトを表示' }}
+    </button>
+  </div>
 
-  <div>
+  <!-- シフト情報本体：左寄せ -->
+  <div v-if="showShift" class="shift-display">
     <div v-if="filteredShiftList.length > 0" class="shift-list">
-      <div class="shift-name">
-        {{ filteredShiftList.map(shift => shift.name).join(', ') }}
+      <div v-for="shift in filteredShiftList" :key="shift.id" class="shift-name">
+        {{ shift.name }}
       </div>
     </div>
     <p v-else class="shift-list">シフトはありません。</p>
+  </div>
+</div>
+
+
+  <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
+
+  <div class="button-container1">
+    <button @click="sortPeople(reservations)" class="bc1">人数順</button>
+    <button @click="sortSeat(reservations)" class="bc1">卓順</button>
+    <button @click="sortTiime(reservations)" class="bc1">時間順</button>
   </div>
 
   <div v-if="filteredReservations.length > 0">
@@ -115,19 +141,23 @@ const filteredShiftList = computed(() => {
         </tr>
       </tbody>
       <tbody>
-        <tr v-for="reservation in filteredReservations" :key="reservation.id" @click="goToDetail(reservation)">
-            <td class="name-space">{{ reservation.name }}</td>
-            <td class="number-space">{{ reservation.people }}</td>
-            <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
-            <td class="seat-space">{{ reservation.seat }}</td>
-            <td class="info-space">
-              <div>
-                {{ addCourseDrink(reservation.course, reservation.drink) }}
-              </div>
-              <div>
-                {{ reservation.info }}
-              </div>
-            </td>
+        <tr
+          v-for="reservation in filteredReservations"
+          :key="reservation.id"
+          @click="goToDetail(reservation)"
+        >
+          <td class="name-space">{{ reservation.name }}</td>
+          <td class="number-space">{{ reservation.people }}</td>
+          <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
+          <td class="seat-space">{{ reservation.seat }}</td>
+          <td class="info-space">
+            <div>
+              {{ addCourseDrink(reservation.course, reservation.drink) }}
+            </div>
+            <div>
+              {{ reservation.info }}
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -139,6 +169,99 @@ const filteredShiftList = computed(() => {
 </template>
 
 <style scoped>
+table th,
+table td {
+  text-align: center;
+  vertical-align: middle;
+}
+.sort-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.sort-buttons button {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  background-color: #ffe38f;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sort-buttons button:hover {
+  background-color: #ffd75e;
+}
+.button-container1 {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.bc1 {
+  width: 90px;
+  height: 35px;
+  background-color: #ececec;
+  border: 0px;
+  border-radius: 25px;
+  padding: 0px 10px;
+  cursor: pointer;
+  font-size: 14.5px;
+  font-weight: bold;
+}
+
+.shift-section {
+  margin: 15px 0;
+}
+
+.shift-controls {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.edit-button,
+.toggle-button {
+  background-color: #ececec;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.edit-button:hover,
+.toggle-button:hover {
+  background-color: #ddd;
+}
+
+.shift-display {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ← 左寄せ */
+  padding-left: 10px;
+}
+
+.shift-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.shift-name {
+  background-color: #fff9e6;
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* ここから上はテスト用 */
 .reservation-table-name {
   text-align: center;
 }
