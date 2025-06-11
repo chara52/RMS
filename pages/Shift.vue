@@ -142,8 +142,15 @@ button.remove-btn:disabled {
 }
 
 button.go-btn {
-  padding: 10px 20px;
-  font-size: 20px;
+  width: 130px;
+  height: 45px;
+  color: black;
+  background-color: #fbc02d;
+  border: 2px solid #fbc02d;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
 }
 
 button:hover {
