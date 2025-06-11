@@ -49,22 +49,20 @@ header h1 {
   display: inline-block; /* 背景色を文字幅に合わせる */
 }
 
-/* ボタンコンテナ */
 .button-container {
-  margin-top: 30px; /* 上部の余白を増やしてボタン間隔を広げる */
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
-  gap: 20px; /* ボタンの間に20pxの間隔を追加 */
+  gap: 20px;
   align-items: center;
 }
 
-/* ボタンのスタイル */
 .btn {
   font-size: 1.5em;
   width: 150px;
   height: 80px;
   color: white;
-  background-color: #f9ae35; /* オレンジ色に変更 */
+  background-color: #f9ae35;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -74,12 +72,12 @@ header h1 {
 }
 
 .btn:hover {
-  background-color: #ff4500; /* ホバー時のオレンジ色を少し濃く */
+  background-color: #ff4500;
   transform: scale(1.05);
 }
 
 .btn:active {
-  background-color: #e03e00; /* クリック時のオレンジ色をさらに濃く */
+  background-color: #e03e00;
   transform: scale(1);
 }
 </style>

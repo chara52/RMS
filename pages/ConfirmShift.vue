@@ -116,25 +116,23 @@ li {
 
 .button-container {
   display: flex;
-  gap: 20px;
+  gap: 37px;
   margin-top: 20px;
   justify-content: center;
-}
-
-button {
-  padding: 10px 20px;
-  border: none;
-  background-color: #fbc02d;
-  color: black;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 button:hover {
   background-color: #f29c1f;
 }
 .go-back-btn {
-  padding: 10px 20px;
-  font-size: 20px;
+  width: 130px;
+  height: 45px;
+  color: black;
+  background-color: #fbc02d;
+  border: 2px solid #fbc02d;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
 }
 </style>

@@ -23,7 +23,7 @@ const reservations = reactive([])
 client
   .getList({
     endpoint: 'data',
-    queries: { limit: 100}
+    queries: { limit: 100 }
   })
   .then((res) => {
     console.log(res)
@@ -80,17 +80,17 @@ const filteredReservations = computed(() => {
       </tbody>
       <tbody>
         <tr v-for="reservation in filteredReservations" :key="reservation.id">
-            <td class="name-space">{{ reservation.name }}</td>
-            <td class="number-space">{{ reservation.people }}</td>
-            <td class="seat-space">{{ reservation.seat }}</td>
-            <td class="info-space">
-              <div v-if="addCourseDrink(reservation.course, reservation.drink) !== '0込'">
-                {{ addCourseDrink(reservation.course, reservation.drink) }}
-              </div>
-              <div>
-                {{ reservation.info }}
-              </div>
-            </td>
+          <td class="name-space">{{ reservation.name }}</td>
+          <td class="number-space">{{ reservation.people }}</td>
+          <td class="seat-space">{{ reservation.seat }}</td>
+          <td class="info-space">
+            <div v-if="addCourseDrink(reservation.course, reservation.drink) !== '0込'">
+              {{ addCourseDrink(reservation.course, reservation.drink) }}
+            </div>
+            <div>
+              {{ reservation.info }}
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -111,98 +111,96 @@ const filteredReservations = computed(() => {
   text-align: center;
 }
 
-@media (max-width: 768px) {
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-    /* 幅を決める */
-  }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  /* 幅を決める */
+}
 
-  table th.name {
-    width: 25%;
-    writing-mode: horizontal-tb;
-    /* 横書きに変換 */
-  }
+table th.name {
+  width: 25%;
+  writing-mode: horizontal-tb;
+  /* 横書きに変換 */
+}
 
-  table th.people {
-    width: 15%;
-    writing-mode: horizontal-tb;
-  }
+table th.people {
+  width: 15%;
+  writing-mode: horizontal-tb;
+}
 
-  table th.seat {
-    width: 20%;
-    writing-mode: horizontal-tb;
-  }
+table th.seat {
+  width: 20%;
+  writing-mode: horizontal-tb;
+}
 
-  table th.info {
-    width: 35%;
-    writing-mode: horizontal-tb;
-  }
+table th.info {
+  width: 35%;
+  writing-mode: horizontal-tb;
+}
 
-  table tr {
-    height: 70px;
-    /* 枠の縦幅を調整 */
-    background-color: #fff9e6;
-  }
+table tr {
+  height: 70px;
+  /* 枠の縦幅を調整 */
+  background-color: #fff9e6;
+}
 
-  .name-space,
-  .number-space,
-  .time-space,
-  .seat-space,
-  .info-space {
-    font-size: 13px;
-    text-align: center;
-    white-space: normal;
-    /* 枠の中に入らなかった場合自動で改行 */
-  }
+.name-space,
+.number-space,
+.time-space,
+.seat-space,
+.info-space {
+  font-size: 13px;
+  text-align: center;
+  white-space: normal;
+  /* 枠の中に入らなかった場合自動で改行 */
+}
 
-  .no-reservations-message {
-    text-align: center;
-    font-size: 22px;
-    margin-top: 45px;
-  }
+.no-reservations-message {
+  text-align: center;
+  font-size: 22px;
+  margin-top: 45px;
+}
 
-  .button-container1 {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-  }
+.button-container1 {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
 
-  .button-container2 {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 18px;
-  }
+.button-container2 {
+  display: flex;
+  justify-content: center;
+  gap: 37px;
+  margin-top: 18px;
+}
 
-  .bc1 {
-    width: 90px;
-    height: 40px;
-    background-color: #ececec;
-    border: 0px;
-    border-radius: 25px;
-    margin: 10px 0;
-    padding: 0px 10px;
-    cursor: pointer;
-    font-size: 14.5px;
-    font-weight: bold;
-  }
+.bc1 {
+  width: 90px;
+  height: 40px;
+  background-color: #ececec;
+  border: 0px;
+  border-radius: 25px;
+  margin: 10px 0;
+  padding: 0px 10px;
+  cursor: pointer;
+  font-size: 14.5px;
+  font-weight: bold;
+}
 
-  .bc2 {
-    width: 180px;
-    height: 50px;
-    background-color: #fbc02d;
-    border: 2px solid #565655;
-    border-radius: 12px;
-    padding: 5px 20px;
-    cursor: pointer;
-    font-size: 22px;
-    font-weight: bold;
-  }
+.bc2 {
+  width: 130px;
+  height: 45px;
+  color: black;
+  background-color: #fbc02d;
+  border: 2px solid #fbc02d;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
 
-  button:hover {
-    background-color: #f9a825;
-  }
+button:hover {
+  background-color: #f9a825;
 }
 </style>
