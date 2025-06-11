@@ -11,6 +11,16 @@ const { login } = useAuth()
 const router = useRouter()
 
 const handleLogin = async () => {
+  if (!email.value) {
+    alert('メールアドレスが入力されていません')
+    return
+  }
+
+  if (!password.value) {
+    alert('パスワードが入力されていません')
+    return
+  }
+
   if (!isValidBirthdayFormat(password.value)) {
     alert('パスワードの形式が正しくありません')
     return
@@ -18,10 +28,14 @@ const handleLogin = async () => {
 
   try {
     await login(email.value, password.value)
-    alert('ログイン成功！')
+    alert('ログインに成功しました')
     router.push('/HomePage')
   } catch (e) {
-    alert('ログイン失敗: ' + e.message)
+    if (e.code === 'auth/invalid-credential') {
+      alert('メールアドレスまたはパスワードが間違っています')
+    } else {
+      alert('ログインに失敗しました')
+    }
   }
 }
 </script>
