@@ -33,6 +33,7 @@ const inputDate = ref('');
 // 予約データを取得
 reservationClient.getList({
   endpoint: 'data',
+  queries: { limit: 100 }
 })
 .then((res) => {
   console.log(res)
@@ -55,6 +56,7 @@ const recordDate = (date) => {
 //シフトデータの取得
 shiftClient.getList({
   endpoint: 'shiftdata',
+  queries: { limit: 100 }
 })
 .then((res) => {
   console.log(res)

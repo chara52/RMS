@@ -23,6 +23,7 @@ const reservations = reactive([])
 client
   .getList({
     endpoint: 'data',
+    queries: { limit: 100}
   })
   .then((res) => {
     console.log(res)
