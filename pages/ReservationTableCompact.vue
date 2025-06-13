@@ -90,9 +90,12 @@ const filteredShiftList = computed(() => {
     <h1>予約表</h1>
   </div>
 
-  <MenuButtonComponent />
-
-  <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
+  <div class="shift-edit">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <button class="shift-edit-btn">
+      <i class="fa-solid fa-pen"></i>
+    </button>
+  </div>
 
   <div>
     <div v-if="filteredShiftList.length > 0" class="shift-list">
@@ -101,6 +104,24 @@ const filteredShiftList = computed(() => {
       </div>
     </div>
     <p v-else class="shift-list">シフトはありません。</p>
+  </div>
+
+
+  <MenuButtonComponent />
+
+  <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
+
+ <div class="sort-btns">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <button class="sort-btn">
+      <i class="fa-solid fa-clock"></i>
+    </button>
+    <button class="sort-btn">
+      <i class="fa-solid fa-user"></i>
+    </button>
+    <button class="sort-btn">
+      <i class="fa-solid fa-chair"></i>
+    </button>
   </div>
 
   <div v-if="filteredReservations.length > 0">
@@ -215,6 +236,8 @@ const filteredShiftList = computed(() => {
   margin: 2px 0;
 }
 
+.sort-btns,
+.shift-edit,
 .shift-list {
   display: flex;
   flex-wrap: wrap;
@@ -225,5 +248,11 @@ const filteredShiftList = computed(() => {
 .shift-name {
   padding: 5px 10px;
   border-radius: 4px;
+}
+
+.sort-btn,
+.shift-edit-btn {
+  padding: 5px 15px;
+  font-size: 15px;
 }
 </style>
