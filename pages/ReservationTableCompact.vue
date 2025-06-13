@@ -101,7 +101,6 @@ const filteredShiftList = computed(() => {
   <MenuButtonComponent />
 
   <div class="shift-section">
-  <!-- 左上にボタン配置 -->
   <div class="shift-controls">
     <button @click="goToShiftEdit" class="edit-button">シフト編集</button>
     <button @click="toggleShift" class="toggle-button">
@@ -109,7 +108,6 @@ const filteredShiftList = computed(() => {
     </button>
   </div>
 
-  <!-- シフト情報本体：左寄せ -->
   <div v-if="showShift" class="shift-display">
     <div v-if="filteredShiftList.length > 0" class="shift-list">
       <div v-for="shift in filteredShiftList" :key="shift.id" class="shift-name">
@@ -196,11 +194,12 @@ table td {
 }
 .button-container1 {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 10px;
+  margin-bottom: 10px;
 }
 .bc1 {
-  width: 90px;
+  width: 120px;
   height: 35px;
   background-color: #ececec;
   border: 0px;
@@ -268,7 +267,7 @@ table td {
 
 @media (max-width: 768px) {
   table {
-    width: auto;
+    width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
   }
