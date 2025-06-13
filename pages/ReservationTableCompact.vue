@@ -96,11 +96,17 @@ const filteredShiftList = computed(() => {
 
   <div>
     <div v-if="filteredShiftList.length > 0" class="shift-list">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+      <i class="fa-solid fa-user-pen user-icon"></i>
       <div class="shift-name">
         {{ filteredShiftList.map(shift => shift.name).join(', ') }}
       </div>
     </div>
-    <p v-else class="shift-list">シフトはありません。</p>
+    <p v-else class="shift-list">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+      <i class="fa-solid fa-user-pen user-icon"></i>
+      シフトはありません。
+    </p>
   </div>
 
   <div v-if="filteredReservations.length > 0">
@@ -108,26 +114,35 @@ const filteredShiftList = computed(() => {
       <tbody>
         <tr>
           <th class="name">名前</th>
-          <th class="people">人数</th>
-          <th class="time">時間</th>
-          <th class="seat">卓</th>
+          <th class="people">
+            人数
+            <i class="fa-solid fa-sort sort-icon"></i>
+          </th>
+          <th class="time">
+            時間
+            <i class="fa-solid fa-sort sort-icon"></i>
+          </th>
+          <th class="seat">
+            卓
+            <i class="fa-solid fa-sort sort-icon"></i>
+          </th>
           <th class="info">詳細</th>
         </tr>
       </tbody>
       <tbody>
         <tr v-for="reservation in filteredReservations" :key="reservation.id" @click="goToDetail(reservation)">
-            <td class="name-space">{{ reservation.name }}</td>
-            <td class="number-space">{{ reservation.people }}</td>
-            <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
-            <td class="seat-space">{{ reservation.seat }}</td>
-            <td class="info-space">
-              <div>
-                {{ addCourseDrink(reservation.course, reservation.drink) }}
-              </div>
-              <div>
-                {{ reservation.info }}
-              </div>
-            </td>
+          <td class="name-space">{{ reservation.name }}</td>
+          <td class="number-space">{{ reservation.people }}</td>
+          <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
+          <td class="seat-space">{{ reservation.seat }}</td>
+          <td class="info-space">
+            <div>
+              {{ addCourseDrink(reservation.course, reservation.drink) }}
+            </div>
+            <div>
+              {{ reservation.info }}
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -145,7 +160,7 @@ const filteredShiftList = computed(() => {
 
 @media (max-width: 768px) {
   table {
-    width: auto;
+    /*width: 100%;*/
     border-collapse: collapse;
     table-layout: fixed;
   }
@@ -156,7 +171,7 @@ const filteredShiftList = computed(() => {
   }
 
   table th.people {
-    width: 10%;
+    width: 15%;
     writing-mode: horizontal-tb;
   }
 
@@ -171,7 +186,7 @@ const filteredShiftList = computed(() => {
   }
 
   table th.info {
-    width: 50%;
+    width: 45%;
     writing-mode: horizontal-tb;
   }
 
@@ -194,6 +209,25 @@ const filteredShiftList = computed(() => {
     font-size: 22px;
     margin-top: 45px;
   }
+}
+
+.user-icon {
+  display: flex;
+  justify-content: center; /* 横方向の中央ぞろえ */
+  align-items: center; /* 縦方向の中央ぞろえ */
+  float: right;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: grey;
+  font-size: 1.5rem; /* アイコンサイズ */
+  width: 30px;
+  height: 30px;
+}
+
+.sort-icon {
+  font-size: 14px;
+  color: grey;
 }
 
 .shift-info {
