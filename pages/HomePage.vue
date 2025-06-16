@@ -22,7 +22,6 @@
 </template>
 
 <style scoped>
-/* 全体のスタイル */
 .app-container {
   font-family: Arial, sans-serif;
   text-align: center;
@@ -37,7 +36,6 @@
   background-color: #fff9e6;
 }
 
-/* ヘッダーのスタイル */
 header h1 {
   font-size: 2.5em;
   color: white;
@@ -45,7 +43,7 @@ header h1 {
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* テキストを読みやすくする影 */
   background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒背景 */
   padding: 10px 20px; /* 背景色が文字を囲むように調整 */
-  border-radius: 10px; /* 背景の角を丸める */
+  border-radius: 10px;
   display: inline-block; /* 背景色を文字幅に合わせる */
 }
 

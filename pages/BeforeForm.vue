@@ -91,6 +91,17 @@ const filteredReservations = computed(() => {
               {{ reservation.info }}
             </div>
           </td>
+          <td class="name-space">{{ reservation.name }}</td>
+          <td class="number-space">{{ reservation.people }}</td>
+          <td class="seat-space">{{ reservation.seat }}</td>
+          <td class="info-space">
+            <div v-if="addCourseDrink(reservation.course, reservation.drink) !== '0込'">
+              {{ addCourseDrink(reservation.course, reservation.drink) }}
+            </div>
+            <div>
+              {{ reservation.info }}
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -117,7 +128,18 @@ table {
   table-layout: fixed;
   /* 幅を決める */
 }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  /* 幅を決める */
+}
 
+table th.name {
+  width: 25%;
+  writing-mode: horizontal-tb;
+  /* 横書きに変換 */
+}
 table th.name {
   width: 25%;
   writing-mode: horizontal-tb;
@@ -128,7 +150,15 @@ table th.people {
   width: 15%;
   writing-mode: horizontal-tb;
 }
+table th.people {
+  width: 15%;
+  writing-mode: horizontal-tb;
+}
 
+table th.seat {
+  width: 20%;
+  writing-mode: horizontal-tb;
+}
 table th.seat {
   width: 20%;
   writing-mode: horizontal-tb;
@@ -138,7 +168,16 @@ table th.info {
   width: 35%;
   writing-mode: horizontal-tb;
 }
+table th.info {
+  width: 35%;
+  writing-mode: horizontal-tb;
+}
 
+table tr {
+  height: 70px;
+  /* 枠の縦幅を調整 */
+  background-color: #fff9e6;
+}
 table tr {
   height: 70px;
   /* 枠の縦幅を調整 */
@@ -155,7 +194,22 @@ table tr {
   white-space: normal;
   /* 枠の中に入らなかった場合自動で改行 */
 }
+.name-space,
+.number-space,
+.time-space,
+.seat-space,
+.info-space {
+  font-size: 13px;
+  text-align: center;
+  white-space: normal;
+  /* 枠の中に入らなかった場合自動で改行 */
+}
 
+.no-reservations-message {
+  text-align: center;
+  font-size: 22px;
+  margin-top: 45px;
+}
 .no-reservations-message {
   text-align: center;
   font-size: 22px;
@@ -167,7 +221,18 @@ table tr {
   justify-content: flex-end;
   gap: 10px;
 }
+.button-container1 {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
 
+.button-container2 {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
 .button-container2 {
   display: flex;
   justify-content: center;

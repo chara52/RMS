@@ -144,7 +144,7 @@ const filteredShiftList = computed(() => {
 }
 
 table {
-  width: auto;
+  width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
 }
