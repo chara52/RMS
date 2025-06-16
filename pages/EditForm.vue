@@ -120,11 +120,6 @@ watch(() => formData.time, (newTime) => {
     <h2>予約編集</h2>
 
     <form @submit.prevent="submitForm">
-      <div>
-        <router-link to="/ReservationDetail">戻る</router-link>
-      </div>
-
-
       <div class="form-group">
         <label for="name">名前</label>
         <input type="text" id="name" v-model="formData.name" required />
@@ -170,7 +165,8 @@ watch(() => formData.time, (newTime) => {
         <label for="seat">席番号</label>
         <input type="text" id="seat" v-model="formData.seat" />
       </div>
-      <div class="form-group">
+      <div class="button-container">
+        <button type="button" @click="router.push('/ReservationDetail')" class="back-button">戻る</button>
         <button type="submit" class="submit-button">更新</button>
         <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
       </div>
@@ -240,9 +236,7 @@ h1 {
 .home-button a:hover,
 .table-button a:hover {
   text-decoration: none;
-  /* カーソルを合わせた時、下線をなくす */
   color: #7d7a7a;
-  /* カーソルを合わせた時、色を変える */
 }
 
 .form-group label {
@@ -269,23 +263,42 @@ select{
   resize: none;
 }
 
-.submit-button {
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 37px;
+  margin-top: 40px;
+}
+
+.back-button {
+  width: 130px;
+  height: 45px;
+  color: black;
   background-color: #fbc02d;
-  border: 2px solid #565655;
+  border: 2px solid #fbc02d;
   border-radius: 12px;
-  padding: 7px 50px;
   cursor: pointer;
   font-size: 17px;
   font-weight: bold;
 }
 
-/* ボタンにカーソルを合わせた時の動作 */
+.submit-button {
+  width: 130px;
+  height: 45px;
+  color: black;
+  background-color: #fbc02d;
+  border: 2px solid #fbc02d;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
+
 .submit-button:hover {
   background-color: #f9a825;
 }
 
 .error-message {
-  /* 携帯番号が11桁以外の時のエラーメッセージのCSS */
   color: red;
   font-size: 14px;
   margin-left: 16px;
