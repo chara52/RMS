@@ -69,8 +69,9 @@ function goToConfirm() {
       </div>
       <button class="add-btn" @click="addRow(index)">＋ 行を追加</button>
     </div>
-    <div class="go-btn-wrapper">
-      <button class="go-btn" @click="goToConfirm">確認</button>
+    <div class="button-container">
+      <button type="button" @click="router.push('/HomePage')" class="back-button">戻る</button>
+      <button class="confirm-button" @click="goToConfirm">確認</button>
     </div>
   </div>
 </template>
@@ -135,13 +136,15 @@ button.remove-btn:disabled {
   cursor: not-allowed;
 }
 
-.go-btn-wrapper {
+.button-container {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  gap: 37px;
+  margin-top: 40px;
 }
 
-button.go-btn {
+.back-button,
+.confirm-button {
   width: 130px;
   height: 45px;
   color: black;
