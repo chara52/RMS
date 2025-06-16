@@ -38,15 +38,15 @@ const handleDelete = () => {
 </script>
 
 <template>
-<div class="reservation-detail-name">
-  <h1>予約詳細</h1>
-</div>
+  <div class="reservation-detail-name">
+    <h1>予約詳細</h1>
+  </div>
 
-<DeleteReservation :id="reservationId" @delete="handleDelete" />
-<EditReservation :id="reservationId" />
-<MenuButtonComponent />
+  <DeleteReservation :id="reservationId" @delete="handleDelete" />
+  <EditReservation :id="reservationId" />
+  <MenuButtonComponent />
 
-<div class="reservation-table">
+  <div class="reservation-table">
     <p><strong>名前 :</strong> {{ formData.name }}</p>
     <p><strong>人数 :</strong> {{ formData.people }}</p>
     <p><strong>時間 :</strong> {{ formData.time }}</p>
@@ -75,44 +75,43 @@ const handleDelete = () => {
 </template>
 
 <style scoped>
-/* スマホ向けのスタイル */
-@media (max-width: 768px) {
-  table {
-    border-collapse: collapse;
-    background-color: #fff9e6;
-  }
-
-  th {
-    writing-mode: vertical-rl;
-    /* 縦書きに設定 */
-  }
-
-  .name-space {
-    font-size: 12px;
-    white-space: nowrap;
-    /* 自動改行を防ぐ */
-  }
-
-  .number-space {
-    font-size: 12px;
-  }
-
-  .time-space {
-    font-size: 12px;
-    /* 卓番号が見えるように文字の大きさを調整 */
-  }
-
-  .seat-space {
-    font-size: 12px;
-  }
-
-  .phone-space {
-    font-size: 12px;
-  }
+table {
+  border-collapse: collapse;
+  background-color: #fff9e6;
 }
+
+th {
+  writing-mode: vertical-rl;
+  /* 縦書きに設定 */
+}
+
+.name-space {
+  font-size: 12px;
+  white-space: nowrap;
+  /* 自動改行を防ぐ */
+}
+
+.number-space {
+  font-size: 12px;
+}
+
+.time-space {
+  font-size: 12px;
+  /* 卓番号が見えるように文字の大きさを調整 */
+}
+
+.seat-space {
+  font-size: 12px;
+}
+
+.phone-space {
+  font-size: 12px;
+}
+
 .reservation-detail-name {
   text-align: center;
 }
+
 .reservation-table {
   margin-top: 50px;
   background-color: #fff9e6;
