@@ -35,12 +35,12 @@ reservationClient.getList({
   endpoint: 'data',
   queries: { limit: 100 }
 })
-.then((res) => {
-  console.log(res)
-  reservations.push(...res.contents)
-  sortTime(reservations)
-})
-.catch((err) => console.error(err))
+  .then((res) => {
+    console.log(res)
+    reservations.push(...res.contents)
+    sortTime(reservations)
+  })
+  .catch((err) => console.error(err))
 
 // 初期値設定
 onMounted(() => {
@@ -58,11 +58,11 @@ shiftClient.getList({
   endpoint: 'shiftdata',
   queries: { limit: 100 }
 })
-.then((res) => {
-  console.log(res)
-  shiftList.value = res.contents
-})
-.catch((err) => console.error(err))
+  .then((res) => {
+    console.log(res)
+    shiftList.value = res.contents
+  })
+  .catch((err) => console.error(err))
 
 const filteredReservations = computed(() => {
   if (!inputDate.value) {
@@ -97,7 +97,7 @@ const filteredShiftList = computed(() => {
   <div>
     <div v-if="filteredShiftList.length > 0" class="shift-list">
       <div class="shift-name">
-        {{ filteredShiftList.map(shift => shift.name).join(', ') }}
+        {{filteredShiftList.map(shift => shift.name).join(', ')}}
       </div>
     </div>
     <p v-else class="shift-list">シフトはありません。</p>
@@ -150,30 +150,34 @@ table {
 }
 
 table th.name {
-  width: 15%;
+  width: 20%;
   writing-mode: horizontal-tb;
 }
 
 table th.people {
-  width: 10%;
+  width: 9%;
   writing-mode: horizontal-tb;
 }
 
 table th.time {
-  width: 15%;
+  width: 13%;
   writing-mode: horizontal-tb;
 }
 
 table th.seat {
-  width: 10%;
+  width: 13%;
   writing-mode: horizontal-tb;
 }
 
 table th.info {
-  width: 50%;
+  width: 45%;
   writing-mode: horizontal-tb;
 }
 
+table tr {
+  height: 70px;
+  background-color: #fff9e6;
+}
 table tr {
   height: 70px;
   background-color: #fff9e6;
@@ -195,7 +199,6 @@ table tr {
   margin-top: 45px;
 }
 
-
 .shift-info {
   background-color: #f9f9f9;
   padding: 10px;
@@ -204,15 +207,18 @@ table tr {
   border-radius: 8px;
 }
 
+
 .shift-info h2 {
   margin-bottom: 5px;
 }
+
 
 .shift-info ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
+
 
 .shift-info li {
   margin: 2px 0;
