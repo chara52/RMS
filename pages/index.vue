@@ -6,35 +6,35 @@ import { isValidBirthdayFormat } from '../composables/passwordValidator'
 
 const email = ref('')
 const password = ref('')
+const errorMessage = ref('')
 
 const { login } = useAuth()
 const router = useRouter()
 
 const handleLogin = async () => {
   if (!email.value) {
-    alert('メールアドレスが入力されていません')
+    errorMessage.value = 'メールアドレスが入力されていません。'
     return
   }
 
   if (!password.value) {
-    alert('パスワードが入力されていません')
+    errorMessage.value = 'パスワードが入力されていません。'
     return
   }
 
   if (!isValidBirthdayFormat(password.value)) {
-    alert('パスワードの形式が正しくありません')
+    errorMessage.value = 'パスワードの形式が正しくありません。'
     return
   }
 
   try {
     await login(email.value, password.value)
-    alert('ログインに成功しました')
     router.push('/HomePage')
   } catch (e) {
     if (e.code === 'auth/invalid-credential') {
-      alert('メールアドレスまたはパスワードが間違っています')
+      errorMessage.value = 'メールアドレスまたはパスワードが間違っています。'
     } else {
-      alert('ログインに失敗しました')
+      errorMessage.value = 'ログインに失敗しました。'
     }
   }
 }
@@ -46,6 +46,7 @@ const handleLogin = async () => {
     <form @submit.prevent="handleLogin">
       <input v-model="email" placeholder="メールアドレス" class="input-email" />
       <input v-model="password" type="password" placeholder="パスワード" class="input-password" />
+      <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
       <button class="login-button">ログイン</button>
     </form>
     <p class="link-text">
@@ -82,8 +83,7 @@ form {
   align-items: center;
 }
 
-.input-email,
-.input-password {
+.input-email {
   width: 270px;
   padding: 14px 12px;
   margin-bottom: 16px;
@@ -93,6 +93,24 @@ form {
   font-size: 16px;
   outline: none;
   display: block;
+}
+
+.input-password {
+  width: 270px;
+  padding: 14px 12px;
+  margin-bottom: 25px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  font-size: 16px;
+  outline: none;
+  display: block;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin: 0px;
 }
 
 .login-button {
@@ -105,7 +123,7 @@ form {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 35px;
+  margin-top: 25px;
   transition: background-color 0.3s;
   display: block;
 }
