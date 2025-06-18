@@ -35,12 +35,12 @@ reservationClient.getList({
   endpoint: 'data',
   queries: { limit: 100 }
 })
-  .then((res) => {
-    console.log(res)
-    reservations.push(...res.contents)
-    sortTime(reservations)
-  })
-  .catch((err) => console.error(err))
+.then((res) => {
+  console.log(res)
+  reservations.push(...res.contents)
+  sortTime(reservations)
+})
+.catch((err) => console.error(err))
 
 // 初期値設定
 onMounted(() => {
