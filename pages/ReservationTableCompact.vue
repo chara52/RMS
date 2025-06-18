@@ -97,7 +97,7 @@ const filteredShiftList = computed(() => {
   <div>
     <div v-if="filteredShiftList.length > 0" class="shift-list">
       <div class="shift-name">
-        {{filteredShiftList.map(shift => shift.name).join(', ')}}
+        {{ filteredShiftList.map(shift => shift.name).join(', ') }}
       </div>
     </div>
     <p v-else class="shift-list">シフトはありません。</p>
