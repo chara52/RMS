@@ -119,7 +119,7 @@ watch(() => formData.time, (newTime) => {
 <template>
   <MenuButtonComponent />
   <div class="reservation-form">
-    <h2>予約編集</h2>
+    <h1>予約編集</h1>
 
     <form @submit.prevent="submitForm">
       <div class="form-group">
