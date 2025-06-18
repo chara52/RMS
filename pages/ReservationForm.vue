@@ -191,7 +191,7 @@ select {
   display: flex;
   justify-content: center;
   gap: 37px;
-  margin-top: 40px;
+  margin-top: 30px;
 }
 
 .backbutton {

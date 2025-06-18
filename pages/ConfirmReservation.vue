@@ -97,14 +97,16 @@ const submitReservation = () => {
   display: flex;
   justify-content: center;
   gap: 37px;
-  margin-top: 13px;
+  margin-top: 20px;
 }
 
 button {
+  width: 130px;
+  height: 45px;
+  color: black;
   background-color: #fbc02d;
-  border: 2px solid #565655;
+  border: 2px solid #fbc02d;
   border-radius: 12px;
-  padding: 7px 50px;
   cursor: pointer;
   font-size: 17px;
   font-weight: bold;
