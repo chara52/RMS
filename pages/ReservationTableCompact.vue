@@ -92,15 +92,27 @@ const filteredShiftList = computed(() => {
 
   <MenuButtonComponent />
 
-  <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
-
   <div>
     <div v-if="filteredShiftList.length > 0" class="shift-list">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+      <i class="fa-solid fa-user-pen user-icon"></i>
       <div class="shift-name">
-        {{ filteredShiftList.map(shift => shift.name).join(', ') }}
+        {{filteredShiftList.map(shift => shift.name).join(', ')}}
       </div>
     </div>
-    <p v-else class="shift-list">シフトはありません。</p>
+    <p v-else class="shift-list">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+      <i class="fa-solid fa-user-pen user-icon"></i>
+      シフトはありません。
+    </p>
+  </div>
+
+  <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
+
+  <div class="sort-button-group">
+    <button @click="sortPeople(reservations)" class="sort-button">人数順</button>
+    <button @click="sortSeat(reservations)" class="sort-button">卓順</button>
+    <button @click="sortTime(reservations)" class="sort-button">時間順</button>
   </div>
 
   <div v-if="filteredReservations.length > 0">
@@ -195,37 +207,47 @@ table tr {
   margin-top: 45px;
 }
 
-.shift-info {
-  background-color: #f9f9f9;
-  padding: 10px;
-  margin: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-}
-
-.shift-info h2 {
-  margin-bottom: 5px;
-}
-
-.shift-info ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.shift-info li {
-  margin: 2px 0;
+.user-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: grey;
+  font-size: 1.5rem;
+  width: 30px;
+  height: 30px;
 }
 
 .shift-list {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  justify-content: flex-end;
 }
 
 .shift-name {
   padding: 5px 10px;
   border-radius: 4px;
+}
+
+.sort-button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.sort-button {
+  width: 120px;
+  height: 35px;
+  background-color: #ececec;
+  border: 0px;
+  border-radius: 25px;
+  padding: 0px 10px;
+  cursor: pointer;
+  font-size: 14.5px;
+  font-weight: bold;
 }
 </style>
