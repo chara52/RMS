@@ -37,7 +37,7 @@ reservationClient.getList({
 })
 .then((res) => {
   console.log(res)
-   reservations.push(...res.contents)
+  reservations.push(...res.contents)
   sortTime(reservations)
 })
 .catch((err) => console.error(err))
