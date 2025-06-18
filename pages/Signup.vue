@@ -46,7 +46,7 @@ const handleSignup = async () => {
 
   try {
     await signup(email.value, password.value, username.value)
-    alert('アカウント作成に成功しました')
+    alert('アカウント作成に成功しました。')
     router.push('/')
   } catch (e) {
     if (e.code === 'auth/email-already-in-use') {
