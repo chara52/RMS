@@ -155,7 +155,7 @@ table th.name {
 }
 
 table th.people {
-  width: 9%;
+  width: 14%;
   writing-mode: horizontal-tb;
 }
 
@@ -170,7 +170,7 @@ table th.seat {
 }
 
 table th.info {
-  width: 45%;
+  width: 40%;
   writing-mode: horizontal-tb;
 }
 
