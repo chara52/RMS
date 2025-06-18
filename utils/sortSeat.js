@@ -7,7 +7,10 @@ export function sortSeat(reservations) {
 }
 
 function extractSeatNumber(seat) {
+  if (typeof seat !== 'string') return Number.MIN_SAFE_INTEGER;
+
   const match = seat.match(/\d+/);
-  const num = parseInt(match);
-  return num;
+  if (!match) return Number.MIN_SAFE_INTEGER;
+
+  return parseInt(match[0], 10);
 }
