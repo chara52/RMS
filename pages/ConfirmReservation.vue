@@ -93,35 +93,10 @@ const submitReservation = () => {
 </template>
 
 <style scoped>
-table {
-  border-collapse: collapse;
-  background-color: #fff9e6;
-}
-
-th {
-  writing-mode: vertical-rl;
-  /* 縦書きに設定 */
-}
-
-.name-space {
-  font-size: 12px;
-  white-space: nowrap;
-  /* 自動改行を防ぐ */
-}
-
-.time-space {
-  font-size: 12px;
-  /* 卓番号が見えるように文字の大きさを調整 */
-}
-
-.phone-space {
-  font-size: 12px;
-}
-
 .button-container {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 37px;
   margin-top: 13px;
 }
 

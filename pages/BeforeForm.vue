@@ -123,6 +123,7 @@ table th.name {
   writing-mode: horizontal-tb;
   /* 横書きに変換 */
 }
+
 table th.people {
   width: 15%;
   writing-mode: horizontal-tb;
@@ -170,7 +171,7 @@ table tr {
 .button-container2 {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 37px;
   margin-top: 18px;
 }
 
