@@ -144,33 +144,33 @@ const filteredShiftList = computed(() => {
 }
 
 table {
-  width: auto;
+  width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
 }
 
 table th.name {
-  width: 15%;
+  width: 20%;
   writing-mode: horizontal-tb;
 }
 
 table th.people {
-  width: 10%;
+  width: 9%;
   writing-mode: horizontal-tb;
 }
 
 table th.time {
-  width: 15%;
+  width: 13%;
   writing-mode: horizontal-tb;
 }
 
 table th.seat {
-  width: 10%;
+  width: 13%;
   writing-mode: horizontal-tb;
 }
 
 table th.info {
-  width: 50%;
+  width: 45%;
   writing-mode: horizontal-tb;
 }
 
@@ -194,7 +194,6 @@ table tr {
   font-size: 22px;
   margin-top: 45px;
 }
-
 
 .shift-info {
   background-color: #f9f9f9;

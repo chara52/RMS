@@ -93,61 +93,25 @@ const submitReservation = () => {
 </template>
 
 <style scoped>
-/* スマホ向けのスタイル */
-@media (max-width: 768px) {
-  table {
-    border-collapse: collapse;
-    background-color: #fff9e6;
-  }
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 37px;
+  margin-top: 13px;
+}
 
-  th {
-    writing-mode: vertical-rl;
-    /* 縦書きに設定 */
-  }
+button {
+  background-color: #fbc02d;
+  border: 2px solid #565655;
+  border-radius: 12px;
+  padding: 7px 50px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
 
-  .name-space {
-    font-size: 12px;
-    white-space: nowrap;
-    /* 自動改行を防ぐ */
-  }
-
-  .number-space {
-    font-size: 12px;
-  }
-
-  .time-space {
-    font-size: 12px;
-    /* 卓番号が見えるように文字の大きさを調整 */
-  }
-
-  .seat-space {
-    font-size: 12px;
-  }
-
-  .phone-space {
-    font-size: 12px;
-  }
-
-  .button-container {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 13px;
-  }
-
-  button {
-    background-color: #fbc02d;
-    border: 2px solid #565655;
-    border-radius: 12px;
-    padding: 7px 50px;
-    cursor: pointer;
-    font-size: 17px;
-    font-weight: bold;
-  }
-
-  button:hover {
-    background-color: #f9a825;
-  }
+button:hover {
+  background-color: #f9a825;
 }
 
 .reservation-table {
