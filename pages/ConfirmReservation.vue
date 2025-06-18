@@ -109,17 +109,9 @@ th {
   /* 自動改行を防ぐ */
 }
 
-.number-space {
-  font-size: 12px;
-}
-
 .time-space {
   font-size: 12px;
   /* 卓番号が見えるように文字の大きさを調整 */
-}
-
-.seat-space {
-  font-size: 12px;
 }
 
 .phone-space {
