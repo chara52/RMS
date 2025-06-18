@@ -116,18 +116,18 @@ const filteredShiftList = computed(() => {
       </tbody>
       <tbody>
         <tr v-for="reservation in filteredReservations" :key="reservation.id" @click="goToDetail(reservation)">
-            <td class="name-space">{{ reservation.name }}</td>
-            <td class="number-space">{{ reservation.people }}</td>
-            <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
-            <td class="seat-space">{{ reservation.seat }}</td>
-            <td class="info-space">
-              <div>
-                {{ addCourseDrink(reservation.course, reservation.drink) }}
-              </div>
-              <div>
-                {{ reservation.info }}
-              </div>
-            </td>
+          <td class="name-space">{{ reservation.name }}</td>
+          <td class="number-space">{{ reservation.people }}</td>
+          <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
+          <td class="seat-space">{{ reservation.seat }}</td>
+          <td class="info-space">
+            <div>
+              {{ addCourseDrink(reservation.course, reservation.drink) }}
+            </div>
+            <div>
+              {{ reservation.info }}
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -143,58 +143,58 @@ const filteredShiftList = computed(() => {
   text-align: center;
 }
 
-@media (max-width: 768px) {
-  table {
-    width: auto;
-    border-collapse: collapse;
-    table-layout: fixed;
-  }
-
-  table th.name {
-    width: 15%;
-    writing-mode: horizontal-tb;
-  }
-
-  table th.people {
-    width: 10%;
-    writing-mode: horizontal-tb;
-  }
-
-  table th.time {
-    width: 15%;
-    writing-mode: horizontal-tb;
-  }
-
-  table th.seat {
-    width: 10%;
-    writing-mode: horizontal-tb;
-  }
-
-  table th.info {
-    width: 50%;
-    writing-mode: horizontal-tb;
-  }
-
-  table tr {
-    height: 70px;
-    background-color: #fff9e6;
-  }
-
-  .name-space,
-  .number-space,
-  .time-space,
-  .seat-space,
-  .info-space {
-    font-size: 13px;
-    text-align: center;
-    white-space: normal;
-  }
-  .no-reservations-message {
-    text-align: center;
-    font-size: 22px;
-    margin-top: 45px;
-  }
+table {
+  width: auto;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
+
+table th.name {
+  width: 15%;
+  writing-mode: horizontal-tb;
+}
+
+table th.people {
+  width: 10%;
+  writing-mode: horizontal-tb;
+}
+
+table th.time {
+  width: 15%;
+  writing-mode: horizontal-tb;
+}
+
+table th.seat {
+  width: 10%;
+  writing-mode: horizontal-tb;
+}
+
+table th.info {
+  width: 50%;
+  writing-mode: horizontal-tb;
+}
+
+table tr {
+  height: 70px;
+  background-color: #fff9e6;
+}
+
+.name-space,
+.number-space,
+.time-space,
+.seat-space,
+.info-space {
+  font-size: 13px;
+  text-align: center;
+  white-space: normal;
+}
+
+.no-reservations-message {
+  text-align: center;
+  font-size: 22px;
+  margin-top: 45px;
+}
+
 
 .shift-info {
   background-color: #f9f9f9;
@@ -203,14 +203,17 @@ const filteredShiftList = computed(() => {
   border: 1px solid #ddd;
   border-radius: 8px;
 }
+
 .shift-info h2 {
   margin-bottom: 5px;
 }
+
 .shift-info ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
+
 .shift-info li {
   margin: 2px 0;
 }

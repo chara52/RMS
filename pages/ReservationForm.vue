@@ -28,7 +28,6 @@ const isPhoneNumberValid = computed(() => {
 
 const router = useRouter()
 
-// 関数（アロー関数）
 const submitReservation = () => {
   if (isPhoneNumberValid.value) {
     errorMessage.value = ''
@@ -41,7 +40,6 @@ const submitReservation = () => {
 
 const datepickerRef = ref(null)
 
-// 関数（ユーティリティ関数）
 onMounted(() => {
   flatpickr(datepickerRef.value, {
     enableTime: true, // 時間選択を有効化
@@ -197,20 +195,24 @@ select {
 }
 
 .backbutton {
+  width: 130px;
+  height: 45px;
+  color: black;
   background-color: #fbc02d;
-  border: 2px solid #565655;
+  border: 2px solid #fbc02d;
   border-radius: 12px;
-  padding: 7px 50px;
   cursor: pointer;
   font-size: 17px;
   font-weight: bold;
 }
 
 .reservebutton {
+  width: 130px;
+  height: 45px;
+  color: black;
   background-color: #fbc02d;
-  border: 2px solid #565655;
+  border: 2px solid #fbc02d;
   border-radius: 12px;
-  padding: 7px 50px;
   cursor: pointer;
   font-size: 17px;
   font-weight: bold;
