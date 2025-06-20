@@ -5,6 +5,7 @@ import 'flatpickr/dist/flatpickr.min.css'
 import { reactive, ref, onMounted, computed, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { createClient } from 'microcms-js-sdk';
+import MenuButtonComponent from '../components/MenuButton.vue'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 
 const router = useRouter();
@@ -116,8 +117,9 @@ watch(() => formData.time, (newTime) => {
 </script>
 
 <template>
+  <MenuButtonComponent />
   <div class="reservation-form">
-    <h2>予約編集</h2>
+    <h1>予約編集</h1>
 
     <form @submit.prevent="submitForm">
       <div class="form-group">
