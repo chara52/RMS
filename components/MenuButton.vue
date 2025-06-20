@@ -88,6 +88,10 @@ onUnmounted(() => {
   gap: 1em;
 }
 
+.btn-link {
+  text-decoration: none;
+}
+
 .menu__item {
   width: 70vw;
   height: auto;
