@@ -8,50 +8,51 @@ const email = ref('')
 const password = ref('')
 const username = ref('')
 const confirmPassword = ref('')
+const errorMessage = ref('')
 
 const { signup } = useAuth()
 const router = useRouter()
 
 const handleSignup = async () => {
   if (!email.value) {
-    alert('メールアドレスが入力されていません')
+    errorMessage.value = 'メールアドレスが入力されていません。'
     return
   }
 
   if (!username.value) {
-    alert('ユーザーネームが入力されていません')
+    errorMessage.value = 'ユーザーネームが入力されていません。'
     return
   }
 
   if (!password.value) {
-    alert('パスワードが入力されていません')
+    errorMessage.value = 'パスワードが入力されていません。'
     return
   }
 
   if (!confirmPassword.value) {
-    alert('パスワード(確認用)が入力されていません')
+    errorMessage.value = 'パスワード(確認用)が入力されていません。'
     return
   }
 
   if (!isValidBirthdayFormat(password.value)) {
-    alert('パスワードの形式が正しくありません')
+    errorMessage.value = 'パスワードの形式が正しくありません。'
     return
   }
 
   if(password.value !== confirmPassword.value){
-    alert('パスワードが一致しません')
+    errorMessage.value = 'パスワードが一致しません。'
     return
   }
 
   try {
     await signup(email.value, password.value, username.value)
-    alert('アカウント作成に成功しました')
+    alert('アカウント作成に成功しました。')
     router.push('/')
   } catch (e) {
     if (e.code === 'auth/email-already-in-use') {
-      alert('このメールアドレスはすでに使用されています')
+      errorMessage.value = 'このメールアドレスはすでに使用されています。'
     } else {
-      alert('アカウント作成に失敗しました')
+      errorMessage.value = 'アカウント作成に失敗しました。'
     }
   }
 }
@@ -64,7 +65,8 @@ const handleSignup = async () => {
       <input v-model="email" placeholder="メールアドレス" class="input-email" />
       <input v-model="username" placeholder="ユーザーネーム" class="input-username" />
       <input v-model="password" type="password" placeholder="パスワード" class="input-password" />
-      <input v-model="confirmPassword" type="password" placeholder="パスワード（確認用）" class="input-password" />
+      <input v-model="confirmPassword" type="password" placeholder="パスワード（確認用）" class="input-password-confirmation" />
+      <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
       <button class="signup-button">アカウント作成</button>
     </form>
     <p class="link-text">
@@ -114,6 +116,23 @@ form {
   outline: none;
 }
 
+.input-password-confirmation {
+  width: 270px;
+  padding: 14px 12px;
+  margin-bottom: 25px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  font-size: 16px;
+  outline: none;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin: 0px;
+}
+
 .signup-button {
   width: 270px;
   padding: 14px;
@@ -124,7 +143,7 @@ form {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 35px;
+  margin-top: 25px;
   transition: background-color 0.3s;
 }
 
