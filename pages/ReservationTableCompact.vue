@@ -97,7 +97,7 @@ const filteredShiftList = computed(() => {
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
       <i class="fa-solid fa-user-pen user-icon"></i>
       <div class="shift-name">
-        {{filteredShiftList.map(shift => shift.name).join(', ')}}
+        {{ filteredShiftList.map(shift => shift.name).join(', ') }}
       </div>
     </div>
     <p v-else class="shift-list">
