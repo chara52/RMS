@@ -172,7 +172,7 @@ table tr {
   display: flex;
   justify-content: center;
   gap: 37px;
-  margin-top: 18px;
+  margin-top: 20px;
 }
 
 .bc1 {
