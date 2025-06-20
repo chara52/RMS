@@ -95,7 +95,6 @@ onUnmounted(() => {
   text-align: left;
   color: black;
   box-sizing: border-box;
-  position: relative;
   padding: .5em 1em .5em 3.5em;
   display: flex;
 }
