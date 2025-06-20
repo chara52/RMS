@@ -13,10 +13,6 @@ const client = createClient({
   apiKey: import.meta.env.VITE_SHIFT_API_KEY,
 })
 
-const formatDate = (date) => {
-  return date.toISOString().split('T')[0]
-}
-
 const getWeekdayLabel = (index) => {
   const weekdays = ['月', '火', '水', '木', '金', '土', '日']
   return weekdays[index]
@@ -36,7 +32,9 @@ onMounted(() => {
 const getDateWithOffset = (offset) => {
   const base = new Date(startDate.value)
   base.setDate(base.getDate() + offset)
-  return formatDate(base)
+  const month = base.getMonth() + 1
+  const day = base.getDate()
+  return `${month}月${day}日`
 }
 
 const submitShift = async () => {
@@ -71,7 +69,7 @@ const submitShift = async () => {
     <h1>シフト確認</h1>
     <div v-if="shiftData.length">
       <div v-for="(day, dayIndex) in shiftData" :key="dayIndex" class="day-section">
-        <h2>{{ getDateWithOffset(dayIndex) }} ({{ getWeekdayLabel(dayIndex) }}曜)</h2>
+        <h2>{{ getDateWithOffset(dayIndex) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
         <ul>
           <li v-for="(row, rowIndex) in day" :key="rowIndex">
             {{ row.name }}
