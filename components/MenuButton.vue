@@ -56,7 +56,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.menu-btn{
+.menu-btn {
   position: fixed;
   top: 20px;
   right: 20px;
@@ -71,7 +71,7 @@ onUnmounted(() => {
   border: 1px solid black;
 }
 
-.menu{
+.menu {
   position: fixed;
   top: 0;
   right: 0;
@@ -86,39 +86,18 @@ onUnmounted(() => {
   transform: translateX(100vw);
   transition: all .3s linear;
   gap: 1em;
-    /* ボタン同士の間隔 */
-    padding: 3em 1em;
-    /* 全体の余白 */
-    box-sizing: border-box;
-    /* paddingを含めてサイズを計算 */
 }
 
-.menu__item{
-
+.menu__item {
   width: 70vw;
   height: auto;
   font-size: 20px;
-  /*padding: .5em 1em;*/
   text-align: left;
   color: black;
   box-sizing: border-box;
   position: relative;
   padding: .5em 1em .5em 3.5em;
-    /* 左にアイコン分のスペースを追加 */
   display: flex;
-
-  /*
-  display: block;
-    width: 70vw;
-    max-width: 200px;
-    padding: 1em;
-    font-size: 20px;
-    text-align: center;
-    color: black;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
-  */
 }
 
 .menu__item i.fa-solid {
