@@ -29,7 +29,7 @@ const shiftClient = createClient({
 const reservations = reactive([]);
 const shiftList = ref([]);
 const inputDate = ref('');
-const activeSort = ref('');
+const activeSort = ref('time');
 
 // 予約データを取得
 reservationClient.getList({
@@ -116,18 +116,19 @@ function handleSort(type, sortFunction) {
 
   <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
 
-  <button @click="handleSort('people', sortPeople)" :class="['sort-button', { active: activeSort === 'people' }]">
-    人数順
-  </button>
+  <div class="sort-button-group">
+    <button @click="handleSort('people', sortPeople)" :class="['sort-button', { active: activeSort === 'people' }]">
+      人数順
+    </button>
 
-  <button @click="handleSort('seat', sortSeat)" :class="['sort-button', { active: activeSort === 'seat' }]">
-    卓順
-  </button>
+    <button @click="handleSort('seat', sortSeat)" :class="['sort-button', { active: activeSort === 'seat' }]">
+      卓順
+    </button>
 
-  <button @click="handleSort('time', sortTime)" :class="['sort-button', { active: activeSort === 'time' }]">
-    時間順
-  </button>
-
+    <button @click="handleSort('time', sortTime)" :class="['sort-button', { active: activeSort === 'time' }]">
+      時間順
+    </button>
+  </div>
 
   <div v-if="filteredReservations.length > 0">
     <table border="1" width="100%">
@@ -267,7 +268,7 @@ table tr {
 
 .sort-button.active {
   background-color: #ff0000;
-  border: 1px solid #ffffff;
+  border: 0px;
   font-weight: bold;
 }
 </style>
