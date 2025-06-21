@@ -55,23 +55,31 @@ onMounted(() => {
     <h1>新規受付</h1>
     <form @submit.prevent="submitReservation">
       <div class="form-group">
-        <label for="name">名前</label>
+        <label for="name" class="label-flex">
+          <span class="label-text">名前</span>
+          <span class="required-mark">＊</span></label>
         <input type="text" id="name" v-model="formData.name" required />
       </div>
 
       <div class="form-group">
-        <label for="people">人数</label>
+        <label for="people" class="label-flex">
+          <span class="label-text">人数</span>
+          <span class="required-mark">＊</span></label>
         <input type="text" id="people" v-model="formData.people" required />
       </div>
 
       <div class="form-group">
-        <label for="time">時間</label>
+        <label for="time" class="label-flex">
+          <span class="label-text">時間</span>
+          <span class="required-mark">＊</span></label>
         <input type="text" id="time" ref="datepickerRef" v-model="formData.time" required />
       </div>
 
       <div class="form-group row">
         <div class="course">
-          <label for="course">コース</label>
+          <label for="course" class="label-flex">
+            <span class="label-text">コース</span>
+          </label>
           <select id="course" v-model="formData.course">
             <option v-for="option in courseOptions" :key="option.value" :value="option.value">
               {{ option.label }}
@@ -80,7 +88,9 @@ onMounted(() => {
         </div>
 
         <div class="drink">
-          <label for="drink">飲み放題</label>
+          <label for="drink" class="label-flex">
+            <span class="label-text">飲み放題</span>
+          </label>
           <select id="drink" v-model="formData.drink">
             <option value="なし">なし</option>
             <option value="2500円（2h）">2500円（2h）</option>
@@ -95,12 +105,16 @@ onMounted(() => {
       </div>
 
       <div class="form-group">
-        <label for="phone">携帯電話番号</label>
+        <label for="phone" class="label-flex">
+          <span class="label-text">携帯電話番号</span>
+          <span class="required-mark">＊</span></label>
         <input type="tel" id="phone" v-model="formData.phone" required />
       </div>
 
       <div class="form-group">
-        <label for="seat">席番号</label>
+        <label for="seat" class="label-flex">
+          <span class="label-text">席番号</span>
+        </label>
         <input type="text" id="seat" v-model="formData.seat" />
       </div>
 
@@ -163,14 +177,6 @@ h1 {
   font-size: 15px;
 }
 
-.form-group label {
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  font-weight: bold;
-  font-size: 19px;
-}
-
 .form-group input,
 .form-group textarea,
 select {
@@ -192,6 +198,25 @@ select {
   justify-content: center;
   gap: 37px;
   margin-top: 30px;
+}
+
+.label-flex {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 19px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.label-text {
+  display: inline-block;
+}
+
+.required-mark {
+  color: red;
+  font-size: 10px;
+  margin-left: 4px;
 }
 
 .backbutton {
