@@ -68,36 +68,38 @@ const filteredReservations = computed(() => {
     <button @click="sortSeat(reservations)" class="bc1">卓順</button>
   </div>
 
-  <div v-if="filteredReservations.length > 0">
-    <table border="1" width="100%">
-      <tbody>
-        <tr>
-          <th class="name">名前</th>
-          <th class="people">人数</th>
-          <th class="seat">卓</th>
-          <th class="info">詳細</th>
-        </tr>
-      </tbody>
-      <tbody>
-        <tr v-for="reservation in filteredReservations" :key="reservation.id">
-          <td class="name-space">{{ reservation.name }}</td>
-          <td class="number-space">{{ reservation.people }}</td>
-          <td class="seat-space">{{ reservation.seat }}</td>
-          <td class="info-space">
-            <div v-if="addCourseDrink(reservation.course, reservation.drink) !== '0込'">
-              {{ addCourseDrink(reservation.course, reservation.drink) }}
-            </div>
-            <div>
-              {{ reservation.info }}
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="table-wrapper">
+    <div v-if="filteredReservations.length > 0">
+      <table border="1" width="100%">
+        <tbody>
+          <tr>
+            <th class="name">名前</th>
+            <th class="people">人数</th>
+            <th class="seat">卓</th>
+            <th class="info">詳細</th>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr v-for="reservation in filteredReservations" :key="reservation.id">
+            <td class="name-space">{{ reservation.name }}</td>
+            <td class="number-space">{{ reservation.people }}</td>
+            <td class="seat-space">{{ reservation.seat }}</td>
+            <td class="info-space">
+              <div v-if="addCourseDrink(reservation.course, reservation.drink) !== '0込'">
+                {{ addCourseDrink(reservation.course, reservation.drink) }}
+              </div>
+              <div>
+                {{ reservation.info }}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <div v-else>
-    <p class="no-reservations-message">予約はありません</p>
+    <div v-else>
+      <p class="no-reservations-message">予約はありません</p>
+    </div>
   </div>
 
   <div class="button-container2">
@@ -109,6 +111,10 @@ const filteredReservations = computed(() => {
 <style scoped>
 .reservation-table-name {
   text-align: center;
+}
+
+.table-wrapper {
+  margin-bottom: 100px;
 }
 
 table {
@@ -169,6 +175,10 @@ table tr {
 }
 
 .button-container2 {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   justify-content: center;
   gap: 37px;
