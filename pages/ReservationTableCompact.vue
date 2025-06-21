@@ -257,6 +257,7 @@ table tr {
 .sort-button {
   width: 120px;
   height: 35px;
+  color: black;
   background-color: #ececec;
   border: 0px;
   border-radius: 25px;
@@ -267,8 +268,6 @@ table tr {
 }
 
 .sort-button.active {
-  background-color: #ff0000;
-  border: 0px;
-  font-weight: bold;
+  background-color: #f9a825;
 }
 </style>
