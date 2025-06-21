@@ -178,6 +178,7 @@ table tr {
 .bc1 {
   width: 90px;
   height: 40px;
+  color: black;
   background-color: #ececec;
   border: 0px;
   border-radius: 25px;
