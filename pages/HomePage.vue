@@ -26,7 +26,7 @@
   font-family: Arial, sans-serif;
   text-align: center;
   max-width: 100%;
-  height: 95vh;
+  height: 105vh;
   margin: -10px -7px;
   padding: 20px;
   display: flex;
