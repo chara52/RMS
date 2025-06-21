@@ -57,21 +57,24 @@ onMounted(() => {
       <div class="form-group">
         <label for="name" class="label-flex">
           <span class="label-text">名前</span>
-          <span class="required-mark">＊</span></label>
+          <span class="required-mark">＊</span>
+        </label>
         <input type="text" id="name" v-model="formData.name" required />
       </div>
 
       <div class="form-group">
         <label for="people" class="label-flex">
           <span class="label-text">人数</span>
-          <span class="required-mark">＊</span></label>
+          <span class="required-mark">＊</span>
+        </label>
         <input type="text" id="people" v-model="formData.people" required />
       </div>
 
       <div class="form-group">
         <label for="time" class="label-flex">
           <span class="label-text">時間</span>
-          <span class="required-mark">＊</span></label>
+          <span class="required-mark">＊</span>
+        </label>
         <input type="text" id="time" ref="datepickerRef" v-model="formData.time" required />
       </div>
 
@@ -107,7 +110,8 @@ onMounted(() => {
       <div class="form-group">
         <label for="phone" class="label-flex">
           <span class="label-text">携帯電話番号</span>
-          <span class="required-mark">＊</span></label>
+          <span class="required-mark">＊</span>
+        </label>
         <input type="tel" id="phone" v-model="formData.phone" required />
       </div>
 
