@@ -19,13 +19,17 @@ const getWeekdayLabel = (index) => {
 
 onMounted(() => {
   const now = new Date()
-  const jst = new Date(now.getTime() + 9 * 60 * 60 * 1000)
-  const day = jst.getDay() // JSTの曜日（0:日曜, ..., 6:土曜）
+  const currentDay = now.getDay() // JSTの曜日（0:日曜, ..., 6:土曜）
 
-  const daysToAdd = (8 - day) % 7 || 7
-  jst.setDate(jst.getDate() + daysToAdd)
+  const daysToAdd = (8 - currentDay) % 7 || 7
 
-  startDate.value = jst.toISOString().split('T')[0]
+  const nextMonday = new Date(now)
+  nextMonday.setDate(now.getDate() + daysToAdd)
+
+  const yyyy = String(nextMonday.getFullYear())
+  const mm = String(nextMonday.getMonth() + 1).padStart(2, '0')
+  const dd = String(nextMonday.getDate()).padStart(2, '0')
+  startDate.value = `${yyyy}-${mm}-${dd}`
   shiftData.days = Array.from({ length: 7 }, () => [{ name: '' }])
 })
 
