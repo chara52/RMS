@@ -4,6 +4,7 @@ import { Japanese } from 'flatpickr/dist/l10n/ja.js'
 import 'flatpickr/dist/flatpickr.min.css'
 import { reactive, ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import MenuButtonComponent from '../components/MenuButton.vue'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 
@@ -38,13 +39,37 @@ const submitReservation = () => {
   }
 }
 
+const route = useRoute()
 const datepickerRef = ref(null)
 
 onMounted(() => {
+  if (route.query.reset === 'true') {
+    localStorage.removeItem('formData')
+    Object.assign(formData, {
+      name: '',
+      people: '',
+      time: '',
+      course: '',
+      drink: '',
+      info: '',
+      phone: '',
+      seat: '',
+    })
+  } else {
+    const saved = localStorage.getItem("formData")
+    if (saved) {
+      Object.assign(formData, JSON.parse(saved))
+    }
+  }
+
   flatpickr(datepickerRef.value, {
     enableTime: true, // 時間選択を有効化
     dateFormat: 'Y-m-d H:i',
     locale: Japanese, // 日本語ロケール
+    defaultDate: formData.time || null,
+    onChange: function (_, dateStr) {
+      formData.time = dateStr
+    }
   })
 })
 </script>
