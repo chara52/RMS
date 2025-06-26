@@ -13,7 +13,7 @@
         <router-link to="/BeforeForm" class="btn-link">
           <button type="button" class="btn">新規入力</button>
         </router-link>
-        <router-link to="/Shift" class="btn-link">
+        <router-link to="/Shift?reset=true" class="btn-link">
           <button type="button" class="btn">シフト作成</button>
         </router-link>
       </div>
