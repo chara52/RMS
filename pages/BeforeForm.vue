@@ -104,7 +104,7 @@ const filteredReservations = computed(() => {
 
   <div class="button-container2">
     <button @click="router.push('/HomePage')" class="bc2">戻る</button>
-    <button @click="router.push('/ReservationForm')" class="bc2">予約へ</button>
+    <button @click="router.push({ path: '/ReservationForm', query: { reset: 'true' } })" class="bc2">予約へ</button>
   </div>
 </template>
 
