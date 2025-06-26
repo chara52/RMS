@@ -63,9 +63,9 @@ onMounted(() => {
   }
 
   flatpickr(datepickerRef.value, {
-    enableTime: true, // 時間選択を有効化
+    enableTime: true,
     dateFormat: 'Y-m-d H:i',
-    locale: Japanese, // 日本語ロケール
+    locale: Japanese,
     defaultDate: formData.time || null,
     onChange: function (_, dateStr) {
       formData.time = dateStr
