@@ -1,8 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import MenuButtonComponent from '../components/MenuButton.vue'
-import { useRouter } from 'vue-router'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
 
