@@ -6,6 +6,7 @@ import MenuButtonComponent from '../components/MenuButton.vue'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter } from 'vue-router'
+import EditShiftData from '~/components/EditShiftData.vue';
 
 defineProps({ reservationsDetail: Array });
 
@@ -98,6 +99,7 @@ function handleSort(type, sortFunction) {
   </div>
 
   <MenuButtonComponent />
+  <EditShiftData :id="shiftId" />
 
   <div>
     <div v-if="filteredShiftList.length > 0" class="shift-list">
