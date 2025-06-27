@@ -40,34 +40,18 @@ const submitShift = async () => {
 
   try {
     for (let i = 0; i < shiftData.value.length; i++) {
-      const dateObj = new Date(startDate.value)
-      dateObj.setDate(dateObj.getDate() + i)
-      const isoDate = dateObj.toISOString()
-
-      // メンバー名を繰り返し形式のオブジェクトに変換
-      const members = shiftData.value[i]
-  .filter(entry => !!entry.name)
-  .map(entry => ({ member: { name: entry.name } }))  // ← ここが大事！
-
-
-    if (members.length === 0) continue
-
-    console.log("送信内容", {
-      date: isoDate,
-      members: members,
-    })
-console.log("members[0]", members[0])  // 最初の要素も中身確認
-
-
-      await client.create({
-        endpoint: 'shiftdata',
-        content: {
-          date: isoDate,
-          members: members,
-        },
-      })
+      const date = getDateWithOffset(i)
+      for (const entry of shiftData.value[i]) {
+        if (!entry.name) continue
+        await client.create({
+          endpoint: 'shiftdata',
+          content: {
+            name: entry.name,
+            date: new Date(date).toISOString(),
+          },
+        })
+      }
     }
-
     alert('シフトデータを送信しました！')
     router.push('/ReservationTableCompact')
   } catch (error) {
@@ -75,7 +59,6 @@ console.log("members[0]", members[0])  // 最初の要素も中身確認
     alert('送信に失敗しました')
   }
 }
-
 </script>
 
 <template>
@@ -84,7 +67,7 @@ console.log("members[0]", members[0])  // 最初の要素も中身確認
     <h1>シフト確認</h1>
     <div v-if="shiftData.length">
       <div v-for="(day, dayIndex) in shiftData" :key="dayIndex" class="day-section">
-        <h2>{{ getDateWithOffset(dayIndex) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
+        <h2>{{ getDateLabel(dayIndex) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
         <ul>
           <li v-for="(row, rowIndex) in day" :key="rowIndex">
             {{ row.name }}
