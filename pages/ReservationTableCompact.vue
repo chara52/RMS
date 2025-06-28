@@ -61,6 +61,7 @@ shiftClient.getList({
   queries: { limit: 100 }
 })
 .then((res) => {
+  // ここですべてのシフトデータを取得
   console.log(res)
   shiftList.value = res.contents
 })
@@ -86,6 +87,14 @@ const filteredShiftList = computed(() => {
   });
 });
 
+const shiftId = computed(() => {
+  return filteredShiftList.value.length > 0 ? filteredShiftList.value[0].id : null;
+});
+
+const logShiftId = () => {
+  console.log('shiftId:', shiftId.value);
+};
+
 function handleSort(type, sortFunction) {
   sortFunction(reservations);
   activeSort.value = type;
@@ -99,7 +108,8 @@ function handleSort(type, sortFunction) {
   </div>
 
   <MenuButtonComponent />
-  <EditShiftData :id="shiftId" />
+  <EditShiftData :id="inputDate" />
+  <button @click="logShiftId">ログ出力</button>
 
   <div>
     <div v-if="filteredShiftList.length > 0" class="shift-list">
