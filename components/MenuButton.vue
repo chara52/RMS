@@ -46,7 +46,7 @@ onUnmounted(() => {
         <span class="menu__text">予約表</span>
       </div>
     </router-link>
-    <router-link to="/Shift" class="btn-link">
+    <router-link to="/Shift?reset=true" class="btn-link">
       <div class="menu__item">
         <i class="fa-solid fa-user-pen"></i>
         <span class="menu__text">シフト作成</span>

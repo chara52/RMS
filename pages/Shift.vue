@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import MenuButtonComponent from '../components/MenuButton.vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
 
@@ -17,20 +17,32 @@ const getWeekdayLabel = (index) => {
   return weekdays[index]
 }
 
+const route = useRoute()
+
 onMounted(() => {
-  const now = new Date()
-  const currentDay = now.getDay() // JSTの曜日（0:日曜, ..., 6:土曜）
+  if (route.query.reset === 'true'){
+    const now = new Date()
+    const currentDay = now.getDay() // JSTの曜日（0:日曜, ..., 6:土曜）
 
-  const daysToAdd = (8 - currentDay) % 7 || 7
+    const daysToAdd = (8 - currentDay) % 7 || 7
 
-  const nextMonday = new Date(now)
-  nextMonday.setDate(now.getDate() + daysToAdd)
+    const nextMonday = new Date(now)
+    nextMonday.setDate(now.getDate() + daysToAdd)
 
-  const yyyy = String(nextMonday.getFullYear())
-  const mm = String(nextMonday.getMonth() + 1).padStart(2, '0')
-  const dd = String(nextMonday.getDate()).padStart(2, '0')
-  startDate.value = `${yyyy}-${mm}-${dd}`
-  shiftData.days = Array.from({ length: 7 }, () => [{ name: '' }])
+    const yyyy = String(nextMonday.getFullYear())
+    const mm = String(nextMonday.getMonth() + 1).padStart(2, '0')
+    const dd = String(nextMonday.getDate()).padStart(2, '0')
+    startDate.value = `${yyyy}-${mm}-${dd}`
+    shiftData.days = Array.from({ length: 7 }, () => [{ name: '' }])
+  } else {
+    const savedStartDate = localStorage.getItem('startDate')
+    const savedShiftData = localStorage.getItem('shiftData')
+
+    if (savedStartDate && savedShiftData) {
+      startDate.value = savedStartDate
+      shiftData.days = JSON.parse(savedShiftData)
+    }
+  }
 })
 
 const getDateWithOffset = (offset) => {

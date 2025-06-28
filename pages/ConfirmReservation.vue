@@ -53,7 +53,6 @@ const submitReservation = () => {
       });
   };
 }
-
 </script>
 
 <template>
@@ -89,7 +88,6 @@ const submitReservation = () => {
     <button @click="router.push('/ReservationForm')">戻る</button>
     <button @click="submitReservation">予約</button>
   </div>
-
 </template>
 
 <style scoped>
