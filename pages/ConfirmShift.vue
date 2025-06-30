@@ -67,7 +67,7 @@ const submitShift = async () => {
     <h1>シフト確認</h1>
     <div v-if="shiftData.length">
       <div v-for="(day, dayIndex) in shiftData" :key="dayIndex" class="day-section">
-        <h2>{{ getDateLabel(dayIndex) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
+        <h2>{{ getDateWithOffset(dayIndex) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
         <ul>
           <li v-for="(row, rowIndex) in day" :key="rowIndex">
             {{ row.name }}
