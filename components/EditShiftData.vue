@@ -18,23 +18,25 @@ const editShiftData = () => {
 
 <template>
   <button @click="editShiftData" class="edit-button">
-    <i class="fa-solid fa-pen"></i>
+    <i class="fa-solid fa-user-pen user-icon"></i>
   </button>
 </template>
 
 <style scoped>
 .edit-button {
-  display: flex;
-  justify-content: center; /* 横方向の中央ぞろえ */
-  align-items: center; /* 縦方向の中央ぞろえ */
-  float: right;
   background: none;
   border: none;
+}
+
+.user-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: left;
   cursor: pointer;
   color: grey;
-  font-size: 1.5rem; /* アイコンサイズ */
+  font-size: 1.5rem;
   width: 30px;
   height: 30px;
-  margin-right: 15px;
 }
 </style>
