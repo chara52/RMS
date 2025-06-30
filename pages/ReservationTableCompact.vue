@@ -99,19 +99,16 @@ function handleSort(type, sortFunction) {
   </div>
 
   <MenuButtonComponent />
-  <EditShiftData :id="inputDate" />
 
   <div>
     <div v-if="filteredShiftList.length > 0" class="shift-list">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-      <i class="fa-solid fa-user-pen user-icon"></i>
+      <EditShiftData :id="inputDate" />
       <div class="shift-name">
         {{ filteredShiftList.map(shift => shift.name).join(', ') }}
       </div>
     </div>
     <p v-else class="shift-list">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-      <i class="fa-solid fa-user-pen user-icon"></i>
+      <EditShiftData :id="inputDate" />
       シフトはありません。
     </p>
   </div>
@@ -222,20 +219,6 @@ table tr {
   text-align: center;
   font-size: 22px;
   margin-top: 45px;
-}
-
-.user-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  float: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: grey;
-  font-size: 1.5rem;
-  width: 30px;
-  height: 30px;
 }
 
 .shift-list {
