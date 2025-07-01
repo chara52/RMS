@@ -100,17 +100,14 @@ function handleSort(type, sortFunction) {
 
   <MenuButtonComponent />
 
-  <div>
-    <div v-if="filteredShiftList.length > 0" class="shift-list">
-      <EditShiftData :id="inputDate" />
-      <div class="shift-name">
-        {{ filteredShiftList.map(shift => shift.name).join(', ') }}
-      </div>
+  <div class="shift-info-container">
+    <EditShiftData :id="inputDate" />
+    <div v-if="filteredShiftList.length > 0" class="shift-name">
+      {{ filteredShiftList.map(shift => shift.name).join(', ') }}
     </div>
-    <p v-else class="shift-list">
-      <EditShiftData :id="inputDate" />
+    <span v-else class="shift-name">
       シフトはありません。
-    </p>
+    </span>
   </div>
 
   <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
@@ -221,15 +218,16 @@ table tr {
   margin-top: 45px;
 }
 
-.shift-list {
+.shift-info-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
 }
 
 .shift-name {
   padding: 5px 10px;
   border-radius: 4px;
+  margin-left: 5px;
+  white-space: nowrap;
+  font-size: 15px;
 }
 
 .sort-button-group {
