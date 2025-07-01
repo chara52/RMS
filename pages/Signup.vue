@@ -147,10 +147,6 @@ form {
   transition: background-color 0.3s;
 }
 
-.signup-button:hover {
-  background-color: #f5a623;
-}
-
 .link-text {
   margin-top: 40px;
   font-size: 15px;

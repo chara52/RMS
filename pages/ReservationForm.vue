@@ -271,14 +271,6 @@ select {
   font-weight: bold;
 }
 
-.backbutton:hover {
-  background-color: #f9a825;
-}
-
-.reservebutton:hover {
-  background-color: #f9a825;
-}
-
 .error-message {
   /* 携帯番号が11桁以外の時のエラーメッセージのCSS */
   color: red;

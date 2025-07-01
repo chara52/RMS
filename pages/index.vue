@@ -128,10 +128,6 @@ form {
   display: block;
 }
 
-.login-button:hover {
-  background-color: #f29c1f;
-}
-
 .link-text {
   margin-top: 40px;
   font-size: 15px;
