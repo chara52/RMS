@@ -117,9 +117,6 @@ li {
   justify-content: center;
 }
 
-button:hover {
-  background-color: #f29c1f;
-}
 .go-back-btn {
   width: 130px;
   height: 45px;

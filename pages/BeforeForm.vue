@@ -210,8 +210,4 @@ table tr {
   font-size: 17px;
   font-weight: bold;
 }
-
-button:hover {
-  background-color: #f9a825;
-}
 </style>

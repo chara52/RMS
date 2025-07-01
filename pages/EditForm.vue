@@ -254,13 +254,6 @@ h1 {
   color: #000000;
 }
 
-/* ボタンにカーソルを合わせた時の動作 */
-.home-button a:hover,
-.table-button a:hover {
-  text-decoration: none;
-  color: #7d7a7a;
-}
-
 .form-group input,
 .form-group textarea .submit-button,
 select{
@@ -325,10 +318,6 @@ select{
   cursor: pointer;
   font-size: 17px;
   font-weight: bold;
-}
-
-.submit-button:hover {
-  background-color: #f9a825;
 }
 
 .error-message {

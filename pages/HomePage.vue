@@ -68,14 +68,4 @@ header h1 {
     background-color 0.3s ease,
     transform 0.2s ease;
 }
-
-.btn:hover {
-  background-color: #ff4500;
-  transform: scale(1.05);
-}
-
-.btn:active {
-  background-color: #e03e00;
-  transform: scale(1);
-}
 </style>

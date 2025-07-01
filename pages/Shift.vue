@@ -171,8 +171,4 @@ button.remove-btn:disabled {
   font-size: 17px;
   font-weight: bold;
 }
-
-button:hover {
-  background-color: #f29c1f;
-}
 </style>
