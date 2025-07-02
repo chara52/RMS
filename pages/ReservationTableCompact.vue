@@ -162,8 +162,10 @@ function handleSort(type, sortFunction) {
 </template>
 
 <style scoped>
-.reservation-table-name {
+h1 {
+  font-size: 30px;
   text-align: center;
+  margin-top: 0px;
 }
 
 table {

@@ -92,6 +92,12 @@ const submitShift = async () => {
   margin: auto;
 }
 
+h1 {
+  font-size: 30px;
+  text-align: center;
+  margin-top: 0px;
+}
+
 .day-section {
   margin-bottom: 30px;
   border-bottom: 1px solid #ccc;

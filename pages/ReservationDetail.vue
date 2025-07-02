@@ -75,6 +75,12 @@ const handleDelete = () => {
 </template>
 
 <style scoped>
+h1 {
+  font-size: 30px;
+  text-align: center;
+  margin-top: 0px;
+}
+
 table {
   border-collapse: collapse;
   background-color: #fff9e6;

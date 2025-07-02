@@ -98,6 +98,12 @@ const submitReservation = () => {
   margin-top: 20px;
 }
 
+h1 {
+  font-size: 30px;
+  text-align: center;
+  margin-top: 0px;
+}
+
 button {
   width: 130px;
   height: 45px;

@@ -113,6 +113,12 @@ const filteredReservations = computed(() => {
   text-align: center;
 }
 
+h1 {
+  font-size: 30px;
+  text-align: center;
+  margin-top: 0px;
+}
+
 .table-wrapper {
   margin-bottom: 100px;
 }
