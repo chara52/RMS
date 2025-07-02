@@ -7,7 +7,7 @@ import MenuButtonComponent from '../components/MenuButton.vue'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { sortPeople } from '../utils/sortPeople.js'
 import { sortSeat } from '../utils/sortSeat.js'
-
+import { sortTime } from '../utils/sortTime.js'
 
 defineProps({ reservationsDetail: Array });
 
@@ -28,6 +28,7 @@ client
   .then((res) => {
     console.log(res)
     reservations.push(...res.contents)
+    sortTime(reservations)
   })
   .catch((err) => console.error(err))
 
