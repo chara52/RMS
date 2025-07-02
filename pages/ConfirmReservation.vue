@@ -110,10 +110,6 @@ button {
   font-weight: bold;
 }
 
-button:hover {
-  background-color: #f9a825;
-}
-
 .reservation-table {
   background-color: #fff9e6;
   padding: 0.5em 1em;
