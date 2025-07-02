@@ -26,6 +26,8 @@ const editShiftData = () => {
 .edit-button {
   background: none;
   border: none;
+  width: 30px;
+  height: 30px;
 }
 
 .user-icon {
