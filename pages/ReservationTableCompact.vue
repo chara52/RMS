@@ -6,6 +6,7 @@ import MenuButtonComponent from '../components/MenuButton.vue'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter } from 'vue-router'
+import EditShiftData from '~/components/EditShiftData.vue';
 
 defineProps({ reservationsDetail: Array });
 
@@ -99,19 +100,14 @@ function handleSort(type, sortFunction) {
 
   <MenuButtonComponent />
 
-  <div>
-    <div v-if="filteredShiftList.length > 0" class="shift-list">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-      <i class="fa-solid fa-user-pen user-icon"></i>
-      <div class="shift-name">
-        {{ filteredShiftList.map(shift => shift.name).join(', ') }}
-      </div>
+  <div class="shift-info-container">
+    <EditShiftData :id="inputDate" />
+    <div v-if="filteredShiftList.length > 0" class="shift-name">
+      {{ filteredShiftList.map(shift => shift.name).join(', ') }}
     </div>
-    <p v-else class="shift-list">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-      <i class="fa-solid fa-user-pen user-icon"></i>
+    <span v-else class="shift-name">
       シフトはありません。
-    </p>
+    </span>
   </div>
 
   <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
@@ -222,29 +218,16 @@ table tr {
   margin-top: 45px;
 }
 
-.user-icon {
+.shift-info-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  float: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: grey;
-  font-size: 1.5rem;
-  width: 30px;
-  height: 30px;
-}
-
-.shift-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
 }
 
 .shift-name {
   padding: 5px 10px;
   border-radius: 4px;
+  margin-left: 5px;
+  white-space: nowrap;
+  font-size: 15px;
 }
 
 .sort-button-group {
