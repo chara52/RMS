@@ -6,7 +6,8 @@ import MenuButtonComponent from '../components/MenuButton.vue'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter } from 'vue-router'
-import EditShiftData from '~/components/EditShiftData.vue';
+import EditShiftData from '~/components/EditShiftData.vue'
+import BottomNavigation from '../components/BottomNavigation.vue'
 
 defineProps({ reservationsDetail: Array });
 
@@ -159,6 +160,8 @@ function handleSort(type, sortFunction) {
   <div v-else>
     <p class="no-reservations-message">予約はありません</p>
   </div>
+
+  <BottomNavigation />
 </template>
 
 <style scoped>
