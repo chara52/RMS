@@ -118,7 +118,7 @@ const filteredReservations = computed(() => {
 }
 
 .table-wrapper {
-  margin-bottom: 100px;
+  margin-bottom: 145px;
 }
 
 table {
@@ -180,7 +180,7 @@ table tr {
 
 .button-container2 {
   position: fixed;
-  bottom: 40px;
+  bottom: 85px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;

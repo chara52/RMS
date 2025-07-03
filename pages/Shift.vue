@@ -100,6 +100,7 @@ function goToConfirm() {
   padding: 20px;
   max-width: 600px;
   margin: auto;
+  margin-bottom: 65px;
 }
 
 .day-section {
