@@ -154,6 +154,8 @@ onMounted(() => {
       </div>
     </form>
   </div>
+
+  <BottomNavigation />
 </template>
 
 <style scoped>

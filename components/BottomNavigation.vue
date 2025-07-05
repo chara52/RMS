@@ -10,7 +10,7 @@ const route = useRoute();
       <i class="fa-solid fa-house"></i>
       <span>ホーム</span>
     </router-link>
-    <router-link to="/BeforeForm" class="nav-item" :class="{ active: route.path === '/BeforeForm' }">
+    <router-link to="/ReservationForm" class="nav-item" :class="{ active: route.path === '/ReservationForm' }">
       <i class="fa-solid fa-pen"></i>
       <span>入力</span>
     </router-link>
