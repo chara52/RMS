@@ -29,7 +29,7 @@ const handleLogin = async () => {
 
   try {
     await login(email.value, password.value)
-    router.push('/HomePage')
+    router.push('/ReservationTableCompact')
   } catch (e) {
     if (e.code === 'auth/invalid-credential') {
       errorMessage.value = 'メールアドレスまたはパスワードが間違っています。'
