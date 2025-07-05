@@ -29,9 +29,10 @@ const route = useRoute();
 .bottom-nav {
   position: fixed;
   bottom: 0;
-  width: 100%;
-  height: 70px;
-  background: white;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: #F5F5F5;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -44,13 +45,14 @@ const route = useRoute();
   text-align: center;
   color: #555;
   text-decoration: none;
-  font-size: 12px;
+  font-size: 10px;
+  margin-bottom: 20px;
 }
 
 .nav-item i {
   display: block;
   font-size: 18px;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .nav-item.active {
