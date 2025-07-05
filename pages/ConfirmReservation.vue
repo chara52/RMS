@@ -2,7 +2,6 @@
 import { reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { createClient } from 'microcms-js-sdk'
-import MenuButtonComponent from '../components/MenuButton.vue'
 
 const router = useRouter()
 const formData = reactive({
@@ -56,8 +55,6 @@ const submitReservation = () => {
 </script>
 
 <template>
-  <MenuButtonComponent />
-
   <h1>新規受付</h1>
 
   <div class="reservation-table">
