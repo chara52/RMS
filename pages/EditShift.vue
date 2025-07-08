@@ -131,3 +131,48 @@ const submitShift = async () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+h1 {
+  font-size: 30px;
+  text-align: center;
+  margin-top: 0px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 37px;
+  margin-top: 30px;
+}
+
+.back-button {
+  width: 130px;
+  height: 45px;
+  color: black;
+  background-color: #fbc02d;
+  border: 2px solid #fbc02d;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.submit-button {
+  width: 130px;
+  height: 45px;
+  color: black;
+  background-color: #fbc02d;
+  border: 2px solid #fbc02d;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-left: 16px;
+}
+</style>
