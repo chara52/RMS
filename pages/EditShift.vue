@@ -101,6 +101,8 @@ const submitShift = async () => {
 
 <template>
   <MenuButtonComponent />
+  <h1>シフト編集</h1>
+
   <div class="shift-edit">
     <h1>シフト編集</h1>
 
@@ -135,8 +137,31 @@ const submitShift = async () => {
 <style scoped>
 h1 {
   font-size: 30px;
-  text-align: center;
+  text-align: start;
   margin-top: 0px;
+}
+
+.shift-list {
+  width: 90%;
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: #fffef8;
+  padding: 16px;
+  margin-top: 30px;
+}
+
+.shift-list h2 {
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  text-align: start;
+}
+
+.shift-list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 10px;
 }
 
 .button-container {
@@ -146,19 +171,8 @@ h1 {
   margin-top: 30px;
 }
 
+.submit-button,
 .back-button {
-  width: 130px;
-  height: 45px;
-  color: black;
-  background-color: #fbc02d;
-  border: 2px solid #fbc02d;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 17px;
-  font-weight: bold;
-}
-
-.submit-button {
   width: 130px;
   height: 45px;
   color: black;
