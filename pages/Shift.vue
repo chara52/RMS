@@ -1,7 +1,6 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import MenuButtonComponent from '../components/MenuButton.vue'
-import BottomNavigation from '../components/BottomNavigation.vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
@@ -87,12 +86,10 @@ function goToConfirm() {
       <button class="add-btn" @click="addRow(index)">＋ 行を追加</button>
     </div>
     <div class="button-container">
-      <button type="button" @click="router.push('/HomePage')" class="back-button">戻る</button>
+      <button type="button" @click="router.push('/ReservationTableCompact')" class="back-button">戻る</button>
       <button class="confirm-button" @click="goToConfirm">確認</button>
     </div>
   </div>
-
-  <BottomNavigation />
 </template>
 
 <style scoped>

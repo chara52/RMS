@@ -4,7 +4,6 @@ import { createClient } from 'microcms-js-sdk'
 import { useRouter } from 'vue-router'
 import FilteredComponent from '../components/FilteredReservation.vue'
 import MenuButtonComponent from '../components/MenuButton.vue'
-import BottomNavigation from '../components/BottomNavigation.vue'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { sortPeople } from '../utils/sortPeople.js'
 import { sortSeat } from '../utils/sortSeat.js'
@@ -105,11 +104,9 @@ const filteredReservations = computed(() => {
   </div>
 
   <div class="button-container2">
-    <button @click="router.push('/HomePage')" class="bc2">戻る</button>
+    <button @click="router.push('/ReservationTableCompact')" class="bc2">戻る</button>
     <button @click="router.push({ path: '/ReservationForm', query: { reset: 'true' } })" class="bc2">予約へ</button>
   </div>
-
-  <BottomNavigation />
 </template>
 
 <style scoped>
