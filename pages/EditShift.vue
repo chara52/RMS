@@ -151,7 +151,7 @@ h1 {
 }
 
 .shift-list h2 {
-  font-size: 25px;
+  font-size: 30px;
   font-weight: bold;
   margin-bottom: 16px;
   text-align: start;
@@ -162,6 +162,33 @@ h1 {
   align-items: center;
   margin-bottom: 12px;
   gap: 10px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  font-size: 20px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.remove-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.add-btn {
+  display: block;
+  margin: 0 auto;
+  margin-top: 16px;
+  font-size: 20px;
+  background-color: #e0e0e0;
+  border: 2px dashed #333;
+  border-radius: 6px;
+  padding: 6px 16px;
+  cursor: pointer;
 }
 
 .button-container {
