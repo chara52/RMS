@@ -47,9 +47,7 @@ const addRow = () => {
 }
 
 const removeRow = (index) => {
-  if (editableNames.value.length > 1) {
     editableNames.value.splice(index, 1)
-  }
 }
 
 const submitShift = async () => {
