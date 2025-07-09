@@ -2,11 +2,11 @@
 import { reactive, ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from '../components/FilteredReservation.vue'
-import MenuButtonComponent from '../components/MenuButton.vue'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter } from 'vue-router'
-import EditShiftData from '~/components/EditShiftData.vue';
+import EditShiftData from '../components/EditShiftData.vue'
+import BottomNavigation from '../components/BottomNavigation.vue'
 
 defineProps({ reservationsDetail: Array });
 
@@ -98,8 +98,6 @@ function handleSort(type, sortFunction) {
     <h1>予約表</h1>
   </div>
 
-  <MenuButtonComponent />
-
   <div class="shift-info-container">
     <EditShiftData :id="inputDate" />
     <div v-if="filteredShiftList.length > 0" class="shift-name">
@@ -159,6 +157,8 @@ function handleSort(type, sortFunction) {
   <div v-else>
     <p class="no-reservations-message">予約はありません</p>
   </div>
+
+  <BottomNavigation />
 </template>
 
 <style scoped>

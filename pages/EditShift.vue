@@ -2,7 +2,6 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { createClient } from 'microcms-js-sdk';
-import MenuButtonComponent from '~/components/MenuButton.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -100,7 +99,6 @@ const submitShift = async () => {
 </script>
 
 <template>
-  <MenuButtonComponent />
   <div class="shift-edit">
     <h1>シフト編集</h1>
 
@@ -110,6 +108,7 @@ const submitShift = async () => {
       <div class="shift-list-item" v-for="(name, index) in editableNames" :key="index">
         <input v-model="editableNames[index]" type="text" />
         <button class="remove-btn" @click="removeRow(index)">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
           <i class="fa-regular fa-trash-can"></i>
         </button>
       </div>

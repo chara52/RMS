@@ -4,7 +4,6 @@ import { Japanese } from 'flatpickr/dist/l10n/ja.js'
 import 'flatpickr/dist/flatpickr.min.css'
 import { reactive, ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import MenuButtonComponent from '../components/MenuButton.vue'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 
 const formData = reactive({
@@ -74,7 +73,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <MenuButtonComponent />
   <div class="reservation-form">
     <h1>新規受付</h1>
     <form @submit.prevent="submitReservation">
@@ -149,7 +147,7 @@ onMounted(() => {
       <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
 
       <div class="button-container">
-        <button type="button" @click="router.push('/BeforeForm')" class="backbutton">戻る</button>
+        <button type="button" @click="router.push('/ReservationTableCompact')" class="backbutton">戻る</button>
         <button type="submit" class="reservebutton">確認</button>
       </div>
     </form>

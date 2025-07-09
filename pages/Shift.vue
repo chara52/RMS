@@ -1,6 +1,5 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import MenuButtonComponent from '../components/MenuButton.vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
@@ -71,7 +70,6 @@ function goToConfirm() {
 </script>
 
 <template>
-  <MenuButtonComponent />
   <div class="shift-page">
     <h1>シフト作成</h1>
     <div v-for="(day, index) in shiftData.days" :key="index" class="day-section">
@@ -86,7 +84,7 @@ function goToConfirm() {
       <button class="add-btn" @click="addRow(index)">＋ 行を追加</button>
     </div>
     <div class="button-container">
-      <button type="button" @click="router.push('/HomePage')" class="back-button">戻る</button>
+      <button type="button" @click="router.push('/ReservationTableCompact')" class="back-button">戻る</button>
       <button class="confirm-button" @click="goToConfirm">確認</button>
     </div>
   </div>
