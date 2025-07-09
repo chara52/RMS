@@ -178,12 +178,13 @@ input[type="text"] {
   padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 16px;
 }
 
 .add-btn {
   margin: 0 auto;
   margin-top: 16px;
-  font-size: 15px;
+  font-size: 16px;
   background-color: #e0e0e0;
   border: 2px dashed #333;
   border-radius: 6px;
@@ -209,11 +210,5 @@ input[type="text"] {
   cursor: pointer;
   font-size: 17px;
   font-weight: bold;
-}
-
-.error-message {
-  color: red;
-  font-size: 14px;
-  margin-left: 16px;
 }
 </style>
