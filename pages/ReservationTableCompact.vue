@@ -2,7 +2,6 @@
 import { reactive, ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from '../components/FilteredReservation.vue'
-import MenuButtonComponent from '../components/MenuButton.vue'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter } from 'vue-router'
@@ -98,8 +97,6 @@ function handleSort(type, sortFunction) {
   <div class="reservation-table-name">
     <h1>予約表</h1>
   </div>
-
-  <MenuButtonComponent />
 
   <div class="shift-info-container">
     <EditShiftData :id="inputDate" />

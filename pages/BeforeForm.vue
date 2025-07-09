@@ -3,7 +3,7 @@ import { reactive, ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import { useRouter } from 'vue-router'
 import FilteredComponent from '../components/FilteredReservation.vue'
-import MenuButtonComponent from '../components/MenuButton.vue'
+import BottomNavigation from '../components/BottomNavigation.vue'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { sortPeople } from '../utils/sortPeople.js'
 import { sortSeat } from '../utils/sortSeat.js'
@@ -59,8 +59,6 @@ const filteredReservations = computed(() => {
   <div class="reservation-table-name">
     <h1>予約確認</h1>
   </div>
-
-  <MenuButtonComponent />
 
   <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
 

@@ -7,6 +7,7 @@ const route = useRoute();
 <template>
   <nav class="bottom-nav">
     <router-link to="/ReservationTableCompact" class="nav-item" :class="{ active: route.path === '/ReservationTableCompact' }">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
       <i class="fa-solid fa-house"></i>
       <span>ホーム</span>
     </router-link>
@@ -42,7 +43,7 @@ const route = useRoute();
   color: #555;
   text-decoration: none;
   font-size: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .nav-item i {

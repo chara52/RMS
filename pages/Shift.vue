@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import MenuButtonComponent from '../components/MenuButton.vue'
+import BottomNavigation from '../components/BottomNavigation.vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
@@ -71,7 +71,6 @@ function goToConfirm() {
 </script>
 
 <template>
-  <MenuButtonComponent />
   <div class="shift-page">
     <h1>シフト作成</h1>
     <div v-for="(day, index) in shiftData.days" :key="index" class="day-section">
