@@ -42,7 +42,7 @@ const route = useRoute();
   color: #555;
   text-decoration: none;
   font-size: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .nav-item i {
