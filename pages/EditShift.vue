@@ -1,54 +1,54 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { createClient } from 'microcms-js-sdk'
-import MenuButtonComponent from '~/components/MenuButton.vue'
+import { ref, computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { createClient } from 'microcms-js-sdk';
+import MenuButtonComponent from '~/components/MenuButton.vue';
 
-const router = useRouter()
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 
 const client = createClient({
   serviceDomain: import.meta.env.VITE_SHIFT_DOMAIN,
   apiKey: import.meta.env.VITE_SHIFT_API_KEY,
-})
+});
 
-const allShiftsForDay = ref([])
+const allShiftsForDay = ref([]);
 
-const editableNames = ref([])
+const editableNames = ref([]);
 
 onMounted(() => {
-  const inputDate = route.query.id
-  if (!inputDate) return
+  const inputDate = route.query.id;
+  if (!inputDate) return;
 
   client
     .get({ endpoint: 'shiftdata', queries: { limit: 100 } })
     .then((res) => {
       const matches = res.contents.filter(
         (shift) => shift.date?.split('T')[0] === inputDate
-      )
-      allShiftsForDay.value = matches
+      );
+      allShiftsForDay.value = matches;
 
       editableNames.value = matches.flatMap((shift) =>
         Array.isArray(shift.name) ? shift.name : [shift.name]
-      )
+      );
     })
-    .catch((err) => console.error(err))
-})
+    .catch((err) => console.error(err));
+});
 
 const formattedDate = computed(() => {
-  const inputDate = route.query.id
-  if (!inputDate) return ''
-  const [, month, day] = inputDate.split('-')
-  return `${Number(month)}月${Number(day)}日`
-})
+  const inputDate = route.query.id;
+  if (!inputDate) return '';
+  const [, month, day] = inputDate.split('-');
+  return `${Number(month)}月${Number(day)}日`;
+});
 
 const addRow = () => {
-  editableNames.value.push('')
-}
+  editableNames.value.push('');
+};
 
 const removeRow = (index) => {
-    editableNames.value.splice(index, 1)
-}
+  editableNames.value.splice(index, 1);
+};
 
 const submitShift = async () => {
   const inputDate = route.query.id;
@@ -97,7 +97,6 @@ const submitShift = async () => {
   alert('シフトを更新しました');
   router.push('/ReservationTableCompact');
 };
-
 </script>
 
 <template>
@@ -122,8 +121,8 @@ const submitShift = async () => {
       </div>
     </div>
 
-    <div v-else>この日に該当するシフトはありません。
-
+    <div v-else>
+      この日に該当するシフトはありません。
       <button class="add-btn" @click="addRow">＋ 行を追加</button>
       <div class="button-container">
         <button @click="router.push('/ReservationTableCompact')">戻る</button>
