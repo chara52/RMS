@@ -107,27 +107,108 @@ const submitShift = async () => {
     <div v-if="editableNames.length > 0">
       <h2>{{ formattedDate }}</h2>
 
-      <div v-for="(name, index) in editableNames" :key="index">
+      <div class="shift-list-item" v-for="(name, index) in editableNames" :key="index">
         <input v-model="editableNames[index]" type="text" />
-        <button @click="removeRow(index)">
+        <button class="remove-btn" @click="removeRow(index)">
           <i class="fa-regular fa-trash-can"></i>
         </button>
       </div>
 
       <button class="add-btn" @click="addRow">＋ 行を追加</button>
       <div class="button-container">
-        <button @click="router.push('/ReservationTableCompact')">戻る</button>
-        <button @click="submitShift">更新</button>
+        <button class="back-button" @click="router.push('/ReservationTableCompact')">戻る</button>
+        <button class="submit-button" @click="submitShift">更新</button>
       </div>
     </div>
 
     <div v-else>
+      <h2>{{ formattedDate }}</h2>
       この日に該当するシフトはありません。
       <button class="add-btn" @click="addRow">＋ 行を追加</button>
       <div class="button-container">
-        <button @click="router.push('/ReservationTableCompact')">戻る</button>
-        <button @click="submitShift">更新</button>
+        <button class="back-button" @click="router.push('/ReservationTableCompact')">戻る</button>
+        <button class="submit-button" @click="submitShift">更新</button>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+h1 {
+  font-size: 30px;
+  text-align: start;
+  margin-top: 0px;
+}
+
+h2 {
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  text-align: start;
+}
+
+.shift-list {
+  width: 90%;
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: #fffef8;
+  padding: 16px;
+  margin-top: 30px;
+}
+
+.shift-list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.remove-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-btn {
+  margin: 0 auto;
+  margin-top: 16px;
+  font-size: 16px;
+  background-color: #e0e0e0;
+  border: 2px dashed #333;
+  border-radius: 6px;
+  padding: 6px 16px;
+  cursor: pointer;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 37px;
+  margin-top: 30px;
+}
+
+.submit-button,
+.back-button {
+  width: 130px;
+  height: 45px;
+  color: black;
+  background-color: #fbc02d;
+  border: 2px solid #fbc02d;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
+</style>
