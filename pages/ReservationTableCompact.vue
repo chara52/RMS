@@ -5,7 +5,7 @@ import FilteredComponent from '../components/FilteredReservation.vue'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter } from 'vue-router'
-import EditShiftData from '~/components/EditShiftData.vue'
+import EditShiftData from '../components/EditShiftData.vue'
 import BottomNavigation from '../components/BottomNavigation.vue'
 
 defineProps({ reservationsDetail: Array });
