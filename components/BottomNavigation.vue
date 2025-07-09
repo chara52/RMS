@@ -7,6 +7,7 @@ const route = useRoute();
 <template>
   <nav class="bottom-nav">
     <router-link to="/HomePage" class="nav-item" :class="{ active: route.path === '/HomePage' }">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
       <i class="fa-solid fa-house"></i>
       <span>ホーム</span>
     </router-link>

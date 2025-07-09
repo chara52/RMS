@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { createClient } from 'microcms-js-sdk'
-import MenuButtonComponent from '../components/MenuButton.vue'
 
 const router = useRouter()
 const shiftData = ref([])
@@ -62,7 +61,6 @@ const submitShift = async () => {
 </script>
 
 <template>
-  <MenuButtonComponent />
   <div class="confirm-page">
     <h1>シフト確認</h1>
     <div v-if="shiftData.length">
