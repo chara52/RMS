@@ -166,23 +166,24 @@ h2 {
 input[type="text"] {
   width: 100%;
   padding: 8px;
-  font-size: 20px;
+  font-size: 16px;
   border-radius: 4px;
   border: 1px solid #ccc;
 }
 
 .remove-btn {
-  background-color: transparent;
+  background-color: #e74c3c;
+  color: white;
   border: none;
-  font-size: 20px;
+  padding: 4px 8px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
 .add-btn {
-  display: block;
   margin: 0 auto;
   margin-top: 16px;
-  font-size: 20px;
+  font-size: 15px;
   background-color: #e0e0e0;
   border: 2px dashed #333;
   border-radius: 6px;
