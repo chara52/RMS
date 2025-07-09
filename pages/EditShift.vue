@@ -101,34 +101,33 @@ const submitShift = async () => {
 
 <template>
   <MenuButtonComponent />
-  <h1>シフト編集</h1>
-
   <div class="shift-edit">
     <h1>シフト編集</h1>
 
     <div v-if="editableNames.length > 0">
       <h2>{{ formattedDate }}</h2>
 
-      <div v-for="(name, index) in editableNames" :key="index">
+      <div class="shift-list-item" v-for="(name, index) in editableNames" :key="index">
         <input v-model="editableNames[index]" type="text" />
-        <button @click="removeRow(index)">
+        <button class="remove-btn" @click="removeRow(index)">
           <i class="fa-regular fa-trash-can"></i>
         </button>
       </div>
 
       <button class="add-btn" @click="addRow">＋ 行を追加</button>
       <div class="button-container">
-        <button @click="router.push('/ReservationTableCompact')">戻る</button>
-        <button @click="submitShift">更新</button>
+        <button class="back-button" @click="router.push('/ReservationTableCompact')">戻る</button>
+        <button class="submit-button" @click="submitShift">更新</button>
       </div>
     </div>
 
     <div v-else>
+      <h2>{{ formattedDate }}</h2>
       この日に該当するシフトはありません。
       <button class="add-btn" @click="addRow">＋ 行を追加</button>
       <div class="button-container">
-        <button @click="router.push('/ReservationTableCompact')">戻る</button>
-        <button @click="submitShift">更新</button>
+        <button class="back-button" @click="router.push('/ReservationTableCompact')">戻る</button>
+        <button class="submit-button" @click="submitShift">更新</button>
       </div>
     </div>
   </div>
@@ -141,6 +140,13 @@ h1 {
   margin-top: 0px;
 }
 
+h2 {
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  text-align: start;
+}
+
 .shift-list {
   width: 90%;
   max-width: 500px;
@@ -148,13 +154,6 @@ h1 {
   background-color: #fffef8;
   padding: 16px;
   margin-top: 30px;
-}
-
-.shift-list h2 {
-  font-size: 30px;
-  font-weight: bold;
-  margin-bottom: 16px;
-  text-align: start;
 }
 
 .shift-list-item {
