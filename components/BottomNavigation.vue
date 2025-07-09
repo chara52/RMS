@@ -14,10 +14,6 @@ const route = useRoute();
       <i class="fa-solid fa-pen"></i>
       <span>入力</span>
     </router-link>
-    <!--router-link to="/ReservationTableCompact" class="nav-item" :class="{ active: route.path === '/ReservationTableCompact' }">
-      <i class="fa-solid fa-table"></i>
-      <span>予約表</span>
-    </router-link-->
     <router-link to="/Shift?reset=true" class="nav-item" :class="{ active: route.path.startsWith('/Shift') }">
       <i class="fa-solid fa-user-pen"></i>
       <span>シフト</span>
