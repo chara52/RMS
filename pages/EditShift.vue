@@ -2,11 +2,6 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { createClient } from 'microcms-js-sdk';
-<<<<<<< HEAD
-import MenuButtonComponent from '~/components/MenuButton.vue';
-=======
-import { useRouter, useRoute } from 'vue-router';
->>>>>>> a5803d8 (MenuButtonを画面から削除)
 
 const router = useRouter();
 const route = useRoute();

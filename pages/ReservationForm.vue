@@ -147,7 +147,7 @@ onMounted(() => {
       <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
 
       <div class="button-container">
-        <button type="button" @click="router.push('/BeforeForm')" class="backbutton">戻る</button>
+        <button type="button" @click="router.push('/ReservationTableCompact')" class="backbutton">戻る</button>
         <button type="submit" class="reservebutton">確認</button>
       </div>
     </form>

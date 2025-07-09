@@ -1,6 +1,5 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import BottomNavigation from '../components/BottomNavigation.vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
@@ -89,8 +88,6 @@ function goToConfirm() {
       <button class="confirm-button" @click="goToConfirm">確認</button>
     </div>
   </div>
-
-  <BottomNavigation />
 </template>
 
 <style scoped>
