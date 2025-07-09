@@ -2,7 +2,6 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { createClient } from 'microcms-js-sdk';
-import MenuButtonComponent from '~/components/MenuButton.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -100,7 +99,6 @@ const submitShift = async () => {
 </script>
 
 <template>
-  <MenuButtonComponent />
   <div class="shift-edit">
     <h1>シフト編集</h1>
 

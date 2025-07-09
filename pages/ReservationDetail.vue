@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import MenuButtonComponent from '../components/MenuButton.vue'
 import DeleteReservation from '../components/DeleteReservation.vue'
 import EditReservation from '../components/EditReservation.vue'
 
@@ -44,7 +43,6 @@ const handleDelete = () => {
 
   <DeleteReservation :id="reservationId" @delete="handleDelete" />
   <EditReservation :id="reservationId" />
-  <MenuButtonComponent />
 
   <div class="reservation-table">
     <p><strong>名前 :</strong> {{ formData.name }}</p>
