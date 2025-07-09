@@ -296,19 +296,8 @@ select{
   margin-left: 4px;
 }
 
+.submit-button,
 .back-button {
-  width: 130px;
-  height: 45px;
-  color: black;
-  background-color: #fbc02d;
-  border: 2px solid #fbc02d;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 17px;
-  font-weight: bold;
-}
-
-.submit-button {
   width: 130px;
   height: 45px;
   color: black;
