@@ -55,7 +55,7 @@ const submitReservation = () => {
 </script>
 
 <template>
-  <h1>新規受付</h1>
+  <h1 class="global-h1">新規受付</h1>
 
   <div class="reservation-table">
     <p><strong>名前 :</strong> {{ formData.name }}</p>

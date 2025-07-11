@@ -100,7 +100,7 @@ const submitShift = async () => {
 
 <template>
   <div class="shift-edit">
-    <h1>シフト編集</h1>
+    <h1 class="global-h1">シフト編集</h1>
 
     <div v-if="editableNames.length > 0">
       <h2>{{ formattedDate }}</h2>
@@ -133,12 +133,6 @@ const submitShift = async () => {
 </template>
 
 <style scoped>
-h1 {
-  font-size: 30px;
-  text-align: start;
-  margin-top: 0px;
-}
-
 h2 {
   font-size: 25px;
   font-weight: bold;

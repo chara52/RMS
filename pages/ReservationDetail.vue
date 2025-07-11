@@ -38,7 +38,7 @@ const handleDelete = () => {
 
 <template>
   <div class="reservation-detail-name">
-    <h1>予約詳細</h1>
+    <h1 class="global-h1">予約詳細</h1>
   </div>
 
   <DeleteReservation :id="reservationId" @delete="handleDelete" />

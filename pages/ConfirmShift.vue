@@ -62,7 +62,7 @@ const submitShift = async () => {
 
 <template>
   <div class="confirm-page">
-    <h1>シフト確認</h1>
+    <h1 class="global-h1">シフト確認</h1>
     <div v-if="shiftData.length">
       <div v-for="(day, dayIndex) in shiftData" :key="dayIndex" class="day-section">
         <h2>{{ getDateWithOffset(dayIndex) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
@@ -88,6 +88,12 @@ const submitShift = async () => {
   padding: 20px;
   max-width: 600px;
   margin: auto;
+}
+
+.global-h1 {
+  font-size: 20px;
+  text-align: center;
+  margin-top: -15px;
 }
 
 .day-section {

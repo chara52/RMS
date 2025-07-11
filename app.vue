@@ -31,3 +31,11 @@ onMounted(() => {
     <NuxtPage />
   </div>
 </template>
+
+<style>
+.global-h1 {
+  font-size: 20px;
+  text-align: center;
+  margin-top: 10px;
+}
+</style>
