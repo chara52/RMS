@@ -71,7 +71,7 @@ function goToConfirm() {
 
 <template>
   <div class="shift-page">
-    <h1>シフト作成</h1>
+    <h1 class="global-h1">シフト作成</h1>
     <div v-for="(day, index) in shiftData.days" :key="index" class="day-section">
       <h2>{{ getDateWithOffset(index) }} ({{ getWeekdayLabel(index) }})</h2>
       <div v-for="(row, rowIndex) in day" :key="rowIndex" class="shift-row">
@@ -95,6 +95,12 @@ function goToConfirm() {
   padding: 20px;
   max-width: 600px;
   margin: auto;
+}
+
+.global-h1 {
+  font-size: 20px;
+  text-align: center;
+  margin-top: -15px;
 }
 
 .day-section {

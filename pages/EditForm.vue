@@ -117,7 +117,7 @@ watch(() => formData.time, (newTime) => {
 
 <template>
   <div class="reservation-form">
-    <h1>予約編集</h1>
+    <h1 class="global-h1">予約編集</h1>
 
     <form @submit.prevent="submitForm">
       <div class="form-group">
@@ -205,10 +205,10 @@ watch(() => formData.time, (newTime) => {
   background-color: #fff9e6;
 }
 
-h1 {
-  font-size: 30px;
+.global-h1 {
+  font-size: 20px;
   text-align: center;
-  margin-top: 0px;
+  margin-top: -7px;
 }
 
 .form-group {

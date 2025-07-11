@@ -74,7 +74,7 @@ onMounted(() => {
 
 <template>
   <div class="reservation-form">
-    <h1>新規受付</h1>
+    <h1 class="global-h1">新規受付</h1>
     <form @submit.prevent="submitReservation">
       <div class="form-group">
         <label for="name" class="label-flex">
@@ -163,19 +163,14 @@ onMounted(() => {
   background-color: #fff9e6;
 }
 
-h1 {
-  font-size: 30px;
+.global-h1 {
+  font-size: 20px;
   text-align: center;
-  margin-top: 0px;
+  margin-top: -7px;
 }
 
 .form-group {
   margin-bottom: 15px;
-}
-
-.header {
-  display: flex;
-  justify-content: flex-start;
 }
 
 .row {
