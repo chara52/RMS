@@ -201,6 +201,10 @@ input[type="text"] {
   justify-content: center;
   gap: 37px;
   margin-top: 30px;
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .submit-button,
