@@ -50,6 +50,13 @@ const removeRow = (index) => {
 };
 
 const submitShift = async () => {
+  const names = editableNames.value.map(name => name.trim()).filter(name => name !== '');
+  const nameSet = new Set(names);
+  if (names.length !== nameSet.size) {
+    alert('同じ名前が複数入力されています。重複を削除してください。');
+    return;
+  }
+
   const inputDate = route.query.id;
   if (!inputDate) return;
 
