@@ -33,7 +33,7 @@ const route = useRoute();
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-top: 1px solid #ddd; /* #cccより薄い */
+  border-top: 1px solid #ddd;
   z-index: 10;
 }
 
