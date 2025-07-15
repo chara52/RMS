@@ -108,7 +108,7 @@ function handleSort(type, sortFunction) {
       {{ filteredShiftList.map(shift => shift.name).join(', ') }}
     </div>
     <span v-else class="shift-name" @click="goToEditShift">
-      シフトはありません。
+      シフトはありません
     </span>
   </div>
 
