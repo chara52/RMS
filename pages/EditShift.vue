@@ -132,7 +132,7 @@ const submitShift = async () => {
 
     <div v-else>
       <h2>{{ formattedDate }}</h2>
-      この日に該当するシフトはありません。
+      この日に該当するシフトはありません
       <button class="add-btn" @click="addRow">＋ 行を追加</button>
       <div class="button-container">
         <button class="back-button" @click="router.push('/ReservationTableCompact')">戻る</button>

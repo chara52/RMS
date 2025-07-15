@@ -74,7 +74,7 @@ const submitShift = async () => {
       </div>
     </div>
     <div v-else>
-      <p>シフトデータがありません。</p>
+      <p>シフトデータがありません</p>
     </div>
     <div class="button-container">
       <button @click="router.push('/Shift')" class="go-back-btn">戻る</button>
