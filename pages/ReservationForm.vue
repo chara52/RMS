@@ -68,6 +68,7 @@ onMounted(() => {
     dateFormat: 'Y-m-d H:i',
     locale: Japanese,
     defaultDate: formData.time || null,
+    disableMobile: true,
     onChange: function (_, dateStr) {
       formData.time = dateStr
     }
@@ -209,6 +210,7 @@ select {
   border: 2px solid rgb(187, 182, 182);
   border-radius: 4px;
   box-sizing: border-box;
+  font-size: 16px;
 }
 
 .form-group textarea {
