@@ -86,6 +86,10 @@ const filteredShiftList = computed(() => {
   });
 });
 
+function goToEditShift() {
+  router.push({ path: '/EditShift', query: { id: inputDate.value } });
+}
+
 function handleSort(type, sortFunction) {
   sortFunction(reservations);
   activeSort.value = type;
@@ -100,10 +104,10 @@ function handleSort(type, sortFunction) {
 
   <div class="shift-info-container">
     <EditShiftData :id="inputDate" />
-    <div v-if="filteredShiftList.length > 0" class="shift-name">
+    <div v-if="filteredShiftList.length > 0" class="shift-name" @click="goToEditShift">
       {{ filteredShiftList.map(shift => shift.name).join(', ') }}
     </div>
-    <span v-else class="shift-name">
+    <span v-else class="shift-name" @click="goToEditShift">
       シフトはありません。
     </span>
   </div>
