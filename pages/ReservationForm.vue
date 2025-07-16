@@ -58,6 +58,9 @@ onMounted(() => {
     if (saved) {
       Object.assign(formData, JSON.parse(saved))
     }
+    if (formData.info && formData.info.trim() !== "") {
+      showDetailInput.value = true;
+    }
   }
 
   flatpickr(datepickerRef.value, {
