@@ -95,7 +95,7 @@ function handleSort(type, sortFunction) {
 
 <template>
   <div class="reservation-table-name">
-    <h1>予約表</h1>
+    <h1 class="global-h1">予約表</h1>
   </div>
 
   <div class="shift-info-container">

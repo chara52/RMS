@@ -57,7 +57,7 @@ const filteredReservations = computed(() => {
 
 <template>
   <div class="reservation-table-name">
-    <h1>予約確認</h1>
+    <h1 class="global-h1">予約確認</h1>
   </div>
 
   <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
