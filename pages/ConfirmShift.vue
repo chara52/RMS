@@ -31,9 +31,7 @@ onMounted(() => {
 const getDateWithOffset = (offset) => {
   const base = new Date(startDate.value)
   base.setDate(base.getDate() + offset)
-  const month = base.getMonth() + 1
-  const day = base.getDate()
-  return `${month}月${day}日`
+  return base.toISOString().split('T')[0]
 }
 
 const submitShift = async () => {
