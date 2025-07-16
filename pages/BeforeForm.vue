@@ -1,0 +1,214 @@
+<script setup>
+import { reactive, ref, computed, onMounted } from 'vue'
+import { createClient } from 'microcms-js-sdk'
+import { useRouter } from 'vue-router'
+import FilteredComponent from '../components/FilteredReservation.vue'
+import BottomNavigation from '../components/BottomNavigation.vue'
+import { addCourseDrink } from '../utils/addCourseDrink.js'
+import { sortPeople } from '../utils/sortPeople.js'
+import { sortSeat } from '../utils/sortSeat.js'
+import { sortTime } from '../utils/sortTime.js'
+
+defineProps({ reservationsDetail: Array });
+
+const router = useRouter();
+
+const client = createClient({
+  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
+  apiKey: import.meta.env.VITE_API_KEY,
+})
+
+const reservations = reactive([])
+
+client
+  .getList({
+    endpoint: 'data',
+    queries: { limit: 100 }
+  })
+  .then((res) => {
+    console.log(res)
+    reservations.push(...res.contents)
+    sortTime(reservations)
+  })
+  .catch((err) => console.error(err))
+
+const inputDate = ref(null)
+
+onMounted(() => {
+  const now = new Date()
+  inputDate.value = new Date(now.getTime() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
+})
+
+const recordDate = (date) => {
+  inputDate.value = date
+}
+
+const filteredReservations = computed(() => {
+  if (!inputDate.value) {
+    return reservations
+  }
+  return reservations.filter((reservation) => {
+    const reservationDate = reservation.time.split('T')[0]
+    return inputDate.value === reservationDate
+  })
+})
+
+</script>
+
+<template>
+  <div class="reservation-table-name">
+    <h1 class="global-h1">予約確認</h1>
+  </div>
+
+  <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
+
+  <div class="button-container1">
+    <button @click="sortPeople(reservations)" class="bc1">人数順</button>
+    <button @click="sortSeat(reservations)" class="bc1">卓順</button>
+  </div>
+
+  <div class="table-wrapper">
+    <div v-if="filteredReservations.length > 0">
+      <table border="1" width="100%">
+        <tbody>
+          <tr>
+            <th class="name">名前</th>
+            <th class="people">人数</th>
+            <th class="seat">卓</th>
+            <th class="info">詳細</th>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr v-for="reservation in filteredReservations" :key="reservation.id">
+            <td class="name-space">{{ reservation.name }}</td>
+            <td class="number-space">{{ reservation.people }}</td>
+            <td class="seat-space">{{ reservation.seat }}</td>
+            <td class="info-space">
+              <div v-if="addCourseDrink(reservation.course, reservation.drink) !== '0込'">
+                {{ addCourseDrink(reservation.course, reservation.drink) }}
+              </div>
+              <div>
+                {{ reservation.info }}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div v-else>
+      <p class="no-reservations-message">予約はありません</p>
+    </div>
+  </div>
+
+  <div class="button-container2">
+    <button @click="router.push('/ReservationTableCompact')" class="bc2">戻る</button>
+    <button @click="router.push({ path: '/ReservationForm', query: { reset: 'true' } })" class="bc2">予約へ</button>
+  </div>
+
+  <BottomNavigation />
+</template>
+
+<style scoped>
+.reservation-table-name {
+  text-align: center;
+}
+
+.table-wrapper {
+  margin-bottom: 100px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  /* 幅を決める */
+}
+
+table th.name {
+  width: 25%;
+  writing-mode: horizontal-tb;
+  /* 横書きに変換 */
+}
+
+table th.people {
+  width: 15%;
+  writing-mode: horizontal-tb;
+}
+
+table th.seat {
+  width: 20%;
+  writing-mode: horizontal-tb;
+}
+
+table th.info {
+  width: 35%;
+  writing-mode: horizontal-tb;
+}
+
+table tr {
+  height: 70px;
+  /* 枠の縦幅を調整 */
+  background-color: #fff9e6;
+}
+
+.name-space,
+.number-space,
+.time-space,
+.seat-space,
+.info-space {
+  font-size: 13px;
+  text-align: center;
+  white-space: normal;
+  /* 枠の中に入らなかった場合自動で改行 */
+}
+
+.no-reservations-message {
+  text-align: center;
+  font-size: 22px;
+  margin-top: 45px;
+}
+
+.button-container1 {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.button-container2 {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  gap: 37px;
+  margin-top: 20px;
+}
+
+.bc1 {
+  width: 90px;
+  height: 40px;
+  color: black;
+  background-color: #ececec;
+  border: 0px;
+  border-radius: 25px;
+  margin: 10px 0;
+  padding: 0px 10px;
+  cursor: pointer;
+  font-size: 14.5px;
+  font-weight: bold;
+}
+
+.bc2 {
+  width: 130px;
+  height: 45px;
+  color: black;
+  background-color: #fbc02d;
+  border: 2px solid #fbc02d;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
+</style>

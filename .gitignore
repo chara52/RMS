@@ -1,3 +1,17 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# PWA generated service worker output (ignore dev-sw-dist)
+.nuxt/dev-sw-dist/
+
+# Node dependencies
+node_modules
+
 # Logs
 logs
 *.log
@@ -7,27 +21,14 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-dev-dist/
-node_modules
+# Misc
 .DS_Store
-dist
-dist-ssr
-coverage
-*.local
-
-/cypress/videos/
-/cypress/screenshots/
-
-# Editor directories and files
+.fleet
+.idea
 .vscode/*
 !.vscode/extensions.json
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
 
-*.tsbuildinfo
-
+# Local env files
 .env
+.env.*
+!.env.example
