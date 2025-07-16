@@ -124,38 +124,40 @@ function handleSort(type, sortFunction) {
     </button>
   </div>
 
-  <div v-if="filteredReservations.length > 0">
-    <table border="1" width="100%">
-      <tbody>
-        <tr>
-          <th class="name">名前</th>
-          <th class="people">人数</th>
-          <th class="time">時間</th>
-          <th class="seat">卓</th>
-          <th class="info">詳細</th>
-        </tr>
-      </tbody>
-      <tbody>
-        <tr v-for="reservation in filteredReservations" :key="reservation.id" @click="goToDetail(reservation)">
-          <td class="name-space">{{ reservation.name }}</td>
-          <td class="number-space">{{ reservation.people }}</td>
-          <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
-          <td class="seat-space">{{ reservation.seat }}</td>
-          <td class="info-space">
-            <div>
-              {{ addCourseDrink(reservation.course, reservation.drink) }}
-            </div>
-            <div>
-              {{ reservation.info }}
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="table-wrapper">
+    <div v-if="filteredReservations.length > 0">
+      <table border="1" width="100%">
+        <tbody>
+          <tr>
+            <th class="name">名前</th>
+            <th class="people">人数</th>
+            <th class="time">時間</th>
+            <th class="seat">卓</th>
+            <th class="info">詳細</th>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr v-for="reservation in filteredReservations" :key="reservation.id" @click="goToDetail(reservation)">
+            <td class="name-space">{{ reservation.name }}</td>
+            <td class="number-space">{{ reservation.people }}</td>
+            <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
+            <td class="seat-space">{{ reservation.seat }}</td>
+            <td class="info-space">
+              <div>
+                {{ addCourseDrink(reservation.course, reservation.drink) }}
+              </div>
+              <div>
+                {{ reservation.info }}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <div v-else>
-    <p class="no-reservations-message">予約はありません</p>
+    <div v-else>
+      <p class="no-reservations-message">予約はありません</p>
+    </div>
   </div>
 
   <BottomNavigation />
@@ -164,6 +166,10 @@ function handleSort(type, sortFunction) {
 <style scoped>
 .reservation-table-name {
   text-align: center;
+}
+
+.table-wrapper {
+  margin-bottom: 100px;
 }
 
 table {
