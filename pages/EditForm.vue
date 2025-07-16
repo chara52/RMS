@@ -104,6 +104,7 @@ function initFlatpicker() {
     dateFormat: "Y-m-d H:i",
     locale: Japanese,
     defaultDate: formData.time,
+    disableMobile: true,
   })
 }
 
@@ -253,13 +254,14 @@ watch(() => formData.time, (newTime) => {
 }
 
 .form-group input,
-.form-group textarea .submit-button,
-select{
+.form-group textarea,
+select {
   width: 100%;
   padding: 10px;
   border: 2px solid rgb(187, 182, 182);
   border-radius: 4px;
   box-sizing: border-box;
+  font-size: 16px;
 }
 
 .form-group textarea {

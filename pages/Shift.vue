@@ -121,6 +121,7 @@ input {
   border-radius: 5px;
   border: 1px solid #ddd;
   flex: 1;
+  font-size: 16px;
 }
 
 button {
