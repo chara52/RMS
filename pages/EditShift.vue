@@ -181,6 +181,7 @@ input[type="text"] {
   margin: 0 auto;
   margin-top: 16px;
   font-size: 16px;
+  color: black;
   background-color: #e0e0e0;
   border: 2px dashed #333;
   border-radius: 6px;
