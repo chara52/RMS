@@ -69,7 +69,9 @@ const handleDelete = () => {
     <p><strong>電話番号 :</strong> {{ formData.phone }}</p>
     <p><strong>席番号 :</strong> {{ formData.seat }}</p>
   </div>
-  <router-link to="/ReservationTableCompact">戻る</router-link>
+  <div class="button-container">
+    <button @click="router.push('/ReservationTableCompact')" class="go-back-btn">戻る</button>
+  </div>
 </template>
 
 <style scoped>
@@ -115,5 +117,24 @@ th {
   background-color: #fff9e6;
   padding: 0.5em 1em;
   border-left: solid 10px #ffc06e;
+}
+
+.button-container {
+  display: flex;
+  gap: 37px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.go-back-btn {
+  width: 130px;
+  height: 45px;
+  color: black;
+  background-color: #fbc02d;
+  border: 2px solid #fbc02d;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
 }
 </style>
