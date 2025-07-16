@@ -53,7 +53,7 @@ const submitShift = async () => {
   const names = editableNames.value.map(name => name.trim()).filter(name => name !== '');
   const nameSet = new Set(names);
   if (names.length !== nameSet.size) {
-    alert('同じ名前が複数入力されています。重複を削除してください。');
+    alert('同じ名前は入力できません。');
     return;
   }
 
