@@ -70,27 +70,32 @@ function goToConfirm() {
 </script>
 
 <template>
-  <div class="shift-page">
-    <h1 class="global-h1">シフト作成</h1>
-    <div v-for="(day, index) in shiftData.days" :key="index" class="day-section">
-      <h2>{{ getDateWithOffset(index) }} ({{ getWeekdayLabel(index) }})</h2>
-      <div v-for="(row, rowIndex) in day" :key="rowIndex" class="shift-row">
-        <input v-model="row.name" placeholder="名前" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <button class="remove-btn" @click="removeRow(index, rowIndex)" :disabled="day.length === 1">
-          <i class="fa-regular fa-trash-can"></i>
-        </button>
+  <div class="shift-page-wrapper">
+    <div class="shift-page">
+      <h1>シフト作成</h1>
+      <div v-for="(day, index) in shiftData.days" :key="index" class="day-section">
+        <h2>{{ getDateWithOffset(index) }} ({{ getWeekdayLabel(index) }})</h2>
+        <div v-for="(row, rowIndex) in day" :key="rowIndex" class="shift-row">
+          <input v-model="row.name" placeholder="名前" />
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+          <button class="remove-btn" @click="removeRow(index, rowIndex)" :disabled="day.length === 1">
+            <i class="fa-regular fa-trash-can"></i>
+          </button>
+        </div>
+        <button class="add-btn" @click="addRow(index)">＋ 行を追加</button>
       </div>
-      <button class="add-btn" @click="addRow(index)">＋ 行を追加</button>
-    </div>
-    <div class="button-container">
-      <button type="button" @click="router.push('/ReservationTableCompact')" class="back-button">戻る</button>
-      <button class="confirm-button" @click="goToConfirm">確認</button>
+      <div class="button-container">
+        <button type="button" @click="router.push('/ReservationTableCompact')" class="back-button">戻る</button>
+        <button class="confirm-button" @click="goToConfirm">確認</button>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.shift-page-wrapper {
+  margin-bottom: 100px;
+}
 .shift-page {
   padding: 20px;
   max-width: 600px;
@@ -162,6 +167,10 @@ button.remove-btn:disabled {
   justify-content: center;
   gap: 37px;
   margin-top: 30px;
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .back-button,
