@@ -109,7 +109,7 @@ onMounted(() => {
           <label for="course" class="label-flex">
             <span class="label-text">コース</span>
           </label>
-          <select id="course" v-model="formData.course">
+          <select id="course" v-model="formData.course" style="color: black;">
             <option v-for="option in courseOptions" :key="option.value" :value="option.value">
               {{ option.label }}
             </option>
@@ -120,7 +120,7 @@ onMounted(() => {
           <label for="drink" class="label-flex">
             <span class="label-text">飲み放題</span>
           </label>
-          <select id="drink" v-model="formData.drink">
+          <select id="drink" v-model="formData.drink" style="color: black;">
             <option value="なし">なし</option>
             <option value="2500円（2h）">2500円（2h）</option>
             <option value="3000円（3h）">3000円（3h）</option>
