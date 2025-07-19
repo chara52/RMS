@@ -19,7 +19,7 @@ export function addCourseDrink(course, drink) {
       return `${sumCP + DP}込`;
     } else if (trimmedDrink === "3000円（3h）") {
       DP = 3000;
-      return `${sumCP + DP}込(3h)`;
+      return `${sumCP + DP}込（3h）`;
     }
 
   } else if (Array.isArray(drink) && drink.length > 0 && course[0] === "なし" || course.length === 0) {
@@ -27,7 +27,7 @@ export function addCourseDrink(course, drink) {
 
     if (trimmedDrink === "2500円（2h）") {
       DP = 2500;
-      return `飲み放題(2h)`;
+      return `飲み放題（2h）`;
     } else if (trimmedDrink === "3000円（3h）") {
       DP = 3000;
       return `飲み放題（3h）`;
