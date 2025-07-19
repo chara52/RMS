@@ -68,7 +68,7 @@ onMounted(() => {
     dateFormat: 'Y-m-d H:i',
     locale: Japanese,
     defaultDate: formData.time || null,
-    disableMobile: true,
+    //disableMobile: true,
     onChange: function (_, dateStr) {
       formData.time = dateStr
     }
