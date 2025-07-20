@@ -13,6 +13,7 @@ const formData = reactive({
   info: '',
   phone: '',
   seat: '',
+  date: '',
 });
 
 const reservationId = ref("");
@@ -22,7 +23,15 @@ onMounted(() => {
   if (storedReservation) {
     const parsedReservation = JSON.parse(storedReservation)
     Object.assign(formData, parsedReservation);
-    formData.time = new Date(formData.time).toISOString().slice(0, 16).replace('T', ' ');
+
+    // timeフィールドから日付と時間を分離
+    if (parsedReservation.time) {
+      // 予約表と同じ方法で時間を抽出
+      const timeParts = parsedReservation.time.split('T');
+      formData.date = timeParts[0]; // 日付部分
+      formData.time = timeParts[1].slice(0, 5); // 時間部分（HH:MM）
+    }
+    //formData.time = new Date(formData.time).toISOString().slice(0, 16).replace('T', ' ');
     reservationId.value = parsedReservation.id;
   }
   console.log("予約ID:", reservationId.value);
@@ -45,6 +54,7 @@ const handleDelete = () => {
   <EditReservation :id="reservationId" />
 
   <div class="reservation-table">
+    <p><strong>日付 :</strong> {{ formData.date }}</p>
     <p><strong>名前 :</strong> {{ formData.name }}</p>
     <p><strong>人数 :</strong> {{ formData.people }}</p>
     <p><strong>時間 :</strong> {{ formData.time }}</p>

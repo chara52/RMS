@@ -1,16 +1,16 @@
 <script setup>
-import flatpickr from 'flatpickr';
-import { Japanese } from 'flatpickr/dist/l10n/ja.js';
-import 'flatpickr/dist/flatpickr.min.css'
-import { reactive, ref, onMounted, computed, watch } from 'vue';
+//import flatpickr from 'flatpickr';
+//import { Japanese } from 'flatpickr/dist/l10n/ja.js';
+//import 'flatpickr/dist/flatpickr.min.css'
+import { reactive, ref, onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { createClient } from 'microcms-js-sdk';
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 
 const router = useRouter();
 const route = useRoute();
-const datepickerRef = ref(null);
-let datepickerInstance = null;
+//const datepickerRef = ref(null);
+//let datepickerInstance = null;
 const errorMessage = ref('');
 const courseOptions = computed(() => generateCourseOptions());
 
@@ -32,7 +32,28 @@ const formData = reactive({
   info: '',
   phone: '',
   seat: '',
+  date: '',
 });
+
+const openDatePicker = (event) => {
+  // 入力フィールドにフォーカスを当ててカレンダーを開く
+  event.target.focus()
+
+  // モダンブラウザでは showPicker() メソッドが利用可能
+  if (event.target.showPicker) {
+    event.target.showPicker()
+  }
+}
+
+const openTimePicker = (event) => {
+  // 入力フィールドにフォーカスを当てて時間選択を開く
+  event.target.focus()
+
+  // モダンブラウザでは showPicker() メソッドが利用可能
+  if (event.target.showPicker) {
+    event.target.showPicker()
+  }
+}
 
 onMounted(() => {
   // route.query.idで予約IDを取得
@@ -46,11 +67,16 @@ onMounted(() => {
     .then((res) => {
       Object.assign(formData, res);
       // 日付のフォーマット調整
-      formData.time = new Date(res.time).toISOString().slice(0, 16).replace('T', ' ');
+      //formData.time = new Date(res.time).toISOString().slice(0, 16).replace('T', ' ');
+       if (res.time) {
+        const timeParts = res.time.split('T');
+        formData.date = timeParts[0]; // 日付部分（YYYY-MM-DD）
+        formData.time = timeParts[1].slice(0, 5); // 時間部分（HH:MM）
+      }
 
       formData.course = String(res.course || '');
       formData.drink = String(res.drink || '');
-      initFlatpicker();
+      //initFlatpicker();
     })
     .catch((err) => console.error(err));
 })
@@ -64,6 +90,10 @@ const submitForm = () => {
     return;
   }
 
+  const combinedTime = formData.date && formData.time
+    ? `${formData.date}T${formData.time}:00.000Z`
+    : formData.time;
+
   // fetchはHTTPリクエストを送信するための関数
   fetch(`https://${import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1/data/${reservationId}`, {
     method: "PATCH",
@@ -74,7 +104,7 @@ const submitForm = () => {
     body: JSON.stringify({
       name: formData.name,
       people: formData.people,
-      time: formData.time,
+      time: combinedTime,
       course: Array.isArray(formData.course) ? formData.course : [formData.course],
       drink: Array.isArray(formData.drink) ? formData.drink : [formData.drink],
       info: formData.info,
@@ -98,6 +128,7 @@ const submitForm = () => {
   }
 };
 
+/*
 function initFlatpicker() {
   datepickerInstance = flatpickr(datepickerRef.value, {
     enableTime: true,
@@ -107,12 +138,15 @@ function initFlatpicker() {
     disableMobile: true,
   })
 }
+*/
 
+/*
 watch(() => formData.time, (newTime) => {
   if (datepickerInstance) {
     datepickerInstance.setDate(newTime, false);
   }
 });
+*/
 
 </script>
 
@@ -122,6 +156,13 @@ watch(() => formData.time, (newTime) => {
 
     <form @submit.prevent="submitForm">
       <div class="form-group">
+        <div class="form-group">
+        <label for="date" class="label-flex">
+          <span class="label-text">日付</span>
+          <span class="required-mark">＊</span>
+        </label>
+        <input type="date" id="date" v-model="formData.date" required @click="openDatePicker" />
+      </div>
         <label for="name" class="label-flex">
           <span class="label-text">名前</span>
           <span class="required-mark">＊</span>
@@ -140,7 +181,7 @@ watch(() => formData.time, (newTime) => {
           <span class="label-text">時間</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" id="time" ref="datepickerRef" v-model="formData.time" required />
+        <input type="time" id="time" v-model="formData.time" required @click="openTimePicker" />
       </div>
 
       <div class="form-group row">
