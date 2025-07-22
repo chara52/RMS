@@ -29,7 +29,6 @@ onMounted(() => {
 
 const submitReservation = () => {
   if (confirm('予約を確定しますか？')) {
-    // dateとtimeを結合してmicroCMSの形式に変換
     const combinedTime = formData.date && formData.time
       ? `${formData.date} ${formData.time}`
       : formData.time || '';
@@ -40,7 +39,7 @@ const submitReservation = () => {
         content: {
           name: formData.name,
           people: formData.people,
-          time: combinedTime, //統合した日時を送信
+          time: combinedTime,
           course: Array.isArray(formData.course) ? formData.course : [formData.course],
           drink: Array.isArray(formData.drink) ? formData.drink : [formData.drink],
           info: formData.info,

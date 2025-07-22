@@ -1,7 +1,4 @@
 <script setup>
-//import flatpickr from 'flatpickr';
-//import { Japanese } from 'flatpickr/dist/l10n/ja.js';
-//import 'flatpickr/dist/flatpickr.min.css'
 import { reactive, ref, onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { createClient } from 'microcms-js-sdk';
@@ -9,8 +6,6 @@ import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 
 const router = useRouter();
 const route = useRoute();
-//const datepickerRef = ref(null);
-//let datepickerInstance = null;
 const errorMessage = ref('');
 const courseOptions = computed(() => generateCourseOptions());
 
@@ -36,27 +31,22 @@ const formData = reactive({
 });
 
 const openDatePicker = (event) => {
-  // 入力フィールドにフォーカスを当ててカレンダーを開く
   event.target.focus()
 
-  // モダンブラウザでは showPicker() メソッドが利用可能
   if (event.target.showPicker) {
     event.target.showPicker()
   }
 }
 
 const openTimePicker = (event) => {
-  // 入力フィールドにフォーカスを当てて時間選択を開く
   event.target.focus()
 
-  // モダンブラウザでは showPicker() メソッドが利用可能
   if (event.target.showPicker) {
     event.target.showPicker()
   }
 }
 
 onMounted(() => {
-  // route.query.idで予約IDを取得
   const reservationId = route.query.id;
 
   client
@@ -66,23 +56,20 @@ onMounted(() => {
     })
     .then((res) => {
       Object.assign(formData, res);
-      // 日付のフォーマット調整
-      //formData.time = new Date(res.time).toISOString().slice(0, 16).replace('T', ' ');
+
        if (res.time) {
         const timeParts = res.time.split('T');
-        formData.date = timeParts[0]; // 日付部分（YYYY-MM-DD）
-        formData.time = timeParts[1].slice(0, 5); // 時間部分（HH:MM）
+        formData.date = timeParts[0];
+        formData.time = timeParts[1].slice(0, 5);
       }
 
       formData.course = String(res.course || '');
       formData.drink = String(res.drink || '');
-      //initFlatpicker();
     })
     .catch((err) => console.error(err));
 })
 
 const submitForm = () => {
-  // route.query.idで予約IDを取得
   const reservationId = route.query.id;
 
   if (!reservationId) {
@@ -94,7 +81,6 @@ const submitForm = () => {
     ? `${formData.date}T${formData.time}:00.000Z`
     : formData.time;
 
-  // fetchはHTTPリクエストを送信するための関数
   fetch(`https://${import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1/data/${reservationId}`, {
     method: "PATCH",
     headers: {
@@ -127,27 +113,6 @@ const submitForm = () => {
     errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
   }
 };
-
-/*
-function initFlatpicker() {
-  datepickerInstance = flatpickr(datepickerRef.value, {
-    enableTime: true,
-    dateFormat: "Y-m-d H:i",
-    locale: Japanese,
-    defaultDate: formData.time,
-    disableMobile: true,
-  })
-}
-*/
-
-/*
-watch(() => formData.time, (newTime) => {
-  if (datepickerInstance) {
-    datepickerInstance.setDate(newTime, false);
-  }
-});
-*/
-
 </script>
 
 <template>
@@ -156,13 +121,13 @@ watch(() => formData.time, (newTime) => {
 
     <form @submit.prevent="submitForm">
       <div class="form-group">
-        <div class="form-group">
         <label for="date" class="label-flex">
           <span class="label-text">日付</span>
           <span class="required-mark">＊</span>
         </label>
         <input type="date" id="date" v-model="formData.date" required @click="openDatePicker" />
       </div>
+      <div class="form-group">
         <label for="name" class="label-flex">
           <span class="label-text">名前</span>
           <span class="required-mark">＊</span>

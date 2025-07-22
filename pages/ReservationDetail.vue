@@ -24,14 +24,11 @@ onMounted(() => {
     const parsedReservation = JSON.parse(storedReservation)
     Object.assign(formData, parsedReservation);
 
-    // timeフィールドから日付と時間を分離
     if (parsedReservation.time) {
-      // 予約表と同じ方法で時間を抽出
       const timeParts = parsedReservation.time.split('T');
-      formData.date = timeParts[0]; // 日付部分
-      formData.time = timeParts[1].slice(0, 5); // 時間部分（HH:MM）
+      formData.date = timeParts[0];
+      formData.time = timeParts[1].slice(0, 5);
     }
-    //formData.time = new Date(formData.time).toISOString().slice(0, 16).replace('T', ' ');
     reservationId.value = parsedReservation.id;
   }
   console.log("予約ID:", reservationId.value);

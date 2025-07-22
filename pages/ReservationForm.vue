@@ -1,7 +1,4 @@
 <script setup>
-//import flatpickr from 'flatpickr'
-//import { Japanese } from 'flatpickr/dist/l10n/ja.js'
-//import 'flatpickr/dist/flatpickr.min.css'
 import { reactive, ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
@@ -34,28 +31,23 @@ const submitReservation = () => {
     localStorage.setItem("formData", JSON.stringify(formData))
     router.push('/ConfirmReservation')
   } else {
-    errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
+    errorMessage.value = '携帯電話番号は11桁で入力してください!'
   }
 }
 
 const route = useRoute()
-//const datepickerRef = ref(null)
 
 const openDatePicker = (event) => {
-  // 入力フィールドにフォーカスを当ててカレンダーを開く
   event.target.focus()
 
-  // モダンブラウザでは showPicker() メソッドが利用可能
   if (event.target.showPicker) {
     event.target.showPicker()
   }
 }
 
 const openTimePicker = (event) => {
-  // 入力フィールドにフォーカスを当てて時間選択を開く
   event.target.focus()
 
-  // モダンブラウザでは showPicker() メソッドが利用可能
   if (event.target.showPicker) {
     event.target.showPicker()
   }
@@ -76,7 +68,6 @@ onMounted(() => {
       date: '',
     })
 
-    // URLクエリから日付を取得して設定
     if (route.query.date) {
       formData.date = route.query.date
     }
@@ -89,19 +80,6 @@ onMounted(() => {
       showDetailInput.value = true;
     }
   }
-
-  /*
-  flatpickr(datepickerRef.value, {
-    enableTime: true,
-    dateFormat: 'Y-m-d H:i',
-    locale: Japanese,
-    defaultDate: formData.time || null,
-    //disableMobile: true,
-    onChange: function (_, dateStr) {
-      formData.time = dateStr
-    }
-  })
-  */
 })
 </script>
 
@@ -138,7 +116,6 @@ onMounted(() => {
           <span class="label-text">時間</span>
           <span class="required-mark">＊</span>
         </label>
-        <!--input type="text" id="time" ref="datepickerRef" v-model="formData.time" required /-->
         <input type="time"  id="time" v-model="formData.time" required @click="openTimePicker" />
       </div>
 

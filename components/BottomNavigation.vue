@@ -3,7 +3,6 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute();
 
-// 日付を受け取るpropsを定義
 defineProps({
   selectedDate: {
     type: String,
