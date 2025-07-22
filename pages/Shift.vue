@@ -139,12 +139,14 @@ button {
 }
 
 button.add-btn {
-  margin-top: 6px;
-  padding: 4px 10px;
-  border: none;
-  background-color: #fbc02d;
+  margin: 0 auto;
+  margin-top: 16px;
+  font-size: 16px;
   color: black;
-  border-radius: 4px;
+  background-color: #e0e0e0;
+  border: 2px dashed #333;
+  border-radius: 6px;
+  padding: 6px 16px;
   cursor: pointer;
 }
 
