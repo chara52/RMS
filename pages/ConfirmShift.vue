@@ -1,9 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { createClient } from 'microcms-js-sdk'
 
 const router = useRouter()
+const route = useRoute()
 const shiftData = ref([])
 const startDate = ref('')
 
@@ -34,6 +35,16 @@ const getDateWithOffset = (offset) => {
   return base.toISOString().split('T')[0]
 }
 
+const goBackWithDate = () => {
+  // URLクエリから日付を取得して予約表に戻る
+  const dateFromQuery = route.query.date;
+  if (dateFromQuery) {
+    router.push(`/Shift?date=${dateFromQuery}`);
+  } else {
+    router.push('/Shift');
+  }
+}
+
 const submitShift = async () => {
   if (!confirm('シフトを確定しますか？')) return
 
@@ -52,7 +63,13 @@ const submitShift = async () => {
       }
     }
     alert('シフトデータを送信しました！')
-    router.push('/ReservationTableCompact')
+
+    // 一番上の日付（startDate）をクエリとして渡して予約表に遷移
+    if (startDate.value) {
+      router.push(`/ReservationTableCompact?date=${startDate.value}`);
+    } else {
+      router.push('/ReservationTableCompact');
+    }
   } catch (error) {
     console.error(error)
     alert('送信に失敗しました')
@@ -77,7 +94,7 @@ const submitShift = async () => {
       <p>シフトデータがありません</p>
     </div>
     <div class="button-container">
-      <button @click="router.push('/Shift')" class="go-back-btn">戻る</button>
+      <button @click="goBackWithDate" class="go-back-btn">戻る</button>
       <button @click="submitShift" class="go-back-btn">送信</button>
     </div>
   </div>
