@@ -2,13 +2,6 @@
 import { useRoute } from 'vue-router'
 
 const route = useRoute();
-
-defineProps({
-  selectedDate: {
-    type: String,
-    default: ''
-  }
-});
 </script>
 
 <template>
@@ -18,7 +11,7 @@ defineProps({
       <i class="fa-solid fa-house"></i>
       <span>ホーム</span>
     </router-link>
-    <router-link :to="`/ReservationForm?reset=true&date=${selectedDate}`" class="nav-item" :class="{ active: route.path === '/ReservationForm' }">
+    <router-link to="/ReservationForm?reset=true" class="nav-item" :class="{ active: route.path === '/ReservationForm' }">
       <i class="fa-solid fa-pen"></i>
       <span>入力</span>
     </router-link>
