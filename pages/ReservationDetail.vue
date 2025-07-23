@@ -38,21 +38,8 @@ const router = useRouter();
 
 const handleDelete = () => {
   localStorage.removeItem('selectedReservation'); // ローカルストレージから削除
-  if (formData.date) {
-    router.push(`/ReservationTableCompact?date=${formData.date}`);
-  } else {
-    router.push('/ReservationTableCompact');
-  }
+  router.push('/ReservationTableCompact');
 };
-
-const goBackWithDate = () => {
-  // 日付が入力されている場合は、その日付をクエリとして渡す
-  if (formData.date) {
-    router.push(`/ReservationTableCompact?date=${formData.date}`)
-  } else {
-    router.push('/ReservationTableCompact')
-  }
-}
 </script>
 
 <template>
@@ -90,7 +77,7 @@ const goBackWithDate = () => {
     <p><strong>席番号 :</strong> {{ formData.seat }}</p>
   </div>
   <div class="button-container">
-    <button @click="goBackWithDate" class="go-back-btn">戻る</button>
+    <button @click="router.push('/ReservationTableCompact')" class="go-back-btn">戻る</button>
   </div>
 </template>
 

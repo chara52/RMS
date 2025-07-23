@@ -4,14 +4,13 @@ import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from '../components/FilteredReservation.vue'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import EditShiftData from '../components/EditShiftData.vue'
 import BottomNavigation from '../components/BottomNavigation.vue'
 
 defineProps({ reservationsDetail: Array });
 
 const router = useRouter();
-const route = useRoute();
 
 const goToDetail = (reservation) => {
   localStorage.setItem('selectedReservation', JSON.stringify(reservation));
@@ -49,11 +48,6 @@ reservationClient.getList({
 onMounted(() => {
   const now = new Date()
   inputDate.value = new Date(now.getTime() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
-
-  // URLクエリから日付を取得して設定
-  if (route.query.date) {
-    inputDate.value = route.query.date
-  }
 });
 
 // 日付を記録する関数

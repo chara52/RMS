@@ -52,16 +52,6 @@ const removeRow = (index) => {
   editableNames.value.splice(index, 1);
 };
 
-const goBackWithDate = () => {
-  // 日付が入力されている場合は、その日付をクエリとして渡す
-  const inputDate = route.query.id;
-  if (inputDate) {
-    router.push(`/ReservationTableCompact?date=${inputDate}`)
-  } else {
-    router.push('/ReservationTableCompact')
-  }
-}
-
 const submitShift = async () => {
   const names = editableNames.value.map(name => name.trim()).filter(name => name !== '');
   const nameSet = new Set(names);
@@ -114,12 +104,7 @@ const submitShift = async () => {
   }
 
   alert('シフトを更新しました');
-
-  if (inputDate) {
-    router.push(`/ReservationTableCompact?date=${inputDate}`)
-  } else {
-    router.push('/ReservationTableCompact')
-  }
+  router.push('/ReservationTableCompact');
 };
 </script>
 
@@ -140,7 +125,7 @@ const submitShift = async () => {
 
       <button class="add-btn" @click="addRow">＋ 行を追加</button>
       <div class="button-container">
-        <button class="back-button" @click="goBackWithDate">戻る</button>
+        <button class="back-button" @click="router.push('/ReservationTableCompact')">戻る</button>
         <button class="submit-button" @click="submitShift">更新</button>
       </div>
     </div>
@@ -150,7 +135,7 @@ const submitShift = async () => {
       この日に該当するシフトはありません
       <button class="add-btn" @click="addRow">＋ 行を追加</button>
       <div class="button-container">
-        <button class="back-button" @click="goBackWithDate">戻る</button>
+        <button class="back-button" @click="router.push('/ReservationTableCompact')">戻る</button>
         <button class="submit-button" @click="submitShift">更新</button>
       </div>
     </div>

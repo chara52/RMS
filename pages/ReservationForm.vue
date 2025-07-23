@@ -53,15 +53,6 @@ const openTimePicker = (event) => {
   }
 }
 
-const goBackWithDate = () => {
-  // 日付が入力されている場合は、その日付をクエリとして渡す
-  if (formData.date) {
-    router.push(`/ReservationTableCompact?date=${formData.date}`)
-  } else {
-    router.push('/ReservationTableCompact')
-  }
-}
-
 onMounted(() => {
   if (route.query.reset === 'true') {
     localStorage.removeItem('formData')
@@ -175,7 +166,7 @@ onMounted(() => {
       <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
 
       <div class="button-container">
-        <button type="button" @click="goBackWithDate" class="backbutton">戻る</button>
+        <button type="button" @click="router.push('/ReservationTableCompact')" class="backbutton">戻る</button>
         <button type="submit" class="reservebutton">確認</button>
       </div>
     </form>

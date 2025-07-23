@@ -62,26 +62,10 @@ const removeRow = (dayIndex, rowIndex) => {
   }
 }
 
-const goBackWithDate = () => {
-  // URLクエリから日付を取得して予約表に戻る
-  const dateFromQuery = route.query.date;
-  if (dateFromQuery) {
-    router.push(`/ReservationTableCompact?date=${dateFromQuery}`);
-  } else {
-    router.push('/ReservationTableCompact');
-  }
-}
-
 function goToConfirm() {
   localStorage.setItem('startDate', startDate.value)
   localStorage.setItem('shiftData', JSON.stringify(shiftData.days))
-  //router.push('/ConfirmShift')
-  const dateFromQuery = route.query.date;
-  if (dateFromQuery) {
-    router.push(`/ConfirmShift?date=${dateFromQuery}`);
-  } else {
-    router.push('/ConfirmShift');
-  }
+  router.push('/ConfirmShift')
 }
 </script>
 
@@ -101,7 +85,7 @@ function goToConfirm() {
         <button class="add-btn" @click="addRow(index)">＋ 行を追加</button>
       </div>
       <div class="button-container">
-        <button type="button" @click="goBackWithDate" class="back-button">戻る</button>
+        <button type="button" @click="router.push('/ReservationTableCompact')" class="back-button">戻る</button>
         <button class="confirm-button" @click="goToConfirm">確認</button>
       </div>
     </div>

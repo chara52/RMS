@@ -49,12 +49,7 @@ const submitReservation = () => {
       })
       .then((res) => {
         console.log('予約送信完了', res);
-        // 日付をクエリとして渡して予約表に遷移
-        if (formData.date) {
-          router.push(`/ReservationTableCompact?date=${formData.date}`);
-        } else {
-          router.push('/ReservationTableCompact');
-        }
+        router.push('/ReservationTableCompact');
       })
       .catch((error) => {
         console.error('送信エラー:', error);

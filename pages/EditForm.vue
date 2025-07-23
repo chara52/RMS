@@ -108,11 +108,7 @@ const submitForm = () => {
   if (isPhoneNumberValid.value) {
     errorMessage.value = ''
     alert('予約が更新されました!')
-    if (formData.date) {
-      router.push(`/ReservationTableCompact?date=${formData.date}`);
-    } else {
-      router.push('/ReservationTableCompact');
-    }
+    router.push('/ReservationTableCompact')
   } else {
     errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
   }
