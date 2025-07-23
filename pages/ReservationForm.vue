@@ -1,4 +1,7 @@
 <script setup>
+import flatpickr from 'flatpickr'
+import { Japanese } from 'flatpickr/dist/l10n/ja.js'
+import 'flatpickr/dist/flatpickr.min.css'
 import { reactive, ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
@@ -12,7 +15,6 @@ const formData = reactive({
   info: '',
   phone: '',
   seat: '',
-  date: '',
 })
 
 const errorMessage = ref('')
@@ -31,27 +33,12 @@ const submitReservation = () => {
     localStorage.setItem("formData", JSON.stringify(formData))
     router.push('/ConfirmReservation')
   } else {
-    errorMessage.value = '携帯電話番号は11桁で入力してください!'
+    errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
   }
 }
 
 const route = useRoute()
-
-const openDatePicker = (event) => {
-  event.target.focus()
-
-  if (event.target.showPicker) {
-    event.target.showPicker()
-  }
-}
-
-const openTimePicker = (event) => {
-  event.target.focus()
-
-  if (event.target.showPicker) {
-    event.target.showPicker()
-  }
-}
+const datepickerRef = ref(null)
 
 onMounted(() => {
   if (route.query.reset === 'true') {
@@ -65,12 +52,7 @@ onMounted(() => {
       info: '',
       phone: '',
       seat: '',
-      date: '',
     })
-
-    if (route.query.date) {
-      formData.date = route.query.date
-    }
   } else {
     const saved = localStorage.getItem("formData")
     if (saved) {
@@ -80,6 +62,17 @@ onMounted(() => {
       showDetailInput.value = true;
     }
   }
+
+  flatpickr(datepickerRef.value, {
+    enableTime: true,
+    dateFormat: 'Y-m-d H:i',
+    locale: Japanese,
+    defaultDate: formData.time || null,
+    //disableMobile: true,
+    onChange: function (_, dateStr) {
+      formData.time = dateStr
+    }
+  })
 })
 </script>
 
@@ -87,14 +80,6 @@ onMounted(() => {
   <div class="reservation-form">
     <h1 class="global-h1">新規受付</h1>
     <form @submit.prevent="submitReservation">
-      <div class="form-group">
-        <label for="date" class="label-flex">
-          <span class="label-text">日付</span>
-          <span class="required-mark">＊</span>
-        </label>
-        <input type="date" id="date" v-model="formData.date" required @click="openDatePicker" />
-      </div>
-
       <div class="form-group">
         <label for="name" class="label-flex">
           <span class="label-text">名前</span>
@@ -116,7 +101,7 @@ onMounted(() => {
           <span class="label-text">時間</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="time"  id="time" v-model="formData.time" required @click="openTimePicker" />
+        <input type="text" id="time" ref="datepickerRef" v-model="formData.time" required />
       </div>
 
       <div class="form-group row">
@@ -226,7 +211,6 @@ select {
   border-radius: 4px;
   box-sizing: border-box;
   font-size: 16px;
-  color:black;
 }
 
 .form-group textarea {

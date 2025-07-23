@@ -164,7 +164,7 @@ function handleSort(type, sortFunction) {
     </div>
   </div>
 
-  <BottomNavigation :selectedDate="inputDate" />
+  <BottomNavigation />
 </template>
 
 <style scoped>
