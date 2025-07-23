@@ -268,6 +268,7 @@ select {
   border-radius: 4px;
   box-sizing: border-box;
   font-size: 16px;
+  color: black;
 }
 
 .form-group textarea {
