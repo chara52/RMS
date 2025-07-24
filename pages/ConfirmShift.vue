@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { createClient } from 'microcms-js-sdk'
 
@@ -41,6 +41,12 @@ const formatDateToJP = (dateStr) => {
   const day = date.getDate()
   return `${month}月${day}日`
 }
+
+const validShiftData = computed(() => {
+  return shiftData.value.map((day) =>
+    day.filter((entry) => entry.name && entry.name.trim() !== '')
+  )
+})
 
 const goBackWithDate = () => {
   // URLクエリから日付を取得して予約表に戻る
@@ -87,18 +93,14 @@ const submitShift = async () => {
 <template>
   <div class="confirm-page">
     <h1 class="global-h1">シフト確認</h1>
-    <div v-if="shiftData.length">
-      <div v-for="(day, dayIndex) in shiftData" :key="dayIndex" class="day-section">
-        <h2>{{ formatDateToJP(getDateWithOffset(dayIndex)) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
-        <ul>
-          <li v-for="(row, rowIndex) in day" :key="rowIndex">
-            {{ row.name }}
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div v-else>
-      <p>シフトデータがありません</p>
+    <div v-for="(day, dayIndex) in validShiftData" :key="dayIndex" class="day-section">
+      <h2>{{ formatDateToJP(getDateWithOffset(dayIndex)) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
+      <ul>
+        <li v-if="day.length === 0">シフトはありません</li>
+        <li v-for="(row, rowIndex) in day" :key="rowIndex">
+          {{ row.name }}
+        </li>
+      </ul>
     </div>
     <div class="button-container">
       <button @click="goBackWithDate" class="go-back-btn">戻る</button>
