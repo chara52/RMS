@@ -25,7 +25,6 @@ const deleteReservation = () => {
   client
     .delete({ endpoint: 'data', contentId: props.id })
     .then(() => {
-      console.log(`${props.id}削除成功`)
       emit('delete', props.id)
     })
     .catch((error) => {
