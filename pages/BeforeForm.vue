@@ -26,7 +26,6 @@ client
     queries: { limit: 100 }
   })
   .then((res) => {
-    console.log(res)
     reservations.push(...res.contents)
     sortTime(reservations)
   })

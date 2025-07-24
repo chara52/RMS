@@ -47,8 +47,7 @@ const submitReservation = () => {
           seat: formData.seat,
         },
       })
-      .then((res) => {
-        console.log('予約送信完了', res);
+      .then(() => {
         // 日付をクエリとして渡して予約表に遷移
         if (formData.date) {
           router.push(`/ReservationTableCompact?date=${formData.date}`);

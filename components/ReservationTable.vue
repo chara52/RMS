@@ -18,7 +18,6 @@ client
     endpoint: 'data',
   })
   .then((res) => {
-    console.log(res)
     reservations.push(...res.contents)
     sortTime(reservations)
   })
@@ -39,7 +38,6 @@ const filteredReservations = computed(() => {
   }
   return reservations.filter((reservation) => {
     const reservationDate = reservation.time.split('T')[0]
-    console.log(reservationDate)
     return inputDate.value === reservationDate
   })
 })

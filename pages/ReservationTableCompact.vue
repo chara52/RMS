@@ -39,7 +39,6 @@ reservationClient.getList({
   queries: { limit: 100 }
 })
 .then((res) => {
-  console.log(res)
   reservations.push(...res.contents)
   sortTime(reservations)
 })
@@ -67,7 +66,6 @@ shiftClient.getList({
   queries: { limit: 100 }
 })
 .then((res) => {
-  console.log(res)
   shiftList.value = res.contents
 })
 .catch((err) => console.error(err))
