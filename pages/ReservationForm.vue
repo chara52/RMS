@@ -230,6 +230,7 @@ onMounted(() => {
 .form-group textarea,
 select {
   width: 100%;
+  height: 40px;
   padding: 10px;
   border: 2px solid rgb(187, 182, 182);
   border-radius: 4px;
@@ -242,6 +243,22 @@ select {
   height: 80px;
   width: 100%;
   resize: none;
+}
+
+input[type="date"],
+input[type="time"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  border: 2px solid rgb(187, 182, 182);
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+  color: black;
+  text-align: left;
 }
 
 .button-container {
