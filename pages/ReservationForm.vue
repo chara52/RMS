@@ -185,7 +185,7 @@ onMounted(() => {
 <style scoped>
 .reservation-form {
   max-width: 100%;
-  height: 105vh;
+  height: 125vh;
   margin: -10px -7px;
   padding: 20px;
   background-color: #fff9e6;

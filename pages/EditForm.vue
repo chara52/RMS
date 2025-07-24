@@ -210,7 +210,7 @@ const submitForm = () => {
 <style scoped>
 .reservation-form {
   max-width: 100%;
-  height: 123vh;
+  height: 135vh;
   margin: -10px -7px;
   padding: 20px;
   background-color: #fff9e6;
