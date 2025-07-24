@@ -35,6 +35,13 @@ const getDateWithOffset = (offset) => {
   return base.toISOString().split('T')[0]
 }
 
+const formatDateToJP = (dateStr) => {
+  const date = new Date(dateStr)
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  return `${month}月${day}日`
+}
+
 const goBackWithDate = () => {
   // URLクエリから日付を取得して予約表に戻る
   const dateFromQuery = route.query.date;
@@ -82,7 +89,7 @@ const submitShift = async () => {
     <h1 class="global-h1">シフト確認</h1>
     <div v-if="shiftData.length">
       <div v-for="(day, dayIndex) in shiftData" :key="dayIndex" class="day-section">
-        <h2>{{ getDateWithOffset(dayIndex) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
+        <h2>{{ formatDateToJP(getDateWithOffset(dayIndex)) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
         <ul>
           <li v-for="(row, rowIndex) in day" :key="rowIndex">
             {{ row.name }}
