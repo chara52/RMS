@@ -1,7 +1,4 @@
 <script setup>
-import flatpickr from 'flatpickr'
-import { Japanese } from 'flatpickr/dist/l10n/ja.js'
-import 'flatpickr/dist/flatpickr.min.css'
 import { reactive, ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
@@ -15,6 +12,7 @@ const formData = reactive({
   info: '',
   phone: '',
   seat: '',
+  date: '',
 })
 
 const errorMessage = ref('')
@@ -33,12 +31,36 @@ const submitReservation = () => {
     localStorage.setItem("formData", JSON.stringify(formData))
     router.push('/ConfirmReservation')
   } else {
-    errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
+    errorMessage.value = '携帯電話番号は11桁で入力してください!'
   }
 }
 
 const route = useRoute()
-const datepickerRef = ref(null)
+
+const openDatePicker = (event) => {
+  event.target.focus()
+
+  if (event.target.showPicker) {
+    event.target.showPicker()
+  }
+}
+
+const openTimePicker = (event) => {
+  event.target.focus()
+
+  if (event.target.showPicker) {
+    event.target.showPicker()
+  }
+}
+
+const goBackWithDate = () => {
+  // 日付が入力されている場合は、その日付をクエリとして渡す
+  if (formData.date) {
+    router.push(`/ReservationTableCompact?date=${formData.date}`)
+  } else {
+    router.push('/ReservationTableCompact')
+  }
+}
 
 onMounted(() => {
   if (route.query.reset === 'true') {
@@ -52,7 +74,12 @@ onMounted(() => {
       info: '',
       phone: '',
       seat: '',
+      date: '',
     })
+
+    if (route.query.date) {
+      formData.date = route.query.date
+    }
   } else {
     const saved = localStorage.getItem("formData")
     if (saved) {
@@ -62,17 +89,6 @@ onMounted(() => {
       showDetailInput.value = true;
     }
   }
-
-  flatpickr(datepickerRef.value, {
-    enableTime: true,
-    dateFormat: 'Y-m-d H:i',
-    locale: Japanese,
-    defaultDate: formData.time || null,
-    disableMobile: true,
-    onChange: function (_, dateStr) {
-      formData.time = dateStr
-    }
-  })
 })
 </script>
 
@@ -80,6 +96,14 @@ onMounted(() => {
   <div class="reservation-form">
     <h1 class="global-h1">新規受付</h1>
     <form @submit.prevent="submitReservation">
+      <div class="form-group">
+        <label for="date" class="label-flex">
+          <span class="label-text">日付</span>
+          <span class="required-mark">＊</span>
+        </label>
+        <input type="date" id="date" v-model="formData.date" required @click="openDatePicker" />
+      </div>
+
       <div class="form-group">
         <label for="name" class="label-flex">
           <span class="label-text">名前</span>
@@ -101,7 +125,7 @@ onMounted(() => {
           <span class="label-text">時間</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" id="time" ref="datepickerRef" v-model="formData.time" required />
+        <input type="time"  id="time" v-model="formData.time" required @click="openTimePicker" />
       </div>
 
       <div class="form-group row">
@@ -109,7 +133,7 @@ onMounted(() => {
           <label for="course" class="label-flex">
             <span class="label-text">コース</span>
           </label>
-          <select id="course" v-model="formData.course">
+          <select id="course" v-model="formData.course" style="color: black;">
             <option v-for="option in courseOptions" :key="option.value" :value="option.value">
               {{ option.label }}
             </option>
@@ -120,7 +144,7 @@ onMounted(() => {
           <label for="drink" class="label-flex">
             <span class="label-text">飲み放題</span>
           </label>
-          <select id="drink" v-model="formData.drink">
+          <select id="drink" v-model="formData.drink" style="color: black;">
             <option value="なし">なし</option>
             <option value="2500円（2h）">2500円（2h）</option>
             <option value="3000円（3h）">3000円（3h）</option>
@@ -151,7 +175,7 @@ onMounted(() => {
       <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
 
       <div class="button-container">
-        <button type="button" @click="router.push('/ReservationTableCompact')" class="backbutton">戻る</button>
+        <button type="button" @click="goBackWithDate" class="backbutton">戻る</button>
         <button type="submit" class="reservebutton">確認</button>
       </div>
     </form>
@@ -206,17 +230,35 @@ onMounted(() => {
 .form-group textarea,
 select {
   width: 100%;
+  height: 40px;
   padding: 10px;
   border: 2px solid rgb(187, 182, 182);
   border-radius: 4px;
   box-sizing: border-box;
   font-size: 16px;
+  color:black;
 }
 
 .form-group textarea {
   height: 80px;
   width: 100%;
   resize: none;
+}
+
+input[type="date"],
+input[type="time"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  border: 2px solid rgb(187, 182, 182);
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+  color: black;
+  text-align: left;
 }
 
 .button-container {

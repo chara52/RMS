@@ -29,13 +29,17 @@ onMounted(() => {
 
 const submitReservation = () => {
   if (confirm('予約を確定しますか？')) {
+    const combinedTime = formData.date && formData.time
+      ? `${formData.date} ${formData.time}`
+      : formData.time || '';
+
     client
       .create({
         endpoint: 'data',
         content: {
           name: formData.name,
           people: formData.people,
-          time: formData.time,
+          time: combinedTime,
           course: Array.isArray(formData.course) ? formData.course : [formData.course],
           drink: Array.isArray(formData.drink) ? formData.drink : [formData.drink],
           info: formData.info,
@@ -45,7 +49,12 @@ const submitReservation = () => {
       })
       .then((res) => {
         console.log('予約送信完了', res);
-        router.push('/ReservationTableCompact');
+        // 日付をクエリとして渡して予約表に遷移
+        if (formData.date) {
+          router.push(`/ReservationTableCompact?date=${formData.date}`);
+        } else {
+          router.push('/ReservationTableCompact');
+        }
       })
       .catch((error) => {
         console.error('送信エラー:', error);
@@ -58,6 +67,7 @@ const submitReservation = () => {
   <h1 class="global-h1">新規受付</h1>
 
   <div class="reservation-table">
+    <p><strong>日付 :</strong> {{ formData.date }}</p>
     <p><strong>名前 :</strong> {{ formData.name }}</p>
     <p><strong>人数 :</strong> {{ formData.people }}</p>
     <p><strong>時間 :</strong> {{ formData.time }}</p>

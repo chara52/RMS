@@ -13,6 +13,7 @@ const formData = reactive({
   info: '',
   phone: '',
   seat: '',
+  date: '',
 });
 
 const reservationId = ref("");
@@ -22,7 +23,12 @@ onMounted(() => {
   if (storedReservation) {
     const parsedReservation = JSON.parse(storedReservation)
     Object.assign(formData, parsedReservation);
-    formData.time = new Date(formData.time).toISOString().slice(0, 16).replace('T', ' ');
+
+    if (parsedReservation.time) {
+      const timeParts = parsedReservation.time.split('T');
+      formData.date = timeParts[0];
+      formData.time = timeParts[1].slice(0, 5);
+    }
     reservationId.value = parsedReservation.id;
   }
   console.log("予約ID:", reservationId.value);
@@ -32,8 +38,21 @@ const router = useRouter();
 
 const handleDelete = () => {
   localStorage.removeItem('selectedReservation'); // ローカルストレージから削除
-  router.push('/ReservationTableCompact');
+  if (formData.date) {
+    router.push(`/ReservationTableCompact?date=${formData.date}`);
+  } else {
+    router.push('/ReservationTableCompact');
+  }
 };
+
+const goBackWithDate = () => {
+  // 日付が入力されている場合は、その日付をクエリとして渡す
+  if (formData.date) {
+    router.push(`/ReservationTableCompact?date=${formData.date}`)
+  } else {
+    router.push('/ReservationTableCompact')
+  }
+}
 </script>
 
 <template>
@@ -45,6 +64,7 @@ const handleDelete = () => {
   <EditReservation :id="reservationId" />
 
   <div class="reservation-table">
+    <p><strong>日付 :</strong> {{ formData.date }}</p>
     <p><strong>名前 :</strong> {{ formData.name }}</p>
     <p><strong>人数 :</strong> {{ formData.people }}</p>
     <p><strong>時間 :</strong> {{ formData.time }}</p>
@@ -70,7 +90,7 @@ const handleDelete = () => {
     <p><strong>席番号 :</strong> {{ formData.seat }}</p>
   </div>
   <div class="button-container">
-    <button @click="router.push('/ReservationTableCompact')" class="go-back-btn">戻る</button>
+    <button @click="goBackWithDate" class="go-back-btn">戻る</button>
   </div>
 </template>
 

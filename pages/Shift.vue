@@ -62,17 +62,33 @@ const removeRow = (dayIndex, rowIndex) => {
   }
 }
 
+const goBackWithDate = () => {
+  // URLクエリから日付を取得して予約表に戻る
+  const dateFromQuery = route.query.date;
+  if (dateFromQuery) {
+    router.push(`/ReservationTableCompact?date=${dateFromQuery}`);
+  } else {
+    router.push('/ReservationTableCompact');
+  }
+}
+
 function goToConfirm() {
   localStorage.setItem('startDate', startDate.value)
   localStorage.setItem('shiftData', JSON.stringify(shiftData.days))
-  router.push('/ConfirmShift')
+  //router.push('/ConfirmShift')
+  const dateFromQuery = route.query.date;
+  if (dateFromQuery) {
+    router.push(`/ConfirmShift?date=${dateFromQuery}`);
+  } else {
+    router.push('/ConfirmShift');
+  }
 }
 </script>
 
 <template>
   <div class="shift-page-wrapper">
     <div class="shift-page">
-      <h1>シフト作成</h1>
+      <h1 class="global-h1">シフト作成</h1>
       <div v-for="(day, index) in shiftData.days" :key="index" class="day-section">
         <h2>{{ getDateWithOffset(index) }} ({{ getWeekdayLabel(index) }})</h2>
         <div v-for="(row, rowIndex) in day" :key="rowIndex" class="shift-row">
@@ -85,7 +101,7 @@ function goToConfirm() {
         <button class="add-btn" @click="addRow(index)">＋ 行を追加</button>
       </div>
       <div class="button-container">
-        <button type="button" @click="router.push('/ReservationTableCompact')" class="back-button">戻る</button>
+        <button type="button" @click="goBackWithDate" class="back-button">戻る</button>
         <button class="confirm-button" @click="goToConfirm">確認</button>
       </div>
     </div>
@@ -139,12 +155,13 @@ button {
 }
 
 button.add-btn {
+  margin: 0 auto;
   margin-top: 6px;
-  padding: 4px 10px;
-  border: none;
-  background-color: #fbc02d;
   color: black;
+  background-color: #e0e0e0;
+  border: 2px dashed #333;
   border-radius: 4px;
+  padding: 4px 10px;
   cursor: pointer;
 }
 
