@@ -73,7 +73,7 @@ const submitReservation = () => {
 
 <template>
   <div class="reservation-form">
-    <h1 class="global-h1">入力確認</h1>
+    <h1 class="global-h1">予約確認</h1>
     <form @submit.prevent="submitReservation">
       <div class="form-group">
         <label for="date" class="label-flex">
