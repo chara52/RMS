@@ -59,35 +59,60 @@ const goBackWithDate = () => {
 }
 
 const submitShift = async () => {
-  if (!confirm('シフトを確定しますか？')) return
-
   try {
+    const allDates = shiftData.value.map((_, i) => getDateWithOffset(i));
+
+    const existingDataList = await Promise.all(
+      allDates.map(date =>
+        client.get({
+          endpoint: 'shiftdata',
+          queries: { filters: `date[contains]${date}`, limit: 100 },
+        }).then(res => ({
+          date,
+          existingNames: res.contents
+            .filter(shift => (shift.date || '').split('T')[0] === date)
+            .map(shift => (shift.name || '').trim())
+            .filter(name => name !== ''),
+        })).catch(() => ({ date, existingNames: null }))
+      )
+    );
+
     for (let i = 0; i < shiftData.value.length; i++) {
-      const date = getDateWithOffset(i)
-      for (const entry of shiftData.value[i]) {
-        if (!entry.name) continue
-        await client.create({
+      const date = allDates[i];
+      const entry = shiftData.value[i];
+      const newNames = Array.from(
+        new Set(
+          entry.map(e => (e.name || '').trim()).filter(name => name !== '')
+        )
+      );
+      const existingEntry = existingDataList.find(e => e.date === date);
+      if (!existingEntry || !existingEntry.existingNames) {
+        alert('既存データの取得に失敗しました');
+        return;
+      }
+      const toCreate = newNames.filter(name => !existingEntry.existingNames.includes(name));
+      const createPromises = toCreate.map(name =>
+        client.create({
           endpoint: 'shiftdata',
           content: {
-            name: entry.name,
+            name,
             date: new Date(date).toISOString(),
           },
+        }).catch(() => {
+          throw new Error('送信に失敗しました');
         })
-      }
+      );
+      await Promise.all(createPromises);
     }
-    alert('シフトデータを送信しました！')
 
-    // 一番上の日付（startDate）をクエリとして渡して予約表に遷移
-    if (startDate.value) {
-      router.push(`/ReservationTableCompact?date=${startDate.value}`);
-    } else {
-      router.push('/ReservationTableCompact');
-    }
-  } catch (error) {
-    console.error(error)
-    alert('送信に失敗しました')
+    // ページ遷移
+    router.push(startDate.value
+      ? `/ReservationTableCompact?date=${startDate.value}`
+      : '/ReservationTableCompact');
+  } catch (e) {
+    alert(e.message || 'エラーが発生しました');
   }
-}
+};
 </script>
 
 <template>
@@ -159,3 +184,4 @@ li {
   font-weight: bold;
 }
 </style>
+
