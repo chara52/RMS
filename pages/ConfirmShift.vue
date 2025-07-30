@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { createClient } from 'microcms-js-sdk'
 
@@ -42,6 +42,12 @@ const formatDateToJP = (dateStr) => {
   return `${month}月${day}日`
 }
 
+const validShiftData = computed(() => {
+  return shiftData.value.map((day) =>
+    day.filter((entry) => entry.name && entry.name.trim() !== '')
+  )
+})
+
 const goBackWithDate = () => {
   // URLクエリから日付を取得して予約表に戻る
   const dateFromQuery = route.query.date;
@@ -53,52 +59,73 @@ const goBackWithDate = () => {
 }
 
 const submitShift = async () => {
-  if (!confirm('シフトを確定しますか？')) return
-
   try {
+    const allDates = shiftData.value.map((_, i) => getDateWithOffset(i));
+
+    const existingDataList = await Promise.all(
+      allDates.map(date =>
+        client.get({
+          endpoint: 'shiftdata',
+          queries: { filters: `date[contains]${date}`, limit: 100 },
+        }).then(res => ({
+          date,
+          existingNames: res.contents
+            .filter(shift => (shift.date || '').split('T')[0] === date)
+            .map(shift => (shift.name || '').trim())
+            .filter(name => name !== ''),
+        })).catch(() => ({ date, existingNames: null }))
+      )
+    );
+
     for (let i = 0; i < shiftData.value.length; i++) {
-      const date = getDateWithOffset(i)
-      for (const entry of shiftData.value[i]) {
-        if (!entry.name) continue
-        await client.create({
+      const date = allDates[i];
+      const entry = shiftData.value[i];
+      const newNames = Array.from(
+        new Set(
+          entry.map(e => (e.name || '').trim()).filter(name => name !== '')
+        )
+      );
+      const existingEntry = existingDataList.find(e => e.date === date);
+      if (!existingEntry || !existingEntry.existingNames) {
+        alert('既存データの取得に失敗しました');
+        return;
+      }
+      const toCreate = newNames.filter(name => !existingEntry.existingNames.includes(name));
+      const createPromises = toCreate.map(name =>
+        client.create({
           endpoint: 'shiftdata',
           content: {
-            name: entry.name,
+            name,
             date: new Date(date).toISOString(),
           },
+        }).catch(() => {
+          throw new Error('送信に失敗しました');
         })
-      }
+      );
+      await Promise.all(createPromises);
     }
-    alert('シフトデータを送信しました！')
 
-    // 一番上の日付（startDate）をクエリとして渡して予約表に遷移
-    if (startDate.value) {
-      router.push(`/ReservationTableCompact?date=${startDate.value}`);
-    } else {
-      router.push('/ReservationTableCompact');
-    }
-  } catch (error) {
-    console.error(error)
-    alert('送信に失敗しました')
+    // ページ遷移
+    router.push(startDate.value
+      ? `/ReservationTableCompact?date=${startDate.value}`
+      : '/ReservationTableCompact');
+  } catch (e) {
+    alert(e.message || 'エラーが発生しました');
   }
-}
+};
 </script>
 
 <template>
   <div class="confirm-page">
     <h1 class="global-h1">シフト確認</h1>
-    <div v-if="shiftData.length">
-      <div v-for="(day, dayIndex) in shiftData" :key="dayIndex" class="day-section">
-        <h2>{{ formatDateToJP(getDateWithOffset(dayIndex)) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
-        <ul>
-          <li v-for="(row, rowIndex) in day" :key="rowIndex">
-            {{ row.name }}
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div v-else>
-      <p>シフトデータがありません</p>
+    <div v-for="(day, dayIndex) in validShiftData" :key="dayIndex" class="day-section">
+      <h2>{{ formatDateToJP(getDateWithOffset(dayIndex)) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
+      <ul>
+        <li v-if="day.length === 0">シフトはありません</li>
+        <li v-for="(row, rowIndex) in day" :key="rowIndex">
+          {{ row.name }}
+        </li>
+      </ul>
     </div>
     <div class="button-container">
       <button @click="goBackWithDate" class="go-back-btn">戻る</button>
@@ -157,3 +184,4 @@ li {
   font-weight: bold;
 }
 </style>
+
