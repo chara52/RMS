@@ -31,7 +31,6 @@ onMounted(() => {
     }
     reservationId.value = parsedReservation.id;
   }
-  console.log("予約ID:", reservationId.value);
 });
 
 const router = useRouter();
