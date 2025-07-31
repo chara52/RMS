@@ -37,6 +37,7 @@ const submitReservation = () => {
 
 const route = useRoute()
 
+/*
 const openDatePicker = (event) => {
   event.target.focus()
 
@@ -44,6 +45,7 @@ const openDatePicker = (event) => {
     event.target.showPicker()
   }
 }
+*/
 
 const openTimePicker = (event) => {
   event.target.focus()
@@ -61,6 +63,54 @@ const goBackWithDate = () => {
     router.push('/ReservationTableCompact')
   }
 }
+
+const showCalendar = ref(false)
+const today = new Date()
+const year = ref(today.getFullYear())
+const month = ref(today.getMonth())
+const selectedDate = ref('')
+
+const weekdays = ['日', '月', '火', '水', '木', '金', '土']
+
+const firstDay = computed(() => {
+  return new Date(year.value, month.value, 1).getDay()
+})
+
+const daysInMonth = computed(() => {
+  return new Date(year.value, month.value + 1, 0).getDate()
+})
+
+function selectDate(day) {
+  selectedDate.value = `${year.value}-${String(month.value + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+  showCalendar.value = false
+}
+
+function prevMonth() {
+  if (month.value === 0) {
+    month.value = 11
+    year.value -= 1
+  } else {
+    month.value -= 1
+  }
+}
+
+function nextMonth() {
+  if (month.value === 11) {
+    month.value = 0
+    year.value += 1
+  } else {
+    month.value += 1
+  }
+}
+
+const formattedDate = computed(() => {
+  if (!selectedDate.value) return ''
+  const date = new Date(selectedDate.value)
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const weekday = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
+  return `${month}月${day}日(${weekday})`
+})
 
 onMounted(() => {
   if (route.query.reset === 'true') {
@@ -101,7 +151,28 @@ onMounted(() => {
           <span class="label-text">日付</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="date" id="date" v-model="formData.date" required @click="openDatePicker" />
+        <!--input type="date" id="date" v-model="formData.date" required @click="openDatePicker" /-->
+        <input type="text" :value="formattedDate" @focus="showCalendar = true" readonly />
+        <div v-if="showCalendar" class="calendar">
+          <div class="header">
+            <button @click="prevMonth">‹</button>
+            {{ year }}年{{ month + 1 }}月
+            <button @click="nextMonth">›</button>
+          </div>
+          <div class="weekdays">
+            <span v-for="w in weekdays" :key="w">{{ w }}</span>
+          </div>
+          <div class="days">
+            <span v-for="n in firstDay" :key="'blank' + n"></span>
+            <span
+              v-for="d in daysInMonth"
+              :key="d"
+              @click="selectDate(d)"
+            >
+              {{ d }}
+            </span>
+          </div>
+        </div>
       </div>
 
       <div class="form-group">
@@ -183,6 +254,27 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.calendar {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  background: white;
+  position: absolute;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.weekdays, .days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+.days span {
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
 .reservation-form {
   max-width: 100%;
   height: 125vh;
