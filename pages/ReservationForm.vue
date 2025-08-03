@@ -82,8 +82,8 @@ const daysInMonth = computed(() => {
 
 function selectDate(day) {
   selectedDate.value = `${year.value}-${String(month.value + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-  formData.date = selectedDate.value  // ← これを追加
-  showCalendar.value = false
+  /*formData.date = selectedDate.value  // ← これを追加*/
+  /*showCalendar.value = false*/
 }
 
 function prevMonth() {
@@ -102,6 +102,37 @@ function nextMonth() {
   } else {
     month.value += 1
   }
+}
+
+function isToday(day) {
+  const today = new Date()
+  return (
+    day === today.getDate() &&
+    month.value === today.getMonth() &&
+    year.value === today.getFullYear()
+  )
+}
+
+function isSelected(day) {
+  const selected = new Date(selectedDate.value)
+  return (
+    day === selected.getDate() &&
+    month.value === selected.getMonth() &&
+    year.value === selected.getFullYear()
+  )
+}
+
+function resetCalendar() {
+  selectedDate.value = ''
+  formData.date = ''
+  showCalendar.value = false
+}
+
+function applySelectedDate() {
+  if (selectedDate.value) {
+    formData.date = selectedDate.value
+  }
+  showCalendar.value = false
 }
 
 const formattedDate = computed(() => {
@@ -188,9 +219,17 @@ function handleClickOutside(event) {
               v-for="d in daysInMonth"
               :key="d"
               @click="selectDate(d)"
+              :class="{
+              today: isToday(d),
+              selected: isSelected(d)
+              }"
             >
               {{ d }}
             </span>
+          </div>
+          <div class="button-group">
+            <button type="button" @click="resetCalendar">リセット</button>
+            <button type="button" @click="applySelectedDate">完了</button>
           </div>
         </div>
       </div>
@@ -275,10 +314,14 @@ function handleClickOutside(event) {
 
 <style scoped>
 .calendar {
+  width: 100%;
   border: 1px solid #ccc;
   padding: 1rem;
   background: white;
   position: absolute;
+  box-sizing: border-box;
+  font-size: 16px;
+  z-index: 1000;
 }
 .header {
   display: flex;
@@ -292,7 +335,35 @@ function handleClickOutside(event) {
 }
 .days span {
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0.65rem;
+}
+
+.days span.today {
+  color: #007bff; /* 青文字 */
+  font-weight: bold;
+}
+
+.days span.selected {
+  color: #007bff; /* 青文字 */
+  background-color: #cce5ff; /* 薄い青 */
+  border-radius: 50%; /* ○で囲む */
+  font-weight: bold;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between; /* 両端に配置 */
+  margin-top: 16px;
+}
+
+.button-group button {
+  background: transparent;     /* 背景なし */
+  color: #007bff;
+  font-size: 16px;;          /* 青文字 */
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .reservation-form {
@@ -311,6 +382,7 @@ function handleClickOutside(event) {
 
 .form-group {
   margin-bottom: 15px;
+  position: relative
 }
 
 .row {
