@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, computed, onMounted } from 'vue'
+import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 
@@ -139,7 +139,25 @@ onMounted(() => {
       showDetailInput.value = true;
     }
   }
+
+  // ↓↓↓ カレンダー外クリックで閉じる処理を追加 ↓↓↓
+  document.addEventListener('click', handleClickOutside)
 })
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
+
+const calendarRef = ref(null)
+
+function handleClickOutside(event) {
+  const calendar = calendarRef.value
+  const dateInput = event.target.closest('input[readonly]')
+
+  if (calendar && !calendar.contains(event.target) && !dateInput) {
+    showCalendar.value = false
+  }
+}
 </script>
 
 <template>
@@ -153,11 +171,11 @@ onMounted(() => {
         </label>
         <!--input type="date" id="date" v-model="formData.date" required @click="openDatePicker" /-->
         <input type="text" :value="formattedDate" @focus="showCalendar = true" readonly />
-        <div v-if="showCalendar" class="calendar">
+        <div v-if="showCalendar" class="calendar" ref="calendarRef">
           <div class="header">
-            <button @click="prevMonth">‹</button>
+            <button type="button" @click="prevMonth">‹</button>
             {{ year }}年{{ month + 1 }}月
-            <button @click="nextMonth">›</button>
+            <button type="button" @click="nextMonth">›</button>
           </div>
           <div class="weekdays">
             <span v-for="w in weekdays" :key="w">{{ w }}</span>
