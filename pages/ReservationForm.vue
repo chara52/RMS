@@ -82,6 +82,7 @@ const daysInMonth = computed(() => {
 
 function selectDate(day) {
   selectedDate.value = `${year.value}-${String(month.value + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+  formData.date = selectedDate.value  // ← これを追加
   showCalendar.value = false
 }
 
@@ -129,6 +130,7 @@ onMounted(() => {
 
     if (route.query.date) {
       formData.date = route.query.date
+      selectedDate.value = route.query.date  // ← これを追加
     }
   } else {
     const saved = localStorage.getItem("formData")
