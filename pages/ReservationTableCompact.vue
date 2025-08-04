@@ -42,8 +42,8 @@ reservationClient.getList({
   queries: { limit: 100 }
 })
 .then((res) => {
-  originalReservations.value = res.contents;
-  reservations.value = [...res.contents];
+   originalReservations.value = reverseArray(res.contents);
+  reservations.value = [...originalReservations.value];
 })
 .catch((err) => console.error(err))
 
@@ -105,6 +105,14 @@ function handleSort(type, sortFunction) {
     sortFunction(reservations.value);
     activeSort.value = type;
   }
+}
+
+function reverseArray(arr) {
+  const reversed = [];
+  for (let i = arr.length - 1; i >= 0; i--) {
+    reversed.push(arr[i]);
+  }
+  return reversed;
 }
 </script>
 
