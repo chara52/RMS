@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, computed, onMounted } from 'vue'
+import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 
@@ -17,13 +17,92 @@ const formData = reactive({
 
 const errorMessage = ref('')
 const showDetailInput = ref(false)
+const showCalendar = ref(false)
+const selectedDate = ref('')
+
+const today = new Date()
+const year = ref(today.getFullYear())
+const month = ref(today.getMonth())
+const weekdays = ['日', '月', '火', '水', '木', '金', '土']
+
 const courseOptions = computed(() => generateCourseOptions())
 
 const isPhoneNumberValid = computed(() => {
   return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
 })
 
+const firstDay = computed(() => {
+  return new Date(year.value, month.value, 1).getDay()
+})
+
+const daysInMonth = computed(() => {
+  return new Date(year.value, month.value + 1, 0).getDate()
+})
+
+const formattedDate = computed(() => {
+  if (!selectedDate.value) return ''
+  const date = new Date(selectedDate.value)
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const weekday = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
+  return `${month}月${day}日(${weekday})`
+})
+
+function selectDate(day) {
+  selectedDate.value = `${year.value}-${String(month.value + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+}
+
+function applySelectedDate() {
+  if (selectedDate.value) {
+    formData.date = selectedDate.value
+  }
+  showCalendar.value = false
+}
+
+function resetCalendar() {
+  selectedDate.value = ''
+  formData.date = ''
+  showCalendar.value = false
+}
+
+function prevMonth() {
+  if (month.value === 0) {
+    month.value = 11
+    year.value -= 1
+  } else {
+    month.value -= 1
+  }
+}
+
+function nextMonth() {
+  if (month.value === 11) {
+    month.value = 0
+    year.value += 1
+  } else {
+    month.value += 1
+  }
+}
+
+function isToday(day) {
+  const today = new Date()
+  return (
+    day === today.getDate() &&
+    month.value === today.getMonth() &&
+    year.value === today.getFullYear()
+  )
+}
+
+function isSelected(day) {
+  const selected = new Date(selectedDate.value)
+  return (
+    day === selected.getDate() &&
+    month.value === selected.getMonth() &&
+    year.value === selected.getFullYear()
+  )
+}
+
 const router = useRouter()
+const route = useRoute()
 
 const submitReservation = () => {
   if (isPhoneNumberValid.value) {
@@ -32,16 +111,6 @@ const submitReservation = () => {
     router.push('/ConfirmReservation')
   } else {
     errorMessage.value = '携帯電話番号は11桁で入力してください!'
-  }
-}
-
-const route = useRoute()
-
-const openDatePicker = (event) => {
-  event.target.focus()
-
-  if (event.target.showPicker) {
-    event.target.showPicker()
   }
 }
 
@@ -54,11 +123,20 @@ const openTimePicker = (event) => {
 }
 
 const goBackWithDate = () => {
-  // 日付が入力されている場合は、その日付をクエリとして渡す
   if (formData.date) {
     router.push(`/ReservationTableCompact?date=${formData.date}`)
   } else {
     router.push('/ReservationTableCompact')
+  }
+}
+
+const calendarRef = ref(null)
+
+function handleClickOutside(event) {
+  const calendar = calendarRef.value
+  const dateInput = event.target.closest('input[readonly]')
+  if (calendar && !calendar.contains(event.target) && !dateInput) {
+    showCalendar.value = false
   }
 }
 
@@ -79,6 +157,7 @@ onMounted(() => {
 
     if (route.query.date) {
       formData.date = route.query.date
+      selectedDate.value = route.query.date
     }
   } else {
     const saved = localStorage.getItem("formData")
@@ -89,6 +168,12 @@ onMounted(() => {
       showDetailInput.value = true;
     }
   }
+
+  document.addEventListener('click', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
 })
 </script>
 
@@ -101,7 +186,35 @@ onMounted(() => {
           <span class="label-text">日付</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="date" id="date" v-model="formData.date" required @click="openDatePicker" />
+        <input type="text" :value="formattedDate" @focus="showCalendar = true" readonly />
+        <div v-if="showCalendar" class="calendar" ref="calendarRef">
+          <div class="header">
+            <button type="button" @click="prevMonth">‹</button>
+            {{ year }}年{{ month + 1 }}月
+            <button type="button" @click="nextMonth">›</button>
+          </div>
+          <div class="weekdays">
+            <span v-for="w in weekdays" :key="w">{{ w }}</span>
+          </div>
+          <div class="days">
+            <span v-for="n in firstDay" :key="'blank' + n"></span>
+            <span
+              v-for="d in daysInMonth"
+              :key="d"
+              @click="selectDate(d)"
+              :class="{
+              today: isToday(d),
+              selected: isSelected(d)
+              }"
+            >
+              {{ d }}
+            </span>
+          </div>
+          <div class="calender-buttons">
+            <button type="button" @click="resetCalendar">リセット</button>
+            <button type="button" @click="applySelectedDate">完了</button>
+          </div>
+        </div>
       </div>
 
       <div class="form-group">
@@ -199,6 +312,63 @@ onMounted(() => {
 
 .form-group {
   margin-bottom: 15px;
+  position: relative
+}
+
+.calendar {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  background: white;
+  position: absolute;
+  box-sizing: border-box;
+  font-size: 16px;
+  z-index: 1000;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.weekdays, .days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.days span {
+  cursor: pointer;
+  padding: 0.65rem;
+}
+
+.days span.today {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.days span.selected {
+  color: #007bff;
+  background-color: #cce5ff;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.calender-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.calender-buttons button {
+  background: transparent;
+  color: #007bff;
+  font-size: 16px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .row {
@@ -312,7 +482,6 @@ input[type="time"] {
 }
 
 .error-message {
-  /* 携帯番号が11桁以外の時のエラーメッセージのCSS */
   color: red;
   font-size: 14px;
   margin-left: 40px;
