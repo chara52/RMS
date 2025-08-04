@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import FilteredComponent from '../components/FilteredReservation.vue'
 import { sortTime } from '../utils/sortTime.js'
@@ -7,6 +7,8 @@ import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter, useRoute } from 'vue-router'
 import EditShiftData from '../components/EditShiftData.vue'
 import BottomNavigation from '../components/BottomNavigation.vue'
+import { sortPeople } from '../utils/sortPeople.js'
+import { sortSeat } from '../utils/sortSeat.js'
 
 defineProps({ reservationsDetail: Array });
 
@@ -28,10 +30,11 @@ const shiftClient = createClient({
   apiKey: import.meta.env.VITE_SHIFT_API_KEY,
 })
 
-const reservations = reactive([]);
+const reservations = ref([]);
+const originalReservations = ref([]);
 const shiftList = ref([]);
 const inputDate = ref('');
-const activeSort = ref('time');
+const activeSort = ref('');
 
 // 予約データを取得
 reservationClient.getList({
@@ -39,8 +42,8 @@ reservationClient.getList({
   queries: { limit: 100 }
 })
 .then((res) => {
-  reservations.push(...res.contents)
-  sortTime(reservations)
+  originalReservations.value = res.contents;
+  reservations.value = [...res.contents];
 })
 .catch((err) => console.error(err))
 
@@ -74,7 +77,7 @@ const filteredReservations = computed(() => {
   if (!inputDate.value) {
     return reservations;
   }
-  return reservations.filter((reservation) => {
+  return reservations.value.filter((reservation) => {
     const reservationDate = reservation.time.split('T')[0];
     return inputDate.value === reservationDate;
   });
@@ -95,10 +98,14 @@ function goToEditShift() {
 }
 
 function handleSort(type, sortFunction) {
-  sortFunction(reservations);
-  activeSort.value = type;
+  if (activeSort.value === type) {
+    reservations.value = [...originalReservations.value];
+    activeSort.value = '';
+  } else {
+    sortFunction(reservations.value);
+    activeSort.value = type;
+  }
 }
-
 </script>
 
 <template>
