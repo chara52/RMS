@@ -190,7 +190,7 @@ onBeforeUnmount(() => {
         <div v-if="showCalendar" class="calendar" ref="calendarRef">
           <div class="header">
             <button type="button" @click="prevMonth">‹</button>
-            {{ year }}年{{ month + 1 }}月
+            <div class="header-title">{{ year }}年{{ month + 1 }}月</div>
             <button type="button" @click="nextMonth">›</button>
           </div>
           <div class="weekdays">
@@ -318,18 +318,39 @@ onBeforeUnmount(() => {
 .calendar {
   width: 100%;
   border: 1px solid #ccc;
-  padding: 1rem;
+  padding: 1rem 1rem 0.5rem;;
   background: white;
   position: absolute;
   box-sizing: border-box;
   font-size: 16px;
   z-index: 1000;
+  border-radius: 3%;
 }
 
 .header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 0.5rem;
+}
+
+.header button {
+  display: flex;
+  background: none;
+  border: none;
+  color: blue;
+  font-size: 30px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 16px;
 }
 
 .weekdays, .days {
@@ -338,32 +359,54 @@ onBeforeUnmount(() => {
   text-align: center;
 }
 
+.weekdays span {
+  color: rgb(164, 164, 164);
+}
+
 .days span {
   cursor: pointer;
   padding: 0.65rem;
 }
 
 .days span.today {
+  color: blue;
+  font-weight: bold;
+}
+
+.days span.today:not(.selected) {
   color: #007bff;
   font-weight: bold;
 }
 
 .days span.selected {
-  color: #007bff;
+  color: blue;
   background-color: #cce5ff;
   border-radius: 50%;
   font-weight: bold;
 }
 
+.days span.today.selected {
+  color: white;
+  background-color: blue;
+}
+
 .calender-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 16px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #ccc;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: calc(100% + 2rem);
+  box-sizing: border-box;
 }
 
 .calender-buttons button {
   background: transparent;
-  color: #007bff;
+  color: blue;
   font-size: 16px;
   padding: 8px 16px;
   border: none;
