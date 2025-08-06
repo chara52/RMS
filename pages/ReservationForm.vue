@@ -324,7 +324,7 @@ onBeforeUnmount(() => {
   box-sizing: border-box;
   font-size: 16px;
   z-index: 1000;
-  border-radius: 3%;
+  border-radius: 15px;
 }
 
 .header {
@@ -458,7 +458,6 @@ select {
   resize: none;
 }
 
-input[type="date"],
 input[type="time"] {
   appearance: none;
   -webkit-appearance: none;
