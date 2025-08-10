@@ -325,6 +325,11 @@ onBeforeUnmount(() => {
   font-size: 16px;
   z-index: 1000;
   border-radius: 15px;
+  /*font-family: sans-serif;*/
+  /*font-family:"HGPｺﾞｼｯｸE"; /* だいぶこれが近いかも */
+  /*font-family:"HGSｺﾞｼｯｸE"; /* これもだいぶ近い */
+  /*font-family: "メイリオ";*/
+  font-family: "Noto Sans JP";
 }
 
 .header {
@@ -357,6 +362,7 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
+  /*font-family: "Zen Maru Gothic", serif;*/
 }
 
 .weekdays span {
