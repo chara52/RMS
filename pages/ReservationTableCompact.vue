@@ -412,7 +412,7 @@ table tr {
   width: 100%;
   max-width: 420px;
   margin: 0 auto;
-  padding: 0 8px;
+  padding: 0;
 }
 
 .calendar {
