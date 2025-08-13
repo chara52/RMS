@@ -213,7 +213,7 @@ const submitReservation = () => {
 }
 
 .readonly-text {
-  background-color: #f5f5f5;
+  background-color: #e8e8e8;
   padding: 10px;
   border-radius: 4px;
   font-size: 16px;
