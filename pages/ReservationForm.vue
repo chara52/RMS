@@ -411,7 +411,7 @@ onBeforeUnmount(() => {
 .header-title {
   flex: 1;
   text-align: center;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .weekdays, .days {
