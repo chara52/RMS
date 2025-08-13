@@ -204,7 +204,7 @@ input[type="text"] {
   margin-top: 16px;
   font-size: 16px;
   color: black;
-  background-color: #e0e0e0;
+  background-color: #f5f5f5;
   border: 2px dashed #333;
   border-radius: 6px;
   padding: 6px 16px;
