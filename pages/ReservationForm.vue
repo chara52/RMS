@@ -114,14 +114,6 @@ const submitReservation = () => {
   }
 }
 
-const openTimePicker = (event) => {
-  event.target.focus()
-
-  if (event.target.showPicker) {
-    event.target.showPicker()
-  }
-}
-
 const goBackWithDate = () => {
   if (formData.date) {
     router.push(`/ReservationTableCompact?date=${formData.date}`)
@@ -138,6 +130,37 @@ function handleClickOutside(event) {
   if (calendar && !calendar.contains(event.target) && !dateInput) {
     showCalendar.value = false
   }
+}
+
+const showTimePicker = ref(false)
+const selectedHour = ref('')
+const selectedMinute = ref('')
+
+const hours = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
+const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'))
+
+function openCustomTimePicker() {
+  showTimePicker.value = true
+  if (formData.time) {
+    const [h, m] = formData.time.split(':')
+    selectedHour.value = h
+    selectedMinute.value = m
+  } else {
+    selectedHour.value = '00'
+    selectedMinute.value = '00'
+  }
+}
+
+function applySelectedTime() {
+  formData.time = `${selectedHour.value}:${selectedMinute.value}`
+  showTimePicker.value = false
+}
+
+function resetTime() {
+  formData.time = ''
+  selectedHour.value = '00'
+  selectedMinute.value = '00'
+  showTimePicker.value = false
 }
 
 onMounted(() => {
@@ -238,7 +261,44 @@ onBeforeUnmount(() => {
           <span class="label-text">時間</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="time"  id="time" v-model="formData.time" required @click="openTimePicker" />
+        <input
+          type="text"
+          id="time"
+          :value="formData.time"
+          readonly
+          @click="openCustomTimePicker"
+        />
+
+        <div v-if="showTimePicker" class="time-picker">
+          <div class="time-highlight"></div>
+          <div class="time-columns">
+            <div class="time-column">
+              <div
+                v-for="h in hours"
+                :key="h"
+                :class="{ selected: h === selectedHour }"
+                @click="selectedHour = h"
+              >
+                {{ h }}
+              </div>
+            </div>
+            <span class="colon">:</span>
+            <div class="time-column">
+              <div
+                v-for="m in minutes"
+                :key="m"
+                :class="{ selected: m === selectedMinute }"
+                @click="selectedMinute = m"
+              >
+                {{ m }}
+              </div>
+            </div>
+          </div>
+          <div class="time-buttons">
+            <button type="button" @click="resetTime">リセット</button>
+            <button type="button" @click="applySelectedTime">完了</button>
+          </div>
+        </div>
       </div>
 
       <div class="form-group row">
@@ -322,13 +382,9 @@ onBeforeUnmount(() => {
   background: white;
   position: absolute;
   box-sizing: border-box;
-  font-size: 16px;
+  font-size: 20px;
   z-index: 1000;
   border-radius: 15px;
-  /*font-family: sans-serif;*/
-  /*font-family:"HGPｺﾞｼｯｸE"; /* だいぶこれが近いかも */
-  /*font-family:"HGSｺﾞｼｯｸE"; /* これもだいぶ近い */
-  /*font-family: "メイリオ";*/
   font-family: "Noto Sans JP";
 }
 
@@ -362,7 +418,6 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
-  /*font-family: "Zen Maru Gothic", serif;*/
 }
 
 .weekdays span {
@@ -417,6 +472,72 @@ onBeforeUnmount(() => {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
+  cursor: pointer;
+}
+
+.time-picker {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  background: white;
+  position: absolute;
+  box-sizing: border-box;
+  font-size: 16px;
+  z-index: 1000;
+  border-radius: 15px;
+}
+
+.time-columns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.time-column {
+  height: 120px;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.time-column::-webkit-scrollbar {
+  display: none;
+}
+
+.time-column div {
+  padding: 8px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 20px;
+}
+
+.time-column div.selected {
+  background-color: #cce5ff;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.colon {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+.time-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  border-top: 1px solid #ccc;
+  padding-top: 8px;
+}
+
+.time-buttons button {
+  background: transparent;
+  color: blue;
+  font-size: 16px;
+  padding: 8px 16px;
+  border: none;
   cursor: pointer;
 }
 
