@@ -123,12 +123,19 @@ const goBackWithDate = () => {
 }
 
 const calendarRef = ref(null)
+const timePickerRef = ref(null)
 
 function handleClickOutside(event) {
   const calendar = calendarRef.value
   const dateInput = event.target.closest('input[readonly]')
   if (calendar && !calendar.contains(event.target) && !dateInput) {
     showCalendar.value = false
+  }
+
+  const timePicker = timePickerRef.value
+  const timeInput = event.target.closest('#time')
+  if (timePicker && !timePicker.contains(event.target) && !timeInput) {
+    showTimePicker.value = false
   }
 }
 
@@ -268,8 +275,7 @@ onBeforeUnmount(() => {
           readonly
           @click="openCustomTimePicker"
         />
-
-        <div v-if="showTimePicker" class="time-picker">
+        <div v-if="showTimePicker" class="time-picker" ref="timePickerRef">
           <div class="time-highlight"></div>
           <div class="time-columns">
             <div class="time-column">
