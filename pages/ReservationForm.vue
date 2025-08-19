@@ -48,6 +48,14 @@ const formattedDate = computed(() => {
   return `${month}月${day}日(${weekday})`
 })
 
+function getDayClass(day) {
+  const date = new Date(year.value, month.value, day)
+  const weekday = date.getDay()
+  if (weekday === 0) return 'sunday'
+  if (weekday === 6) return 'saturday'
+  return ''
+}
+
 function selectDate(day) {
   selectedDate.value = `${year.value}-${String(month.value + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
 }
@@ -143,7 +151,7 @@ const showTimePicker = ref(false)
 const selectedHour = ref('')
 const selectedMinute = ref('')
 
-const hours = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'))
+const hours = Array.from({ length: 6 }, (_, i) => String(i + 17).padStart(2, '0'))
 const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'))
 
 function openCustomTimePicker() {
@@ -224,7 +232,16 @@ onBeforeUnmount(() => {
             <button type="button" @click="nextMonth">›</button>
           </div>
           <div class="weekdays">
-            <span v-for="w in weekdays" :key="w">{{ w }}</span>
+            <span
+              v-for="(w, i) in weekdays"
+              :key="w"
+              :class="{
+                sunday: i === 0,
+                saturday: i === 6
+              }"
+            >
+              {{ w }}
+            </span>
           </div>
           <div class="days">
             <span v-for="n in firstDay" :key="'blank' + n"></span>
@@ -232,10 +249,10 @@ onBeforeUnmount(() => {
               v-for="d in daysInMonth"
               :key="d"
               @click="selectDate(d)"
-              :class="{
-              today: isToday(d),
-              selected: isSelected(d)
-              }"
+              :class="[
+                { today: isToday(d), selected: isSelected(d) },
+                getDayClass(d)
+              ]"
             >
               {{ d }}
             </span>
@@ -268,34 +285,19 @@ onBeforeUnmount(() => {
           <span class="label-text">時間</span>
           <span class="required-mark">＊</span>
         </label>
-        <input
-          type="text"
-          id="time"
-          :value="formData.time"
-          readonly
-          @click="openCustomTimePicker"
-        />
+        <input type="text" id="time" :value="formData.time" readonly @click="openCustomTimePicker" />
         <div v-if="showTimePicker" class="time-picker" ref="timePickerRef">
           <div class="time-highlight"></div>
           <div class="time-columns">
             <div class="time-column">
-              <div
-                v-for="h in hours"
-                :key="h"
-                :class="{ selected: h === selectedHour }"
-                @click="selectedHour = h"
-              >
+              <div v-for="h in hours" :key="h" :class="{ selected: h === selectedHour }" @click="selectedHour = h">
                 {{ h }}
               </div>
             </div>
             <span class="colon">:</span>
             <div class="time-column">
-              <div
-                v-for="m in minutes"
-                :key="m"
-                :class="{ selected: m === selectedMinute }"
-                @click="selectedMinute = m"
-              >
+              <div v-for="m in minutes" :key="m" :class="{ selected: m === selectedMinute }"
+                @click="selectedMinute = m">
                 {{ m }}
               </div>
             </div>
@@ -391,7 +393,9 @@ onBeforeUnmount(() => {
   font-size: 20px;
   z-index: 1000;
   border-radius: 15px;
-  font-family: "Noto Sans JP";
+  /*font-family: "Noto Sans JP";*/
+  /*font-family: sans-serif;*/
+  font-family: Arial;
 }
 
 .header {
@@ -430,9 +434,23 @@ onBeforeUnmount(() => {
   color: rgb(164, 164, 164);
 }
 
+.weekdays .sunday {
+  color: red;
+}
+
+.weekdays .saturday {
+  color: blue;
+}
+
 .days span {
-  cursor: pointer;
-  padding: 0.65rem;
+  /*cursor: pointer;
+  padding: 0.65rem;*/
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  /* 固定高さを設定 */
+  box-sizing: border-box;
 }
 
 .days span.today {
@@ -441,7 +459,7 @@ onBeforeUnmount(() => {
 }
 
 .days span.today:not(.selected) {
-  color: #007bff;
+  color: rgb(0, 130, 255);
   font-weight: bold;
 }
 
@@ -454,7 +472,15 @@ onBeforeUnmount(() => {
 
 .days span.today.selected {
   color: white;
-  background-color: blue;
+  background-color: rgb(42, 152, 254);
+}
+
+.days .sunday {
+  color: red;
+}
+
+.days .saturday {
+  color: blue;
 }
 
 .calender-buttons {
