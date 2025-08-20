@@ -161,9 +161,19 @@ function openCustomTimePicker() {
     selectedHour.value = h
     selectedMinute.value = m
   } else {
-    selectedHour.value = '00'
+    selectedHour.value = '17'
     selectedMinute.value = '00'
   }
+}
+
+function selectHour(h) {
+  selectedHour.value = h
+  formData.time = `${h}:${selectedMinute.value}`
+}
+
+function selectMinute(m) {
+  selectedMinute.value = m
+  formData.time = `${selectedHour.value}:${m}`
 }
 
 function applySelectedTime() {
@@ -232,28 +242,19 @@ onBeforeUnmount(() => {
             <button type="button" @click="nextMonth">›</button>
           </div>
           <div class="weekdays">
-            <span
-              v-for="(w, i) in weekdays"
-              :key="w"
-              :class="{
+            <span v-for="(w, i) in weekdays" :key="w" :class="{
                 sunday: i === 0,
                 saturday: i === 6
-              }"
-            >
+              }">
               {{ w }}
             </span>
           </div>
           <div class="days">
             <span v-for="n in firstDay" :key="'blank' + n"></span>
-            <span
-              v-for="d in daysInMonth"
-              :key="d"
-              @click="selectDate(d)"
-              :class="[
+            <span v-for="d in daysInMonth" :key="d" @click="selectDate(d)" :class="[
                 { today: isToday(d), selected: isSelected(d) },
                 getDayClass(d)
-              ]"
-            >
+              ]">
               {{ d }}
             </span>
           </div>
@@ -290,14 +291,13 @@ onBeforeUnmount(() => {
           <div class="time-highlight"></div>
           <div class="time-columns">
             <div class="time-column">
-              <div v-for="h in hours" :key="h" :class="{ selected: h === selectedHour }" @click="selectedHour = h">
+              <div v-for="h in hours" :key="h" :class="{ selected: h === selectedHour }" @click="() => selectHour(h)">
                 {{ h }}
               </div>
             </div>
             <span class="colon">:</span>
             <div class="time-column">
-              <div v-for="m in minutes" :key="m" :class="{ selected: m === selectedMinute }"
-                @click="selectedMinute = m">
+              <div v-for="m in minutes" :key="m" :class="{ selected: m === selectedMinute }" @click="() => selectMinute(m)">
                 {{ m }}
               </div>
             </div>
@@ -390,7 +390,6 @@ onBeforeUnmount(() => {
   background: white;
   position: absolute;
   box-sizing: border-box;
-  font-size: 20px;
   z-index: 1000;
   border-radius: 15px;
   /*font-family: "Noto Sans JP";*/
@@ -432,6 +431,7 @@ onBeforeUnmount(() => {
 
 .weekdays span {
   color: rgb(164, 164, 164);
+  font-size: 14px;
 }
 
 .weekdays .sunday {
@@ -451,6 +451,7 @@ onBeforeUnmount(() => {
   height: 45px;
   /* 固定高さを設定 */
   box-sizing: border-box;
+  font-size: 20px;
 }
 
 .days span.today {
@@ -460,7 +461,7 @@ onBeforeUnmount(() => {
 
 .days span.today:not(.selected) {
   color: rgb(0, 130, 255);
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .days span.selected {
@@ -539,7 +540,6 @@ onBeforeUnmount(() => {
 
 .time-column div {
   padding: 8px;
-  cursor: pointer;
   text-align: center;
   font-size: 20px;
 }
@@ -548,6 +548,7 @@ onBeforeUnmount(() => {
   background-color: #cce5ff;
   font-weight: bold;
   border-radius: 4px;
+  width: 15vw;
 }
 
 .colon {
@@ -562,6 +563,12 @@ onBeforeUnmount(() => {
   margin-top: 30px;
   border-top: 1px solid #ccc;
   padding-top: 8px;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: calc(100% + 2rem);
+  box-sizing: border-box;
 }
 
 .time-buttons button {
