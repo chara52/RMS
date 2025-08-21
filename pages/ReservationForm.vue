@@ -48,6 +48,14 @@ const formattedDate = computed(() => {
   return `${month}月${day}日(${weekday})`
 })
 
+function getDayClass(day) {
+  const date = new Date(year.value, month.value, day)
+  const weekday = date.getDay()
+  if (weekday === 0) return 'sunday'
+  if (weekday === 6) return 'saturday'
+  return ''
+}
+
 function selectDate(day) {
   selectedDate.value = `${year.value}-${String(month.value + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
 }
@@ -114,14 +122,6 @@ const submitReservation = () => {
   }
 }
 
-const openTimePicker = (event) => {
-  event.target.focus()
-
-  if (event.target.showPicker) {
-    event.target.showPicker()
-  }
-}
-
 const goBackWithDate = () => {
   if (formData.date) {
     router.push(`/ReservationTableCompact?date=${formData.date}`)
@@ -131,6 +131,7 @@ const goBackWithDate = () => {
 }
 
 const calendarRef = ref(null)
+const timePickerRef = ref(null)
 
 function handleClickOutside(event) {
   const calendar = calendarRef.value
@@ -138,6 +139,53 @@ function handleClickOutside(event) {
   if (calendar && !calendar.contains(event.target) && !dateInput) {
     showCalendar.value = false
   }
+
+  const timePicker = timePickerRef.value
+  const timeInput = event.target.closest('#time')
+  if (timePicker && !timePicker.contains(event.target) && !timeInput) {
+    showTimePicker.value = false
+  }
+}
+
+const showTimePicker = ref(false)
+const selectedHour = ref('')
+const selectedMinute = ref('')
+
+const hours = Array.from({ length: 6 }, (_, i) => String(i + 17).padStart(2, '0'))
+const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'))
+
+function openCustomTimePicker() {
+  showTimePicker.value = true
+  if (formData.time) {
+    const [h, m] = formData.time.split(':')
+    selectedHour.value = h
+    selectedMinute.value = m
+  } else {
+    selectedHour.value = '17'
+    selectedMinute.value = '00'
+  }
+}
+
+function selectHour(h) {
+  selectedHour.value = h
+  formData.time = `${h}:${selectedMinute.value}`
+}
+
+function selectMinute(m) {
+  selectedMinute.value = m
+  formData.time = `${selectedHour.value}:${m}`
+}
+
+function applySelectedTime() {
+  formData.time = `${selectedHour.value}:${selectedMinute.value}`
+  showTimePicker.value = false
+}
+
+function resetTime() {
+  formData.time = ''
+  selectedHour.value = '00'
+  selectedMinute.value = '00'
+  showTimePicker.value = false
 }
 
 onMounted(() => {
@@ -190,23 +238,23 @@ onBeforeUnmount(() => {
         <div v-if="showCalendar" class="calendar" ref="calendarRef">
           <div class="header">
             <button type="button" @click="prevMonth">‹</button>
-            {{ year }}年{{ month + 1 }}月
+            <div class="header-title">{{ year }}年{{ month + 1 }}月</div>
             <button type="button" @click="nextMonth">›</button>
           </div>
           <div class="weekdays">
-            <span v-for="w in weekdays" :key="w">{{ w }}</span>
+            <span v-for="(w, i) in weekdays" :key="w" :class="{
+                sunday: i === 0,
+                saturday: i === 6
+              }">
+              {{ w }}
+            </span>
           </div>
           <div class="days">
             <span v-for="n in firstDay" :key="'blank' + n"></span>
-            <span
-              v-for="d in daysInMonth"
-              :key="d"
-              @click="selectDate(d)"
-              :class="{
-              today: isToday(d),
-              selected: isSelected(d)
-              }"
-            >
+            <span v-for="d in daysInMonth" :key="d" @click="selectDate(d)" :class="[
+                { today: isToday(d), selected: isSelected(d) },
+                getDayClass(d)
+              ]">
               {{ d }}
             </span>
           </div>
@@ -238,7 +286,27 @@ onBeforeUnmount(() => {
           <span class="label-text">時間</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="time"  id="time" v-model="formData.time" required @click="openTimePicker" />
+        <input type="text" id="time" :value="formData.time" readonly @click="openCustomTimePicker" />
+        <div v-if="showTimePicker" class="time-picker" ref="timePickerRef">
+          <div class="time-highlight"></div>
+          <div class="time-columns">
+            <div class="time-column">
+              <div v-for="h in hours" :key="h" :class="{ selected: h === selectedHour }" @click="() => selectHour(h)">
+                {{ h }}
+              </div>
+            </div>
+            <span class="colon">:</span>
+            <div class="time-column">
+              <div v-for="m in minutes" :key="m" :class="{ selected: m === selectedMinute }" @click="() => selectMinute(m)">
+                {{ m }}
+              </div>
+            </div>
+          </div>
+          <div class="time-buttons">
+            <button type="button" @click="resetTime">リセット</button>
+            <button type="button" @click="applySelectedTime">完了</button>
+          </div>
+        </div>
       </div>
 
       <div class="form-group row">
@@ -318,18 +386,39 @@ onBeforeUnmount(() => {
 .calendar {
   width: 100%;
   border: 1px solid #ccc;
-  padding: 1rem;
+  padding: 1rem 1rem 0.5rem;;
   background: white;
   position: absolute;
   box-sizing: border-box;
-  font-size: 16px;
   z-index: 1000;
+  border-radius: 15px;
+  font-family: Arial;
 }
 
 .header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 0.5rem;
+}
+
+.header button {
+  display: flex;
+  background: none;
+  border: none;
+  color: blue;
+  font-size: 30px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 20px;
 }
 
 .weekdays, .days {
@@ -338,36 +427,152 @@ onBeforeUnmount(() => {
   text-align: center;
 }
 
+.weekdays span {
+  color: rgb(164, 164, 164);
+  font-size: 14px;
+}
+
+.weekdays .sunday {
+  color: red;
+}
+
+.weekdays .saturday {
+  color: blue;
+}
+
 .days span {
-  cursor: pointer;
-  padding: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  box-sizing: border-box;
+  font-size: 20px;
 }
 
 .days span.today {
-  color: #007bff;
+  color: blue;
   font-weight: bold;
 }
 
+.days span.today:not(.selected) {
+  color: rgb(0, 130, 255);
+  font-weight: normal;
+}
+
 .days span.selected {
-  color: #007bff;
+  color: blue;
   background-color: #cce5ff;
   border-radius: 50%;
   font-weight: bold;
 }
 
+.days span.today.selected {
+  color: white;
+  background-color: rgb(42, 152, 254);
+}
+
+.days .sunday {
+  color: red;
+}
+
+.days .saturday {
+  color: blue;
+}
+
 .calender-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 16px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #ccc;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: calc(100% + 2rem);
+  box-sizing: border-box;
 }
 
 .calender-buttons button {
   background: transparent;
-  color: #007bff;
+  color: blue;
   font-size: 16px;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
+  cursor: pointer;
+}
+
+.time-picker {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  background: white;
+  position: absolute;
+  box-sizing: border-box;
+  font-size: 16px;
+  z-index: 1000;
+  border-radius: 15px;
+}
+
+.time-columns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.time-column {
+  height: 120px;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  font-family: Arial;
+}
+
+.time-column::-webkit-scrollbar {
+  display: none;
+}
+
+.time-column div {
+  padding: 8px;
+  text-align: center;
+  font-size: 20px;
+}
+
+.time-column div.selected {
+  background-color: #cce5ff;
+  font-weight: bold;
+  border-radius: 4px;
+  width: 15vw;
+}
+
+.colon {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+.time-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  border-top: 1px solid #ccc;
+  padding-top: 8px;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: calc(100% + 2rem);
+  box-sizing: border-box;
+}
+
+.time-buttons button {
+  background: transparent;
+  color: blue;
+  font-size: 16px;
+  padding: 8px 16px;
+  border: none;
   cursor: pointer;
 }
 
@@ -415,7 +620,6 @@ select {
   resize: none;
 }
 
-input[type="date"],
 input[type="time"] {
   appearance: none;
   -webkit-appearance: none;
