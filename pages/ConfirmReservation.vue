@@ -68,6 +68,15 @@ const submitReservation = () => {
       });
   };
 }
+
+const formattedDisplayDate = computed(() => {
+  if (!formData.date) return ''
+  const date = new Date(formData.date)
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const weekday = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
+  return `${month}月${day}日(${weekday})`
+})
 </script>
 
 <template>
@@ -79,7 +88,7 @@ const submitReservation = () => {
           <span class="label-text">日付</span>
           <span class="required-mark">＊</span>
         </label>
-        <p class="readonly-text">{{ formData.date }}</p>
+        <p class="readonly-text">{{ formattedDisplayDate }}</p>
       </div>
 
       <div class="form-group">
