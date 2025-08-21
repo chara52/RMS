@@ -392,8 +392,6 @@ onBeforeUnmount(() => {
   box-sizing: border-box;
   z-index: 1000;
   border-radius: 15px;
-  /*font-family: "Noto Sans JP";*/
-  /*font-family: sans-serif;*/
   font-family: Arial;
 }
 
@@ -443,13 +441,10 @@ onBeforeUnmount(() => {
 }
 
 .days span {
-  /*cursor: pointer;
-  padding: 0.65rem;*/
   display: flex;
   align-items: center;
   justify-content: center;
   height: 45px;
-  /* 固定高さを設定 */
   box-sizing: border-box;
   font-size: 20px;
 }
@@ -532,6 +527,7 @@ onBeforeUnmount(() => {
   scroll-snap-type: y mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  font-family: Arial;
 }
 
 .time-column::-webkit-scrollbar {
