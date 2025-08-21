@@ -417,6 +417,7 @@ table tr {
 
 .calendar {
   width: 100%;
+  max-width: 375px;
   border: 1px solid #ccc;
   padding: 1rem;
   background: white;
