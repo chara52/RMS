@@ -422,6 +422,8 @@ table tr {
   padding: 1rem;
   background: white;
   position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   box-sizing: border-box;
   font-size: 16px;
   z-index: 1000;
