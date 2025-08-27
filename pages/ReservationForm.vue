@@ -113,6 +113,15 @@ const router = useRouter()
 const route = useRoute()
 
 const submitReservation = () => {
+  if (selectedDate.value) {
+    errorMessage.value = ''
+    localStorage.setItem("formData", JSON.stringify(formData))
+    router.push('/ConfirmReservation')
+  } else {
+    errorMessage.value = '日付が選択されていません。'
+    return
+  }
+
   if (isPhoneNumberValid.value) {
     errorMessage.value = ''
     localStorage.setItem("formData", JSON.stringify(formData))
@@ -235,6 +244,9 @@ onBeforeUnmount(() => {
           <span class="required-mark">＊</span>
         </label>
         <input type="text" :value="formattedDate" @focus="showCalendar = true" readonly />
+
+        <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
+
         <div v-if="showCalendar" class="calendar" ref="calendarRef">
           <div class="header">
             <button type="button" @click="prevMonth">‹</button>
@@ -352,8 +364,6 @@ onBeforeUnmount(() => {
         </label>
         <input type="text" id="seat" v-model="formData.seat" />
       </div>
-
-      <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
 
       <div class="button-container">
         <button type="button" @click="goBackWithDate" class="backbutton">戻る</button>
