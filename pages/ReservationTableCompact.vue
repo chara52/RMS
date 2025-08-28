@@ -207,6 +207,10 @@ function reverseArray(arr) {
   }
   return reversed;
 }
+
+function setTodayDate(todayStr) {
+  inputDate.value = todayStr;
+}
 </script>
 
 <template>
@@ -301,7 +305,7 @@ function reverseArray(arr) {
     </div>
   </div>
 
-  <BottomNavigation :selectedDate="inputDate" />
+  <BottomNavigation :selectedDate="inputDate" @setTodayDate="setTodayDate" />
 </template>
 
 <style scoped>
