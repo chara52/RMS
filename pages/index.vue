@@ -7,9 +7,14 @@ import { isValidBirthdayFormat } from '../composables/passwordValidator'
 const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
+const showPassword = ref(false)
 
 const { login } = useAuth()
 const router = useRouter()
+
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value
+}
 
 const handleLogin = async () => {
   if (!email.value) {
@@ -45,7 +50,23 @@ const handleLogin = async () => {
     <h1 class="title">居酒屋 壱</h1>
     <form @submit.prevent="handleLogin">
       <input v-model="email" placeholder="メールアドレス" class="input-email" />
-      <input v-model="password" type="password" placeholder="パスワード" class="input-password" />
+      <div class="password-input-container">
+        <input
+          v-model="password"
+          :type="showPassword ? 'text' : 'password'"
+          placeholder="パスワード"
+          class="input-password"
+        />
+        <button
+          type="button"
+          class="password-toggle-button"
+          @click="togglePasswordVisibility"
+        >
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+          <i v-if="!showPassword" class="fa-solid fa-eye-slash"></i>
+          <i v-else class="fa-solid fa-eye"></i>
+        </button>
+      </div>
       <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
       <button class="login-button">ログイン</button>
     </form>
@@ -95,16 +116,37 @@ form {
   display: block;
 }
 
-.input-password {
+.password-input-container {
+  position: relative;
   width: 270px;
-  padding: 14px 12px;
   margin-bottom: 25px;
+}
+
+.input-password {
+  width: 100%;
+  padding: 14px 48px 14px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #f9f9f9;
   font-size: 16px;
   outline: none;
   display: block;
+}
+
+.password-toggle-button {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 20px;
 }
 
 .error-message {
