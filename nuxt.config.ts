@@ -4,6 +4,13 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   plugins: ['~/plugins/firebase'],
   modules: ['@vite-pwa/nuxt'],
+  app: {
+    head: {
+      meta: [
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      ]
+    }
+  },
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
