@@ -447,6 +447,16 @@ table tr {
   padding: 0.65rem;
 }
 
+/* 日曜日の列を赤色に */
+.days span:nth-child(7n+1) {
+  color: #ff4444;
+}
+
+/* 土曜日の列を水色に */
+.days span:nth-child(7n) {
+  color: #007bff;
+}
+
 .days span.today {
   color: #007bff;
   font-weight: bold;
