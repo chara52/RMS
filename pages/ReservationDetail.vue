@@ -44,6 +44,14 @@ const handleDelete = () => {
   }
 };
 
+const formattedPhone = computed(() => {
+  const raw = formData.phone.replace(/\D/g, '')
+  if (raw.length === 11) {
+    return `${raw.slice(0, 3)}-${raw.slice(3, 7)}-${raw.slice(7)}`
+  }
+  return formData.phone
+})
+
 const formattedDisplayDate = computed(() => {
   if (!formData.date) return ''
   const date = new Date(formData.date)
@@ -94,7 +102,7 @@ const goBackWithDate = () => {
 
     </p>
     <p><strong>詳細 :</strong> {{ formData.info }}</p>
-    <p><strong>電話番号 :</strong> {{ formData.phone }}</p>
+    <p><strong>電話番号 :</strong> {{ formattedPhone }}</p>
     <p><strong>席番号 :</strong> {{ formData.seat }}</p>
   </div>
   <div class="button-container">
