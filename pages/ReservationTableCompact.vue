@@ -432,7 +432,25 @@ table tr {
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 0.5rem;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.header button {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.header button:hover {
+  background-color: #f0f0f0;
+  border-radius: 4px;
 }
 
 .weekdays,
@@ -447,12 +465,10 @@ table tr {
   padding: 0.65rem;
 }
 
-/* 日曜日の列を赤色に */
 .days span:nth-child(7n+1) {
   color: #ff4444;
 }
 
-/* 土曜日の列を水色に */
 .days span:nth-child(7n) {
   color: #007bff;
 }
