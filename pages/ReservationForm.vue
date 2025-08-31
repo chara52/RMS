@@ -113,13 +113,26 @@ const router = useRouter()
 const route = useRoute()
 
 const submitReservation = () => {
-  if (isPhoneNumberValid.value) {
-    errorMessage.value = ''
-    localStorage.setItem("formData", JSON.stringify(formData))
-    router.push('/ConfirmReservation')
-  } else {
-    errorMessage.value = '携帯電話番号は11桁で入力してください!'
+  const errors = []
+
+  if (!selectedDate.value) {
+    errors.push('日付が選択されていません。')
   }
+
+  if (!isPhoneNumberValid.value) {
+    errors.push('携帯電話番号は11桁で入力してください!')
+  }
+
+  if (errors.length > 0) {
+    // 改行でつなげて文字列化
+    errorMessage.value = errors.join('\n')
+    return
+  }
+
+  // バリデーションOK
+  errorMessage.value = ''
+  localStorage.setItem("formData", JSON.stringify(formData))
+  router.push('/ConfirmReservation')
 }
 
 const goBackWithDate = () => {
@@ -688,6 +701,6 @@ input[type="time"] {
 .error-message {
   color: red;
   font-size: 14px;
-  margin-left: 40px;
+  margin: 0px;
 }
 </style>
