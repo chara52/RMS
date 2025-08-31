@@ -124,12 +124,10 @@ const submitReservation = () => {
   }
 
   if (errors.length > 0) {
-    // 改行でつなげて文字列化
     errorMessage.value = errors.join('\n')
     return
   }
 
-  // バリデーションOK
   errorMessage.value = ''
   localStorage.setItem("formData", JSON.stringify(formData))
   router.push('/ConfirmReservation')
