@@ -1,8 +1,9 @@
 <script setup>
-import { reactive, ref, onMounted, computed } from 'vue';
+import { reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { createClient } from 'microcms-js-sdk';
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
+import TimePicker from '../components/TimePicker.vue'
 
 const router = useRouter();
 const route = useRoute();
@@ -38,11 +39,20 @@ const openDatePicker = (event) => {
   }
 }
 
-const openTimePicker = (event) => {
-  event.target.focus()
+const showTimePicker = ref(false)
 
-  if (event.target.showPicker) {
-    event.target.showPicker()
+const openCustomTimePicker = () => {
+  showTimePicker.value = true
+}
+
+const handleTimePickerApply = () => {
+  showTimePicker.value = false
+}
+
+const handleClickOutside = (event) => {
+  const timeInput = event.target.closest('#time')
+  if (showTimePicker.value && !event.target.closest('.time-picker') && !timeInput) {
+    showTimePicker.value = false
   }
 }
 
@@ -67,6 +77,12 @@ onMounted(() => {
       formData.drink = String(res.drink || '');
     })
     .catch((err) => console.error(err));
+
+  document.addEventListener('click', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
 })
 
 const submitForm = () => {
@@ -150,7 +166,12 @@ const submitForm = () => {
           <span class="label-text">時間</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="time" id="time" v-model="formData.time" required @click="openTimePicker" />
+        <input type="text" id="time" :value="formData.time" readonly @click="openCustomTimePicker" />
+        <TimePicker
+          v-if="showTimePicker"
+          v-model="formData.time"
+          @apply="handleTimePickerApply"
+        />
       </div>
 
       <div class="form-group row">
@@ -224,6 +245,7 @@ const submitForm = () => {
 
 .form-group {
   margin-bottom: 15px;
+  position: relative;
 }
 
 .header {

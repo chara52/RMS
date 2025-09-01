@@ -2,6 +2,7 @@
 import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
+import TimePicker from '../components/TimePicker.vue'
 
 const formData = reactive({
   name: '',
@@ -142,7 +143,6 @@ const goBackWithDate = () => {
 }
 
 const calendarRef = ref(null)
-const timePickerRef = ref(null)
 
 function handleClickOutside(event) {
   const calendar = calendarRef.value
@@ -151,51 +151,19 @@ function handleClickOutside(event) {
     showCalendar.value = false
   }
 
-  const timePicker = timePickerRef.value
   const timeInput = event.target.closest('#time')
-  if (timePicker && !timePicker.contains(event.target) && !timeInput) {
+  if (showTimePicker.value && !event.target.closest('.time-picker') && !timeInput) {
     showTimePicker.value = false
   }
 }
 
 const showTimePicker = ref(false)
-const selectedHour = ref('')
-const selectedMinute = ref('')
-
-const hours = Array.from({ length: 6 }, (_, i) => String(i + 17).padStart(2, '0'))
-const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'))
 
 function openCustomTimePicker() {
   showTimePicker.value = true
-  if (formData.time) {
-    const [h, m] = formData.time.split(':')
-    selectedHour.value = h
-    selectedMinute.value = m
-  } else {
-    selectedHour.value = '17'
-    selectedMinute.value = '00'
-  }
 }
 
-function selectHour(h) {
-  selectedHour.value = h
-  formData.time = `${h}:${selectedMinute.value}`
-}
-
-function selectMinute(m) {
-  selectedMinute.value = m
-  formData.time = `${selectedHour.value}:${m}`
-}
-
-function applySelectedTime() {
-  formData.time = `${selectedHour.value}:${selectedMinute.value}`
-  showTimePicker.value = false
-}
-
-function resetTime() {
-  formData.time = ''
-  selectedHour.value = '00'
-  selectedMinute.value = '00'
+function handleTimePickerApply() {
   showTimePicker.value = false
 }
 
@@ -298,26 +266,11 @@ onBeforeUnmount(() => {
           <span class="required-mark">＊</span>
         </label>
         <input type="text" id="time" :value="formData.time" readonly @click="openCustomTimePicker" />
-        <div v-if="showTimePicker" class="time-picker" ref="timePickerRef">
-          <div class="time-highlight"></div>
-          <div class="time-columns">
-            <div class="time-column">
-              <div v-for="h in hours" :key="h" :class="{ selected: h === selectedHour }" @click="() => selectHour(h)">
-                {{ h }}
-              </div>
-            </div>
-            <span class="colon">:</span>
-            <div class="time-column">
-              <div v-for="m in minutes" :key="m" :class="{ selected: m === selectedMinute }" @click="() => selectMinute(m)">
-                {{ m }}
-              </div>
-            </div>
-          </div>
-          <div class="time-buttons">
-            <button type="button" @click="resetTime">リセット</button>
-            <button type="button" @click="applySelectedTime">完了</button>
-          </div>
-        </div>
+        <TimePicker
+          v-if="showTimePicker"
+          v-model="formData.time"
+          @apply="handleTimePickerApply"
+        />
       </div>
 
       <div class="form-group row">
@@ -514,78 +467,6 @@ onBeforeUnmount(() => {
   cursor: pointer;
 }
 
-.time-picker {
-  width: 100%;
-  border: 1px solid #ccc;
-  padding: 1rem;
-  background: white;
-  position: absolute;
-  box-sizing: border-box;
-  font-size: 16px;
-  z-index: 1000;
-  border-radius: 15px;
-}
-
-.time-columns {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.time-column {
-  height: 120px;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  font-family: Arial;
-}
-
-.time-column::-webkit-scrollbar {
-  display: none;
-}
-
-.time-column div {
-  padding: 8px;
-  text-align: center;
-  font-size: 20px;
-}
-
-.time-column div.selected {
-  background-color: #cce5ff;
-  font-weight: bold;
-  border-radius: 4px;
-  width: 15vw;
-}
-
-.colon {
-  font-size: 20px;
-  font-weight: bold;
-  padding: 0 10px;
-}
-
-.time-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 30px;
-  border-top: 1px solid #ccc;
-  padding-top: 8px;
-  margin-left: -1rem;
-  margin-right: -1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  width: calc(100% + 2rem);
-  box-sizing: border-box;
-}
-
-.time-buttons button {
-  background: transparent;
-  color: blue;
-  font-size: 16px;
-  padding: 8px 16px;
-  border: none;
-  cursor: pointer;
-}
 
 .row {
   display: flex;
