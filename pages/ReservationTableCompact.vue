@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
@@ -36,7 +36,6 @@ const shiftList = ref([]);
 const inputDate = ref('');
 const activeSort = ref('');
 
-// 予約データを取得
 reservationClient.getList({
   endpoint: 'data',
   queries: { limit: 100 }
@@ -60,13 +59,6 @@ onMounted(() => {
 function handleDateSelected(date) {
   inputDate.value = date
 }
-
-// inputDateの変更を監視
-watch(inputDate, (newVal) => {
-  if (newVal) {
-    // 日付が変更されたときの処理
-  }
-})
 
 shiftClient.getList({
   endpoint: 'shiftdata',
