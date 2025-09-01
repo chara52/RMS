@@ -9,9 +9,19 @@ const password = ref('')
 const username = ref('')
 const confirmPassword = ref('')
 const errorMessage = ref('')
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
 
 const { signup } = useAuth()
 const router = useRouter()
+
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value
+}
+
+const toggleConfirmPasswordVisibility = () => {
+  showConfirmPassword.value = !showConfirmPassword.value
+}
 
 const handleSignup = async () => {
   if (!email.value) {
@@ -64,8 +74,39 @@ const handleSignup = async () => {
     <form @submit.prevent="handleSignup">
       <input v-model="email" placeholder="メールアドレス" class="input-email" />
       <input v-model="username" placeholder="ユーザーネーム" class="input-username" />
-      <input v-model="password" type="password" placeholder="パスワード" class="input-password" />
-      <input v-model="confirmPassword" type="password" placeholder="パスワード（確認用）" class="input-password-confirmation" />
+      <div class="password-input-container">
+        <input
+          v-model="password"
+          :type="showPassword ? 'text' : 'password'"
+          placeholder="パスワード"
+          class="input-password"
+        />
+        <button
+          type="button"
+          class="password-toggle-button"
+          @click="togglePasswordVisibility"
+        >
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+          <i v-if="!showPassword" class="fa-solid fa-eye-slash"></i>
+          <i v-else class="fa-solid fa-eye"></i>
+        </button>
+      </div>
+      <div class="password-input-container">
+        <input
+          v-model="confirmPassword"
+          :type="showConfirmPassword ? 'text' : 'password'"
+          placeholder="パスワード（確認用）"
+          class="input-password-confirmation"
+        />
+        <button
+          type="button"
+          class="password-toggle-button"
+          @click="toggleConfirmPasswordVisibility"
+        >
+          <i v-if="!showConfirmPassword" class="fa-solid fa-eye-slash"></i>
+          <i v-else class="fa-solid fa-eye"></i>
+        </button>
+      </div>
       <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
       <button class="signup-button">アカウント作成</button>
     </form>
@@ -104,7 +145,6 @@ form {
 }
 
 .input-email,
-.input-password,
 .input-username {
   width: 270px;
   padding: 14px 12px;
@@ -116,15 +156,52 @@ form {
   outline: none;
 }
 
-.input-password-confirmation {
+.password-input-container {
+  position: relative;
   width: 270px;
-  padding: 14px 12px;
+  margin-bottom: 16px;
+}
+
+.password-input-container:last-of-type {
   margin-bottom: 25px;
+}
+
+.input-password {
+  width: 100%;
+  padding: 14px 48px 14px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #f9f9f9;
   font-size: 16px;
   outline: none;
+  display: block;
+}
+
+.input-password-confirmation {
+  width: 100%;
+  padding: 14px 48px 14px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  font-size: 16px;
+  outline: none;
+  display: block;
+}
+
+.password-toggle-button {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 20px;
 }
 
 .error-message {
