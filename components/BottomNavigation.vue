@@ -1,7 +1,10 @@
 <script setup>
-import { useRoute } from 'vue-router'
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute();
+const router = useRouter();
+const isSpinning = ref(false);
 
 defineProps({
   selectedDate: {
@@ -9,15 +12,35 @@ defineProps({
     default: ''
   }
 });
+
+const emit = defineEmits(['setTodayDate']);
+
+const handleHomeClick = () => {
+  if (route.path === '/ReservationTableCompact') {
+    isSpinning.value = true;
+    const today = new Date();
+    const todayStr = today.getFullYear() + '-' +
+                     String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                     String(today.getDate()).padStart(2, '0');
+
+    emit('setTodayDate', todayStr);
+    setTimeout(() => {
+      isSpinning.value = false;
+    }, 500);
+  } else {
+    router.push('/ReservationTableCompact');
+  }
+};
 </script>
 
 <template>
   <nav class="bottom-nav">
-    <router-link to="/ReservationTableCompact" class="nav-item" :class="{ active: route.path === '/ReservationTableCompact' }">
+    <div class="nav-item" :class="{ active: route.path === '/ReservationTableCompact' }" @click="handleHomeClick">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-      <i class="fa-solid fa-house"></i>
+      <i v-if="!isSpinning" class="fa-solid fa-house"></i>
+      <i v-else class="fa-solid fa-rotate-left spinning"></i>
       <span>ホーム</span>
-    </router-link>
+    </div>
     <router-link :to="`/ReservationForm?reset=true&date=${selectedDate}`" class="nav-item" :class="{ active: route.path === '/ReservationForm' }">
       <i class="fa-solid fa-pen"></i>
       <span>入力</span>
@@ -61,5 +84,18 @@ defineProps({
 
 .nav-item.active {
   color: #f9a825;
+}
+
+.nav-item {
+  cursor: pointer;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
 }
 </style>
