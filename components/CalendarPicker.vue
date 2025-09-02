@@ -9,6 +9,10 @@ const props = defineProps({
   rounded: {
     type: Boolean,
     default: true
+  },
+  alignLeft: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -49,10 +53,12 @@ const dateDisplayBoxStyle = computed(() => ({
   border: props.rounded ? '1.5px solid #bbb' : '2px solid rgb(187, 182, 182)',
   fontSize: props.rounded ? '17px' : '16px',
   color: props.rounded ? '#333' : 'black',
-  fontWeight: 'bold',
+  fontWeight: props.rounded ? 'bold' : 'normal',
+  fontFamily: 'inherit',
   margin: props.rounded ? '8px 0 12px 0' : '0',
   padding: props.rounded ? '0' : '10px',
-  boxShadow: props.rounded ? '0 1px 2px rgba(0, 0, 0, 0.03)' : 'none'
+  boxShadow: props.rounded ? '0 1px 2px rgba(0, 0, 0, 0.03)' : 'none',
+  justifyContent: props.alignLeft ? 'flex-start' : 'center'
 }))
 
 function getDayClass(day) {
@@ -191,7 +197,7 @@ onBeforeUnmount(() => {
   width: 100%;
   max-width: 375px;
   border: 1px solid #ccc;
-  padding: 1rem;
+  padding: 1rem 1rem 0.5rem;
   background: white;
   position: absolute;
   left: 50%;
@@ -199,6 +205,9 @@ onBeforeUnmount(() => {
   box-sizing: border-box;
   font-size: 16px;
   z-index: 1000;
+  border-radius: 15px;
+  overflow: hidden;
+  font-family: Arial;
 }
 
 .header {
@@ -211,18 +220,22 @@ onBeforeUnmount(() => {
 }
 
 .header button {
-  background: transparent;
+  display: flex;
+  background: none;
   border: none;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 4px 8px;
-  color: #007bff;
-  font-weight: bold;
+  color: blue;
+  font-size: 30px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
 }
 
-.header button:hover {
-  background-color: #f0f0f0;
-  border-radius: 4px;
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 20px;
 }
 
 .weekdays, .days {
@@ -233,7 +246,8 @@ onBeforeUnmount(() => {
 
 .weekdays span {
   padding: 0.5rem;
-  font-weight: bold;
+  color: rgb(164, 164, 164);
+  font-size: 14px;
 }
 
 .weekdays .sunday {
@@ -245,8 +259,13 @@ onBeforeUnmount(() => {
 }
 
 .days span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  box-sizing: border-box;
+  font-size: 20px;
   cursor: pointer;
-  padding: 0.65rem;
 }
 
 .days span.today {

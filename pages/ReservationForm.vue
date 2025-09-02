@@ -127,7 +127,7 @@ onBeforeUnmount(() => {
           <span class="label-text">日付</span>
           <span class="required-mark">＊</span>
         </label>
-        <CalendarPicker :selectedDate="formData.date" :rounded="false" @dateSelected="handleDateSelected" />
+        <CalendarPicker :selectedDate="formData.date" :rounded="false" :alignLeft="true" @dateSelected="handleDateSelected" />
       </div>
 
       <div class="form-group">
