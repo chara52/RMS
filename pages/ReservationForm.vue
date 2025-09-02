@@ -236,7 +236,7 @@ onBeforeUnmount(() => {
 .calendar {
   width: 100%;
   border: 1px solid #ccc;
-  padding: 1rem 1rem 0.5rem;;
+  padding: 1rem 1rem 0.5rem;
   background: white;
   position: absolute;
   box-sizing: border-box;
