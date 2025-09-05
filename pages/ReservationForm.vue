@@ -36,8 +36,20 @@ const route = useRoute()
 const submitReservation = () => {
   const errors = []
 
-  if (!formData.date) {
-    errors.push('日付が選択されていません。')
+  if (!selectedDate.value) {
+    errors.push('日付を入力してください!')
+  }
+
+  if (!formData.name || formData.name.trim() === '') {
+    errors.push('名前を入力してください!')
+  }
+
+  if (!formData.people || formData.people.trim() === '') {
+    errors.push('人数を入力してください!')
+  }
+
+  if (!formData.time || formData.time.trim() === '') {
+    errors.push('時間を入力してください!')
   }
 
   if (!isPhoneNumberValid.value) {
@@ -135,7 +147,7 @@ onBeforeUnmount(() => {
           <span class="label-text">名前</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" id="name" v-model="formData.name" required />
+        <input type="text" id="name" v-model="formData.name" />
       </div>
 
       <div class="form-group">
@@ -143,7 +155,7 @@ onBeforeUnmount(() => {
           <span class="label-text">人数</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" id="people" v-model="formData.people" required />
+        <input type="text" id="people" v-model="formData.people" />
       </div>
 
       <div class="form-group">
@@ -193,7 +205,7 @@ onBeforeUnmount(() => {
           <span class="label-text">携帯電話番号</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="tel" id="phone" v-model="formData.phone" required />
+        <input type="tel" id="phone" v-model="formData.phone" />
       </div>
 
       <div class="form-group">
@@ -464,6 +476,7 @@ input[type="time"] {
 }
 
 .error-message {
+  white-space: pre-line;
   color: red;
   font-size: 14px;
   margin: 0px;
