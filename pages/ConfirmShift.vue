@@ -7,6 +7,7 @@ const router = useRouter()
 const route = useRoute()
 const shiftData = ref([])
 const startDate = ref('')
+const isSubmitting = ref(false)
 
 const client = createClient({
   serviceDomain: import.meta.env.VITE_SHIFT_DOMAIN,
@@ -59,6 +60,9 @@ const goBackWithDate = () => {
 }
 
 const submitShift = async () => {
+  if (isSubmitting.value) return
+  isSubmitting.value = true
+
   try {
     const allDates = shiftData.value.map((_, i) => getDateWithOffset(i));
 
@@ -111,6 +115,8 @@ const submitShift = async () => {
       : '/ReservationTableCompact');
   } catch (e) {
     alert(e.message || 'エラーが発生しました');
+  } finally {
+    isSubmitting.value = false
   }
 };
 </script>
@@ -129,7 +135,9 @@ const submitShift = async () => {
     </div>
     <div class="button-container">
       <button @click="goBackWithDate" class="go-back-btn">戻る</button>
-      <button @click="submitShift" class="go-back-btn">送信</button>
+      <button @click="submitShift" :disabled="isSubmitting" class="submit-btn">
+        {{ isSubmitting ? '送信中...' : '送信' }}
+      </button>
     </div>
   </div>
 </template>
@@ -183,5 +191,23 @@ li {
   font-size: 17px;
   font-weight: bold;
 }
-</style>
 
+.submit-btn {
+  width: 130px;
+  height: 45px;
+  color: black;
+  background-color: #fbc02d;
+  border: 2px solid #fbc02d;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #ccc;
+  border-color: #ccc;
+}
+</style>

@@ -11,6 +11,7 @@ const confirmPassword = ref('')
 const errorMessage = ref('')
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
+const isSubmitting = ref(false)
 
 const { signup } = useAuth()
 const router = useRouter()
@@ -24,33 +25,42 @@ const toggleConfirmPasswordVisibility = () => {
 }
 
 const handleSignup = async () => {
+  if (isSubmitting.value) return
+  isSubmitting.value = true
+
   if (!email.value) {
     errorMessage.value = 'メールアドレスが入力されていません。'
+    isSubmitting.value = false
     return
   }
 
   if (!username.value) {
     errorMessage.value = 'ユーザーネームが入力されていません。'
+    isSubmitting.value = false
     return
   }
 
   if (!password.value) {
     errorMessage.value = 'パスワードが入力されていません。'
+    isSubmitting.value = false
     return
   }
 
   if (!confirmPassword.value) {
     errorMessage.value = 'パスワード(確認用)が入力されていません。'
+    isSubmitting.value = false
     return
   }
 
   if (!isValidBirthdayFormat(password.value)) {
     errorMessage.value = 'パスワードの形式が正しくありません。'
+    isSubmitting.value = false
     return
   }
 
   if(password.value !== confirmPassword.value){
     errorMessage.value = 'パスワードが一致しません。'
+    isSubmitting.value = false
     return
   }
 
@@ -64,6 +74,8 @@ const handleSignup = async () => {
     } else {
       errorMessage.value = 'アカウント作成に失敗しました。'
     }
+  } finally {
+    isSubmitting.value = false
   }
 }
 </script>
@@ -108,7 +120,9 @@ const handleSignup = async () => {
         </button>
       </div>
       <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
-      <button class="signup-button">アカウント作成</button>
+      <button :disabled="isSubmitting" class="signup-button">
+        {{ isSubmitting ? 'アカウント作成中...' : 'アカウント作成' }}
+      </button>
     </form>
     <p class="link-text">
       すでにアカウントをお持ちの方は
@@ -222,6 +236,12 @@ form {
   cursor: pointer;
   margin-top: 25px;
   transition: background-color 0.3s;
+}
+
+.signup-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #ccc;
 }
 
 .link-text {
