@@ -3,6 +3,7 @@ import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 import TimePicker from '../components/TimePicker.vue'
+import CalendarPicker from '../components/CalendarPicker.vue'
 
 const formData = reactive({
   name: '',
@@ -18,13 +19,6 @@ const formData = reactive({
 
 const errorMessage = ref('')
 const showDetailInput = ref(false)
-const showCalendar = ref(false)
-const selectedDate = ref('')
-
-const today = new Date()
-const year = ref(today.getFullYear())
-const month = ref(today.getMonth())
-const weekdays = ['日', '月', '火', '水', '木', '金', '土']
 
 const courseOptions = computed(() => generateCourseOptions())
 
@@ -32,82 +26,8 @@ const isPhoneNumberValid = computed(() => {
   return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
 })
 
-const firstDay = computed(() => {
-  return new Date(year.value, month.value, 1).getDay()
-})
-
-const daysInMonth = computed(() => {
-  return new Date(year.value, month.value + 1, 0).getDate()
-})
-
-const formattedDate = computed(() => {
-  if (!selectedDate.value) return ''
-  const date = new Date(selectedDate.value)
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  const weekday = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
-  return `${month}月${day}日(${weekday})`
-})
-
-function getDayClass(day) {
-  const date = new Date(year.value, month.value, day)
-  const weekday = date.getDay()
-  if (weekday === 0) return 'sunday'
-  if (weekday === 6) return 'saturday'
-  return ''
-}
-
-function selectDate(day) {
-  selectedDate.value = `${year.value}-${String(month.value + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-}
-
-function applySelectedDate() {
-  if (selectedDate.value) {
-    formData.date = selectedDate.value
-  }
-  showCalendar.value = false
-}
-
-function resetCalendar() {
-  selectedDate.value = ''
-  formData.date = ''
-  showCalendar.value = false
-}
-
-function prevMonth() {
-  if (month.value === 0) {
-    month.value = 11
-    year.value -= 1
-  } else {
-    month.value -= 1
-  }
-}
-
-function nextMonth() {
-  if (month.value === 11) {
-    month.value = 0
-    year.value += 1
-  } else {
-    month.value += 1
-  }
-}
-
-function isToday(day) {
-  const today = new Date()
-  return (
-    day === today.getDate() &&
-    month.value === today.getMonth() &&
-    year.value === today.getFullYear()
-  )
-}
-
-function isSelected(day) {
-  const selected = new Date(selectedDate.value)
-  return (
-    day === selected.getDate() &&
-    month.value === selected.getMonth() &&
-    year.value === selected.getFullYear()
-  )
+function handleDateSelected(date) {
+  formData.date = date
 }
 
 const router = useRouter()
@@ -116,7 +36,7 @@ const route = useRoute()
 const submitReservation = () => {
   const errors = []
 
-  if (!selectedDate.value) {
+  if (!formData.date) {
     errors.push('日付が選択されていません。')
   }
 
@@ -142,17 +62,12 @@ const goBackWithDate = () => {
   }
 }
 
-const calendarRef = ref(null)
+const timePickerRef = ref(null)
 
 function handleClickOutside(event) {
-  const calendar = calendarRef.value
-  const dateInput = event.target.closest('input[readonly]')
-  if (calendar && !calendar.contains(event.target) && !dateInput) {
-    showCalendar.value = false
-  }
-
+  const timePicker = timePickerRef.value
   const timeInput = event.target.closest('#time')
-  if (showTimePicker.value && !event.target.closest('.time-picker') && !timeInput) {
+  if (timePicker && !timePicker.contains(event.target) && !timeInput) {
     showTimePicker.value = false
   }
 }
@@ -184,7 +99,6 @@ onMounted(() => {
 
     if (route.query.date) {
       formData.date = route.query.date
-      selectedDate.value = route.query.date
     }
   } else {
     const saved = localStorage.getItem("formData")
@@ -213,35 +127,7 @@ onBeforeUnmount(() => {
           <span class="label-text">日付</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" :value="formattedDate" @focus="showCalendar = true" readonly />
-        <div v-if="showCalendar" class="calendar" ref="calendarRef">
-          <div class="header">
-            <button type="button" @click="prevMonth">‹</button>
-            <div class="header-title">{{ year }}年{{ month + 1 }}月</div>
-            <button type="button" @click="nextMonth">›</button>
-          </div>
-          <div class="weekdays">
-            <span v-for="(w, i) in weekdays" :key="w" :class="{
-                sunday: i === 0,
-                saturday: i === 6
-              }">
-              {{ w }}
-            </span>
-          </div>
-          <div class="days">
-            <span v-for="n in firstDay" :key="'blank' + n"></span>
-            <span v-for="d in daysInMonth" :key="d" @click="selectDate(d)" :class="[
-                { today: isToday(d), selected: isSelected(d) },
-                getDayClass(d)
-              ]">
-              {{ d }}
-            </span>
-          </div>
-          <div class="calender-buttons">
-            <button type="button" @click="resetCalendar">リセット</button>
-            <button type="button" @click="applySelectedDate">完了</button>
-          </div>
-        </div>
+        <CalendarPicker :selectedDate="formData.date" :rounded="false" :alignLeft="true" @dateSelected="handleDateSelected" />
       </div>
 
       <div class="form-group">
@@ -350,7 +236,7 @@ onBeforeUnmount(() => {
 .calendar {
   width: 100%;
   border: 1px solid #ccc;
-  padding: 1rem 1rem 0.5rem;;
+  padding: 1rem 1rem 0.5rem;
   background: white;
   position: absolute;
   box-sizing: border-box;

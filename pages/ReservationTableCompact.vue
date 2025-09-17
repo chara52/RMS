@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
@@ -8,6 +8,7 @@ import EditShiftData from '../components/EditShiftData.vue'
 import BottomNavigation from '../components/BottomNavigation.vue'
 import { sortPeople } from '../utils/sortPeople.js'
 import { sortSeat } from '../utils/sortSeat.js'
+import CalendarPicker from '../components/CalendarPicker.vue'
 
 defineProps({ reservationsDetail: Array });
 
@@ -35,106 +36,15 @@ const shiftList = ref([]);
 const inputDate = ref('');
 const activeSort = ref('');
 
-const showCalendar = ref(false)
-const selectedDate = ref('')
-const today = new Date()
-const year = ref(today.getFullYear())
-const month = ref(today.getMonth())
-const weekdays = ['日', '月', '火', '水', '木', '金', '土']
-
-const firstDay = computed(() => {
-  return new Date(year.value, month.value, 1).getDay()
-})
-
-const daysInMonth = computed(() => {
-  return new Date(year.value, month.value + 1, 0).getDate()
-})
-
-const formattedDate = computed(() => {
-  if (!selectedDate.value) return ''
-  const date = new Date(selectedDate.value)
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  const weekday = weekdays[date.getDay()]
-  return `${month}月${day}日(${weekday})`
-})
-
-function selectDate(day) {
-  selectedDate.value = `${year.value}-${String(month.value + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-}
-
-function applySelectedDate() {
-  if (selectedDate.value) {
-    inputDate.value = selectedDate.value
-  }
-  showCalendar.value = false
-}
-
-function resetCalendar() {
-  selectedDate.value = ''
-  inputDate.value = ''
-  showCalendar.value = false
-}
-
-function prevMonth() {
-  if (month.value === 0) {
-    month.value = 11
-    year.value -= 1
-  } else {
-    month.value -= 1
-  }
-}
-
-function nextMonth() {
-  if (month.value === 11) {
-    month.value = 0
-    year.value += 1
-  } else {
-    month.value += 1
-  }
-}
-
-function isToday(day) {
-  const today = new Date()
-  return (
-    day === today.getDate() &&
-    month.value === today.getMonth() &&
-    year.value === today.getFullYear()
-  )
-}
-
-function isSelected(day) {
-  const selected = new Date(selectedDate.value)
-  return (
-    day === selected.getDate() &&
-    month.value === selected.getMonth() &&
-    year.value === selected.getFullYear()
-  )
-}
-
 reservationClient.getList({
   endpoint: 'data',
   queries: { limit: 100 }
 })
-  .then((res) => {
-    originalReservations.value = reverseArray(res.contents);
-    reservations.value = [...originalReservations.value];
-  })
-  .catch((err) => console.error(err))
-
-const dateInputGroupRef = ref(null)
-const calendarRef = ref(null)
-
-function handleClickOutside(event) {
-  const calendar = calendarRef.value
-  const dateInputGroup = dateInputGroupRef.value
-  if (
-    calendar && !calendar.contains(event.target) &&
-    dateInputGroup && !dateInputGroup.contains(event.target)
-  ) {
-    showCalendar.value = false
-  }
-}
+.then((res) => {
+   originalReservations.value = reverseArray(res.contents);
+  reservations.value = [...originalReservations.value];
+})
+.catch((err) => console.error(err))
 
 onMounted(() => {
   if (!inputDate.value) {
@@ -144,27 +54,20 @@ onMounted(() => {
   if (route.query.date) {
     inputDate.value = route.query.date
   }
-  document.addEventListener('click', handleClickOutside)
 });
 
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
-
-watch(inputDate, (newVal) => {
-  if (newVal) {
-    selectedDate.value = newVal
-  }
-})
+function handleDateSelected(date) {
+  inputDate.value = date
+}
 
 shiftClient.getList({
   endpoint: 'shiftdata',
   queries: { limit: 100 }
 })
-  .then((res) => {
-    shiftList.value = res.contents
-  })
-  .catch((err) => console.error(err))
+.then((res) => {
+  shiftList.value = res.contents
+})
+.catch((err) => console.error(err))
 
 const filteredReservations = computed(() => {
   if (!inputDate.value) {
@@ -225,33 +128,8 @@ function setTodayDate(todayStr) {
         シフトはありません
       </span>
     </div>
-    <div class="date-input-group" ref="dateInputGroupRef">
-      <div class="date-display-box" @click="showCalendar = true">
-        {{ formattedDate }}
-      </div>
-      <div v-if="showCalendar" class="calendar" ref="calendarRef">
-        <div class="header">
-          <button type="button" @click="prevMonth">‹</button>
-          {{ year }}年{{ month + 1 }}月
-          <button type="button" @click="nextMonth">›</button>
-        </div>
-        <div class="weekdays">
-          <span v-for="w in weekdays" :key="w">{{ w }}</span>
-        </div>
-        <div class="days">
-          <span v-for="n in firstDay" :key="'blank' + n"></span>
-          <span v-for="d in daysInMonth" :key="d" @click="selectDate(d)" :class="{
-            today: isToday(d),
-            selected: isSelected(d)
-          }">
-            {{ d }}
-          </span>
-        </div>
-        <div class="calender-buttons">
-          <button type="button" @click="resetCalendar">リセット</button>
-          <button type="button" @click="applySelectedDate">完了</button>
-        </div>
-      </div>
+    <div class="date-input-group">
+      <CalendarPicker :selectedDate="inputDate" @date-selected="handleDateSelected" />
     </div>
   </div>
 
