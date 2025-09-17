@@ -36,7 +36,7 @@ const route = useRoute()
 const submitReservation = () => {
   const errors = []
 
-  if (!selectedDate.value) {
+  if (!formData.date) {
     errors.push('日付を入力してください!')
   }
 
