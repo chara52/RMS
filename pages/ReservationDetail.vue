@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import DeleteReservation from '../components/DeleteReservation.vue'
 import EditReservation from '../components/EditReservation.vue'
@@ -44,6 +44,23 @@ const handleDelete = () => {
   }
 };
 
+const formattedPhone = computed(() => {
+  const raw = formData.phone.replace(/\D/g, '')
+  if (raw.length === 11) {
+    return `${raw.slice(0, 3)}-${raw.slice(3, 7)}-${raw.slice(7)}`
+  }
+  return formData.phone
+})
+
+const formattedDisplayDate = computed(() => {
+  if (!formData.date) return ''
+  const date = new Date(formData.date)
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const weekday = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
+  return `${month}月${day}日(${weekday})`
+})
+
 const goBackWithDate = () => {
   // 日付が入力されている場合は、その日付をクエリとして渡す
   if (formData.date) {
@@ -63,7 +80,7 @@ const goBackWithDate = () => {
   <EditReservation :id="reservationId" />
 
   <div class="reservation-table">
-    <p><strong>日付 :</strong> {{ formData.date }}</p>
+    <p><strong>日付 :</strong> {{ formattedDisplayDate }}</p>
     <p><strong>名前 :</strong> {{ formData.name }}</p>
     <p><strong>人数 :</strong> {{ formData.people }}</p>
     <p><strong>時間 :</strong> {{ formData.time }}</p>
@@ -85,7 +102,7 @@ const goBackWithDate = () => {
 
     </p>
     <p><strong>詳細 :</strong> {{ formData.info }}</p>
-    <p><strong>電話番号 :</strong> {{ formData.phone }}</p>
+    <p><strong>電話番号 :</strong> {{ formattedPhone }}</p>
     <p><strong>席番号 :</strong> {{ formData.seat }}</p>
   </div>
   <div class="button-container">

@@ -41,7 +41,7 @@ const formattedDate = computed(() => {
   const dateObj = new Date(Number(year), Number(month) - 1, Number(day));
   const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
   const youbi = weekdays[dateObj.getDay()];
-  return `${Number(month)}月${Number(day)}日（${youbi}）`;
+  return `${Number(month)}月${Number(day)}日(${youbi})`;
 });
 
 const addRow = () => {

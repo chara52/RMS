@@ -1,12 +1,14 @@
 <script setup>
-import { reactive, ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
-import FilteredComponent from '../components/FilteredReservation.vue'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter, useRoute } from 'vue-router'
 import EditShiftData from '../components/EditShiftData.vue'
 import BottomNavigation from '../components/BottomNavigation.vue'
+import { sortPeople } from '../utils/sortPeople.js'
+import { sortSeat } from '../utils/sortSeat.js'
+import CalendarPicker from '../components/CalendarPicker.vue'
 
 defineProps({ reservationsDetail: Array });
 
@@ -28,39 +30,36 @@ const shiftClient = createClient({
   apiKey: import.meta.env.VITE_SHIFT_API_KEY,
 })
 
-const reservations = reactive([]);
+const reservations = ref([]);
+const originalReservations = ref([]);
 const shiftList = ref([]);
 const inputDate = ref('');
-const activeSort = ref('time');
+const activeSort = ref('');
 
-// 予約データを取得
 reservationClient.getList({
   endpoint: 'data',
   queries: { limit: 100 }
 })
 .then((res) => {
-  reservations.push(...res.contents)
-  sortTime(reservations)
+   originalReservations.value = reverseArray(res.contents);
+  reservations.value = [...originalReservations.value];
 })
 .catch((err) => console.error(err))
 
-// 初期値設定
 onMounted(() => {
-  const now = new Date()
-  inputDate.value = new Date(now.getTime() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
-
-  // URLクエリから日付を取得して設定
+  if (!inputDate.value) {
+    const now = new Date()
+    inputDate.value = new Date(now.getTime() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
+  }
   if (route.query.date) {
     inputDate.value = route.query.date
   }
 });
 
-// 日付を記録する関数
-const recordDate = (date) => {
-  inputDate.value = date;
-};
+function handleDateSelected(date) {
+  inputDate.value = date
+}
 
-//シフトデータの取得
 shiftClient.getList({
   endpoint: 'shiftdata',
   queries: { limit: 100 }
@@ -74,7 +73,7 @@ const filteredReservations = computed(() => {
   if (!inputDate.value) {
     return reservations;
   }
-  return reservations.filter((reservation) => {
+  return reservations.value.filter((reservation) => {
     const reservationDate = reservation.time.split('T')[0];
     return inputDate.value === reservationDate;
   });
@@ -85,7 +84,7 @@ const filteredShiftList = computed(() => {
     return shiftList.value;
   }
   return shiftList.value.filter((shift) => {
-    const shiftDate = shift.date.split('T')[0]; // 日付フォーマットに合わせて調整してください
+    const shiftDate = shift.date.split('T')[0];
     return inputDate.value === shiftDate;
   });
 });
@@ -95,28 +94,44 @@ function goToEditShift() {
 }
 
 function handleSort(type, sortFunction) {
-  sortFunction(reservations);
-  activeSort.value = type;
+  if (activeSort.value === type) {
+    reservations.value = [...originalReservations.value];
+    activeSort.value = '';
+  } else {
+    sortFunction(reservations.value);
+    activeSort.value = type;
+  }
 }
 
+function reverseArray(arr) {
+  const reversed = [];
+  for (let i = arr.length - 1; i >= 0; i--) {
+    reversed.push(arr[i]);
+  }
+  return reversed;
+}
+
+function setTodayDate(todayStr) {
+  inputDate.value = todayStr;
+}
 </script>
 
 <template>
   <div class="reservation-table-name">
     <h1 class="global-h1">予約表</h1>
-  </div>
-
-  <div class="shift-info-container">
-    <EditShiftData :id="inputDate" />
-    <div v-if="filteredShiftList.length > 0" class="shift-name" @click="goToEditShift">
-      {{ filteredShiftList.map(shift => shift.name).join(', ') }}
+    <div class="shift-info-container">
+      <EditShiftData :id="inputDate" />
+      <div v-if="filteredShiftList.length > 0" class="shift-name" @click="goToEditShift">
+        {{filteredShiftList.map(shift => shift.name).join(', ')}}
+      </div>
+      <span v-else class="shift-name" @click="goToEditShift">
+        シフトはありません
+      </span>
     </div>
-    <span v-else class="shift-name" @click="goToEditShift">
-      シフトはありません
-    </span>
+    <div class="date-input-group">
+      <CalendarPicker :selectedDate="inputDate" @date-selected="handleDateSelected" />
+    </div>
   </div>
-
-  <FilteredComponent v-model:inputDate="inputDate" v-on:update:inputDate="recordDate" />
 
   <div class="sort-button-group">
     <button @click="handleSort('people', sortPeople)" :class="['sort-button', { active: activeSort === 'people' }]">
@@ -168,12 +183,19 @@ function handleSort(type, sortFunction) {
     </div>
   </div>
 
-  <BottomNavigation :selectedDate="inputDate" />
+  <BottomNavigation :selectedDate="inputDate" @setTodayDate="setTodayDate" />
 </template>
 
 <style scoped>
 .reservation-table-name {
   text-align: center;
+}
+
+.date-display {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #333;
 }
 
 .table-wrapper {
@@ -266,5 +288,122 @@ table tr {
 
 .sort-button.active {
   background-color: #f9a825;
+}
+
+.date-input-group {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.calendar {
+  width: 100%;
+  max-width: 375px;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  background: white;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  font-size: 16px;
+  z-index: 1000;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.header button {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.header button:hover {
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.weekdays,
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.days span {
+  cursor: pointer;
+  padding: 0.65rem;
+}
+
+.days span:nth-child(7n+1) {
+  color: #ff4444;
+}
+
+.days span:nth-child(7n) {
+  color: #007bff;
+}
+
+.days span.today {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.days span.selected {
+  color: #007bff;
+  background-color: #cce5ff;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.calender-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.calender-buttons button {
+  background: transparent;
+  color: #007bff;
+  font-size: 16px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.date-display-box {
+  width: 100%;
+  height: 36px;
+  border: 1.5px solid #bbb;
+  border-radius: 12px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  color: #333;
+  cursor: pointer;
+  margin: 8px 0 12px 0;
+  box-sizing: border-box;
+  font-weight: bold;
+  transition: border-color 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.date-display-box:hover {
+  border-color: #888;
+  background: #fff;
 }
 </style>
