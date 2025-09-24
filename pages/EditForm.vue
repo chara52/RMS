@@ -81,11 +81,18 @@ onMounted(() => {
 
 const submitForm = () => {
   const reservationId = route.query.id;
+  const errors = [];
 
-  if (!reservationId) {
-    console.error("予約IDが取得できませんでした");
+  if (!isPhoneNumberValid.value) {
+    errors.push('携帯電話番号は11桁で入力してください!');
+  }
+
+  if (errors.length > 0) {
+    errorMessage.value = errors.join('\n');
     return;
   }
+
+  errorMessage.value = '';
 
   const combinedTime = formData.date && formData.time
     ? `${formData.date}T${formData.time}:00.000Z`
@@ -110,22 +117,22 @@ const submitForm = () => {
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error('HTTPエラー: ${response.status}');
+        throw new Error(`HTTPエラー: ${response.status}`);
       }
       return response.json();
     })
-
-  if (isPhoneNumberValid.value) {
-    errorMessage.value = ''
-    alert('予約が更新されました!')
-    if (formData.date) {
-      router.push(`/ReservationTableCompact?date=${formData.date}`);
-    } else {
-      router.push('/ReservationTableCompact');
-    }
-  } else {
-    errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
-  }
+    .then(() => {
+      alert('予約が更新されました!');
+      if (formData.date) {
+        router.push(`/ReservationTableCompact?date=${formData.date}`);
+      } else {
+        router.push('/ReservationTableCompact');
+      }
+    })
+    .catch((err) => {
+      errorMessage.value = '更新に失敗しました';
+      console.error(err);
+    });
 };
 </script>
 
