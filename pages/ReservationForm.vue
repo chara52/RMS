@@ -17,7 +17,7 @@ const formData = reactive({
   date: '',
 })
 
-const errorMessage = ref('')
+const errors = ref([])
 const showDetailInput = ref(false)
 
 const courseOptions = computed(() => generateCourseOptions())
@@ -34,36 +34,37 @@ const router = useRouter()
 const route = useRoute()
 
 const submitReservation = () => {
-  const errors = []
+  errors.value = []
 
   if (!formData.date) {
-    errors.push('日付を入力してください!')
+    errors.value.push({ field: 'date', message: '日付を入力してください!'})
   }
 
   if (!formData.name || formData.name.trim() === '') {
-    errors.push('名前を入力してください!')
+    errors.value.push({ field: 'name', message: '名前を入力してください!'})
   }
 
   if (!formData.people || formData.people.trim() === '') {
-    errors.push('人数を入力してください!')
+    errors.value.push({ field: 'people', message: '人数を入力してください!'})
   }
 
   if (!formData.time || formData.time.trim() === '') {
-    errors.push('時間を入力してください!')
+    errors.value.push({ field: 'time', message: '時間を入力してください!'})
   }
 
   if (!isPhoneNumberValid.value) {
-    errors.push('携帯電話番号は11桁で入力してください!')
+    errors.value.push({ field: 'phone', message: '携帯電話番号は11桁で入力してください!'})
   }
 
-  if (errors.length > 0) {
-    errorMessage.value = errors.join('\n')
-    return
-  }
-
-  errorMessage.value = ''
+  if(errors.value.length === 0) {
   localStorage.setItem("formData", JSON.stringify(formData))
   router.push('/ConfirmReservation')
+  }
+}
+
+const getError = (field) => {
+  const err = errors.value.find(err => err.field === field)
+  return err ? err.message : ''
 }
 
 const goBackWithDate = () => {
@@ -139,7 +140,8 @@ onBeforeUnmount(() => {
           <span class="label-text">日付</span>
           <span class="required-mark">＊</span>
         </label>
-        <CalendarPicker :selectedDate="formData.date" :rounded="false" :alignLeft="true" @dateSelected="handleDateSelected" />
+        <CalendarPicker :selectedDate="formData.date" :rounded="false" :alignLeft="true" @dateSelected="handleDateSelected" :class="{ 'input-error': getError('date') }" />
+        <p v-if="getError('date')" class="error">{{ getError('date') }}</p>
       </div>
 
       <div class="form-group">
@@ -147,7 +149,8 @@ onBeforeUnmount(() => {
           <span class="label-text">名前</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" id="name" v-model="formData.name" />
+        <input type="text" id="name" v-model="formData.name" :class="{ 'input-error': getError('name') }" />
+        <p v-if="getError('name')" class="error">{{ getError('name') }}</p>
       </div>
 
       <div class="form-group">
@@ -155,7 +158,8 @@ onBeforeUnmount(() => {
           <span class="label-text">人数</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" id="people" v-model="formData.people" />
+        <input type="text" id="people" v-model="formData.people" :class="{ 'input-error': getError('people') }" />
+        <p v-if="getError('people')" class="error">{{ getError('people') }}</p>
       </div>
 
       <div class="form-group">
@@ -163,12 +167,13 @@ onBeforeUnmount(() => {
           <span class="label-text">時間</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" id="time" :value="formData.time" readonly @click="openCustomTimePicker" />
+        <input type="text" id="time" :value="formData.time" readonly @click="openCustomTimePicker" :class="{ 'input-error': getError('time') }" />
         <TimePicker
           v-if="showTimePicker"
           v-model="formData.time"
           @apply="handleTimePickerApply"
         />
+        <p v-if="getError('time')" class="error">{{ getError('time') }}</p>
       </div>
 
       <div class="form-group row">
@@ -205,7 +210,8 @@ onBeforeUnmount(() => {
           <span class="label-text">携帯電話番号</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="tel" id="phone" v-model="formData.phone" />
+        <input type="tel" id="phone" v-model="formData.phone" :class="{ 'input-error': getError('phone') }" />
+        <p v-if="getError('phone')" class="error">{{ getError('phone') }}</p>
       </div>
 
       <div class="form-group">
@@ -214,8 +220,6 @@ onBeforeUnmount(() => {
         </label>
         <input type="text" id="seat" v-model="formData.seat" />
       </div>
-
-      <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
 
       <div class="button-container">
         <button type="button" @click="goBackWithDate" class="backbutton">戻る</button>
@@ -475,10 +479,14 @@ input[type="time"] {
   font-weight: bold;
 }
 
-.error-message {
+.error {
   white-space: pre-line;
   color: red;
   font-size: 14px;
   margin: 0px;
+}
+
+.input-error {
+  border: 2px solid red !important;
 }
 </style>
