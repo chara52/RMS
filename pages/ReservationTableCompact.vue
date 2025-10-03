@@ -9,6 +9,7 @@ import BottomNavigation from '../components/BottomNavigation.vue'
 import { sortPeople } from '../utils/sortPeople.js'
 import { sortSeat } from '../utils/sortSeat.js'
 import CalendarPicker from '../components/CalendarPicker.vue'
+import MenuButton from '../components/MenuButton.vue'
 
 defineProps({ reservationsDetail: Array });
 
@@ -71,11 +72,19 @@ shiftClient.getList({
 
 const filteredReservations = computed(() => {
   if (!inputDate.value) {
-    return reservations;
+    return reservations.value.filter((reservation) => reservation.info !== '休み');
   }
   return reservations.value.filter((reservation) => {
     const reservationDate = reservation.time.split('T')[0];
-    return inputDate.value === reservationDate;
+    return inputDate.value === reservationDate && reservation.info !== '休み';
+  });
+});
+
+const isHoliday = computed(() => {
+  if (!inputDate.value) return false;
+  return reservations.value.some((reservation) => {
+    const reservationDate = reservation.time.split('T')[0];
+    return inputDate.value === reservationDate && reservation.info === '休み';
   });
 });
 
@@ -117,6 +126,7 @@ function setTodayDate(todayStr) {
 </script>
 
 <template>
+  <MenuButton />
   <div class="reservation-table-name">
     <h1 class="global-h1">予約表</h1>
     <div class="shift-info-container">
@@ -179,7 +189,7 @@ function setTodayDate(todayStr) {
     </div>
 
     <div v-else>
-      <p class="no-reservations-message">予約はありません</p>
+      <p class="no-reservations-message">{{ isHoliday ? '休み' : '予約はありません' }}</p>
     </div>
   </div>
 

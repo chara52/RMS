@@ -52,6 +52,12 @@ onUnmounted(() => {
         <span class="menu__text">シフト作成</span>
       </div>
     </router-link>
+    <router-link to="/HolidaySettings" class="btn-link">
+      <div class="menu__item">
+        <i class="fa-solid fa-calendar-xmark"></i>
+        <span class="menu__text">休み設定</span>
+      </div>
+    </router-link>
   </div>
 </template>
 
