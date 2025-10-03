@@ -147,11 +147,9 @@ function setTodayDate(todayStr) {
     <button @click="handleSort('people', sortPeople)" :class="['sort-button', { active: activeSort === 'people' }]">
       人数順
     </button>
-
     <button @click="handleSort('seat', sortSeat)" :class="['sort-button', { active: activeSort === 'seat' }]">
       卓順
     </button>
-
     <button @click="handleSort('time', sortTime)" :class="['sort-button', { active: activeSort === 'time' }]">
       時間順
     </button>
@@ -419,5 +417,18 @@ table tr {
 .date-display-box:hover {
   border-color: #888;
   background: #fff;
+}
+
+.reservation-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.closed-message {
+  color: red;
+  font-size: 20px;
+  margin: 40px 0;
+  text-align: center;
 }
 </style>
