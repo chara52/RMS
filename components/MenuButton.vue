@@ -27,31 +27,7 @@ onUnmounted(() => {
     <span class="icon">&#9776;</span>
   </button>
   <div ref="menuRef" class="menu" v-bind:class="{ 'is-active': isActive }">
-    <router-link to="/HomePage" class="btn-link">
-      <div class="menu__item">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <i class="fa-solid fa-house"></i>
-        <span class="menu__text">ホーム</span>
-      </div>
-    </router-link>
-    <router-link to="/BeforeForm" class="btn-link">
-      <div class="menu__item">
-        <i class="fa-solid fa-pen"></i>
-        <span class="menu__text">新規入力</span>
-      </div>
-    </router-link>
-    <router-link to="/ReservationTableCompact" class="btn-link">
-      <div class="menu__item">
-        <i class="fa-solid fa-table"></i>
-        <span class="menu__text">予約表</span>
-      </div>
-    </router-link>
-    <router-link to="/Shift?reset=true" class="btn-link">
-      <div class="menu__item">
-        <i class="fa-solid fa-user-pen"></i>
-        <span class="menu__text">シフト作成</span>
-      </div>
-    </router-link>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <router-link to="/HolidaySettings" class="btn-link">
       <div class="menu__item">
         <i class="fa-solid fa-calendar-xmark"></i>

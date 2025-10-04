@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import { useRouter } from 'vue-router'
 import DateRangePicker from '../components/DateRangePicker.vue'
+import BottomNavigation from '../components/BottomNavigation.vue'
 
 const router = useRouter()
 
@@ -81,6 +82,11 @@ async function saveHolidaySettings() {
 function goBack() {
   router.push('/ReservationTableCompact')
 }
+
+// eslint-disable-next-line no-unused-vars
+function setTodayDate(todayStr) {
+  // BottomNavigationからの日付設定は不要なので空実装
+}
 </script>
 
 <template>
@@ -119,6 +125,8 @@ function goBack() {
       </div>
     </div>
   </div>
+
+  <BottomNavigation :selectedDate="startDate" @setTodayDate="setTodayDate" />
 </template>
 
 <style scoped>
