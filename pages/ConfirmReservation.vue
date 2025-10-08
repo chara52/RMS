@@ -81,7 +81,10 @@ const formattedDisplayDate = computed(() => {
 
 <template>
   <div class="reservation-form">
-    <h1 class="global-h1">予約確認</h1>
+    <div class="header-row">
+      <button type="button" @click="goBackWithDate" class="backbutton">＜</button>
+      <h1 class="global-h1">予約確認</h1>
+    </div>
     <form @submit.prevent="submitReservation">
       <div class="form-group">
         <label for="date" class="label-flex">
@@ -157,7 +160,6 @@ const formattedDisplayDate = computed(() => {
       </div>
 
       <div class="button-container">
-        <button type="button" @click="router.push('/ReservationForm')" class="backbutton">戻る</button>
         <button type="submit" class="reservebutton">予約</button>
       </div>
     </form>
@@ -165,6 +167,13 @@ const formattedDisplayDate = computed(() => {
 </template>
 
 <style scoped>
+.header-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .button-container {
   display: flex;
   justify-content: center;
@@ -231,8 +240,10 @@ const formattedDisplayDate = computed(() => {
 }
 
 .backbutton {
-  width: 130px;
-  height: 45px;
+  position: absolute;
+  left: 0;
+  width: 60px;
+  height: 40px;
   color: black;
   background-color: #fbc02d;
   border: 2px solid #fbc02d;
