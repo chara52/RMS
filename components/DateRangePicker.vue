@@ -16,12 +16,12 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['datesSelected'])
+const emit = defineEmits(['datesSelected', 'calendarToggle'])
 
 const showCalendar = ref(false)
 const selectedStartDate = ref(props.startDate)
 const selectedEndDate = ref(props.endDate)
-const selectionMode = ref('start') // 'start' or 'end'
+const selectionMode = ref('start')
 
 const today = new Date()
 const year = ref(today.getFullYear())
@@ -90,7 +90,6 @@ function selectDate(day) {
     if (end >= start) {
       selectedEndDate.value = dateStr
     } else {
-      // 開始日より前の日を選んだ場合は、開始日を入れ替える
       selectedEndDate.value = selectedStartDate.value
       selectedStartDate.value = dateStr
     }
@@ -105,6 +104,7 @@ function applySelectedDates() {
     })
   }
   showCalendar.value = false
+  emit('calendarToggle', false)
 }
 
 function resetCalendar() {
@@ -113,6 +113,7 @@ function resetCalendar() {
   selectionMode.value = 'start'
   emit('datesSelected', { startDate: '', endDate: '' })
   showCalendar.value = false
+  emit('calendarToggle', false)
 }
 
 function prevMonth() {
@@ -179,6 +180,7 @@ function handleClickOutside(event) {
   const dateInput = event.target.closest('.date-display-box')
   if (calendar && !calendar.contains(event.target) && !dateInput) {
     showCalendar.value = false
+    emit('calendarToggle', false)
   }
 }
 
@@ -193,7 +195,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="calendar-picker">
-    <div class="date-display-box" @click="showCalendar = true" :style="dateDisplayBoxStyle">
+    <div class="date-display-box" @click="showCalendar = true; emit('calendarToggle', true)" :style="dateDisplayBoxStyle">
       {{ formattedDateRange || '期間を選択' }}
     </div>
     <div v-if="showCalendar" class="calendar" ref="calendarRef">
@@ -253,7 +255,7 @@ onBeforeUnmount(() => {
 
 .calendar {
   width: 100%;
-  max-width: 375px;
+  max-width: 420px;
   border: 1px solid #ccc;
   padding: 1rem 1rem 0.5rem;
   background: white;
@@ -327,10 +329,12 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 45px;
   height: 45px;
   box-sizing: border-box;
   font-size: 20px;
   cursor: pointer;
+  margin: 0 auto;
 }
 
 .days span.today {
