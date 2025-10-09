@@ -77,6 +77,14 @@ const formattedDisplayDate = computed(() => {
   const weekday = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
   return `${month}月${day}日(${weekday})`
 })
+
+const goBackWithDate = () => {
+  if (formData.date) {
+    router.push(`/ReservationForm?date=${formData.date}`)
+  } else {
+    router.push('/ReservationForm')
+  }
+}
 </script>
 
 <template>
