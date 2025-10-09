@@ -133,7 +133,10 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="reservation-form">
-    <h1 class="global-h1">新規受付</h1>
+    <div class="header-row">
+      <button type="button" @click="goBackWithDate" class="backbutton">＜</button>
+      <h1 class="global-h1">新規受付</h1>
+    </div>
     <form @submit.prevent="submitReservation">
       <div class="form-group">
         <label for="date" class="label-flex">
@@ -222,7 +225,6 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="button-container">
-        <button type="button" @click="goBackWithDate" class="backbutton">戻る</button>
         <button type="submit" class="reservebutton">確認</button>
       </div>
     </form>
@@ -236,6 +238,13 @@ onBeforeUnmount(() => {
   margin: -10px -7px;
   padding: 20px;
   background-color: #fff9e6;
+}
+
+.header-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .global-h1 {
@@ -456,8 +465,10 @@ input[type="time"] {
 }
 
 .backbutton {
-  width: 130px;
-  height: 45px;
+  position: absolute;
+  left: 0;
+  width: 60px;
+  height: 40px;
   color: black;
   background-color: #fbc02d;
   border: 2px solid #fbc02d;
