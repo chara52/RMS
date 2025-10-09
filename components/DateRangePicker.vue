@@ -312,7 +312,10 @@ onBeforeUnmount(() => {
 }
 
 .weekdays span {
-  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0;
   color: rgb(164, 164, 164);
   font-size: 14px;
 }
@@ -329,12 +332,11 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 45px;
   height: 45px;
   box-sizing: border-box;
   font-size: 20px;
   cursor: pointer;
-  margin: 0 auto;
+  position: relative;
 }
 
 .days span.today {
@@ -347,16 +349,25 @@ onBeforeUnmount(() => {
   font-weight: normal;
 }
 
-.days span.in-range {
+.days span.in-range:not(.start-date):not(.end-date) {
   background-color: #e6f2ff;
 }
 
 .days span.start-date,
 .days span.end-date {
   color: white;
+  font-weight: bold;
+}
+
+.days span.start-date::before,
+.days span.end-date::before {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
   background-color: rgb(42, 152, 254);
   border-radius: 50%;
-  font-weight: bold;
+  z-index: -1;
 }
 
 .days .sunday {

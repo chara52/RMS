@@ -141,9 +141,8 @@ async function saveHolidaySettings() {
     const start = new Date(startDate.value)
     const end = new Date(endDate.value)
 
-    // 開始日から終了日までの各日付に対してデータを作成
+    // 開始日から終了日までの各日付に対してデータを作成（順次実行で遅延を入れる）
     const currentDate = new Date(start)
-    const promises = []
 
     while (currentDate <= end) {
       const dateStr = currentDate.toISOString().split('T')[0]
@@ -160,17 +159,16 @@ async function saveHolidaySettings() {
         info: '休み'
       }
 
-      promises.push(
-        client.create({
-          endpoint: 'data',
-          content: holidayData
-        })
-      )
+      await client.create({
+        endpoint: 'data',
+        content: holidayData
+      })
+
+      // レート制限回避のため100ms待機
+      await new Promise(resolve => setTimeout(resolve, 100))
 
       currentDate.setDate(currentDate.getDate() + 1)
     }
-
-    await Promise.all(promises)
 
     alert('休み設定を保存しました')
 
@@ -218,20 +216,20 @@ async function updatePeriod() {
   isSubmitting.value = true
 
   try {
-    // 既存の期間を削除
-    const deletePromises = editingPeriod.value.ids.map(id =>
-      client.delete({
+    // 既存の期間を削除（順次実行で遅延を入れる）
+    for (const id of editingPeriod.value.ids) {
+      await client.delete({
         endpoint: 'data',
         contentId: id
       })
-    )
-    await Promise.all(deletePromises)
+      // レート制限回避のため100ms待機
+      await new Promise(resolve => setTimeout(resolve, 100))
+    }
 
-    // 新しい期間を作成
+    // 新しい期間を作成（順次実行で遅延を入れる）
     const start = new Date(editStartDate.value)
     const end = new Date(editEndDate.value)
     const currentDate = new Date(start)
-    const createPromises = []
 
     while (currentDate <= end) {
       const dateStr = currentDate.toISOString().split('T')[0]
@@ -248,17 +246,16 @@ async function updatePeriod() {
         info: '休み'
       }
 
-      createPromises.push(
-        client.create({
-          endpoint: 'data',
-          content: holidayData
-        })
-      )
+      await client.create({
+        endpoint: 'data',
+        content: holidayData
+      })
+
+      // レート制限回避のため100ms待機
+      await new Promise(resolve => setTimeout(resolve, 100))
 
       currentDate.setDate(currentDate.getDate() + 1)
     }
-
-    await Promise.all(createPromises)
 
     alert('休み設定を更新しました')
 
@@ -284,14 +281,15 @@ async function deletePeriod(period) {
   isSubmitting.value = true
 
   try {
-    const promises = period.ids.map(id =>
-      client.delete({
+    // 順次実行で遅延を入れる
+    for (const id of period.ids) {
+      await client.delete({
         endpoint: 'data',
         contentId: id
       })
-    )
-
-    await Promise.all(promises)
+      // レート制限回避のため100ms待機
+      await new Promise(resolve => setTimeout(resolve, 100))
+    }
 
     alert('休み設定を削除しました')
 
