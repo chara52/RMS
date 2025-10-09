@@ -21,6 +21,7 @@ const editingPeriod = ref(null)
 const editStartDate = ref('')
 const editEndDate = ref('')
 const isEditCalendarOpen = ref(false)
+const deletingPeriodIndex = ref(null)
 
 async function fetchHolidays() {
   try {
@@ -129,9 +130,33 @@ function handleEditCalendarToggle(isOpen) {
   isEditCalendarOpen.value = isOpen
 }
 
+// 日付の重複チェック
+function checkDateOverlap(newStartDate, newEndDate) {
+  const newStart = new Date(newStartDate)
+  const newEnd = new Date(newEndDate)
+
+  // 既存の休みデータと重複チェック
+  for (const holiday of holidays.value) {
+    const existingDate = new Date(holiday.date)
+
+    // 新規期間に既存の日付が含まれているかチェック
+    if (existingDate >= newStart && existingDate <= newEnd) {
+      return true
+    }
+  }
+
+  return false
+}
+
 async function saveHolidaySettings() {
   if (!startDate.value || !endDate.value) {
     alert('開始日と終了日を選択してください')
+    return
+  }
+
+  // 重複チェック
+  if (checkDateOverlap(startDate.value, endDate.value)) {
+    alert('選択した期間は既に休み設定されています')
     return
   }
 
@@ -273,12 +298,12 @@ async function updatePeriod() {
 }
 
 // 期間を削除
-async function deletePeriod(period) {
+async function deletePeriod(period, index) {
   if (!confirm(`${formatPeriod(period)} の休み設定を削除しますか？`)) {
     return
   }
 
-  isSubmitting.value = true
+  deletingPeriodIndex.value = index
 
   try {
     // 順次実行で遅延を入れる
@@ -299,7 +324,7 @@ async function deletePeriod(period) {
     console.error('休み設定の削除に失敗しました:', error)
     alert('休み設定の削除に失敗しました')
   } finally {
-    isSubmitting.value = false
+    deletingPeriodIndex.value = null
   }
 }
 
@@ -406,17 +431,17 @@ onMounted(() => {
               type="button"
               class="edit-btn"
               @click="startEdit(period)"
-              :disabled="isSubmitting"
+              :disabled="deletingPeriodIndex !== null"
             >
               編集
             </button>
             <button
               type="button"
               class="delete-btn"
-              @click="deletePeriod(period)"
-              :disabled="isSubmitting"
+              @click="deletePeriod(period, index)"
+              :disabled="deletingPeriodIndex !== null"
             >
-              削除
+              {{ deletingPeriodIndex === index ? '削除中...' : '削除' }}
             </button>
           </div>
         </div>
@@ -523,22 +548,26 @@ onMounted(() => {
 
 .holiday-item {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  padding: 15px;
+  padding: 20px;
   background: white;
   border-radius: 8px;
   border: 1px solid #ddd;
+  gap: 15px;
 }
 
 .period-info {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
+  text-align: center;
 }
 
 .period-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
 }
 
 .edit-btn,
