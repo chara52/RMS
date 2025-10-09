@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted} from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
@@ -34,8 +34,9 @@ const shiftClient = createClient({
 const reservations = ref([]);
 const originalReservations = ref([]);
 const shiftList = ref([]);
-const inputDate = ref('');
+const inputDate = ref('') // 選択中の日付
 const activeSort = ref('');
+const isClosed = ref(false) // 休業日状態
 
 reservationClient.getList({
   endpoint: 'data',
@@ -123,12 +124,30 @@ function reverseArray(arr) {
 function setTodayDate(todayStr) {
   inputDate.value = todayStr;
 }
+
+function toggleClosed() {
+  if (!isClosed.value) {
+    if (confirm('本当にこの日を休業日にしますか？')) {
+      isClosed.value = true
+    }
+  } else {
+    if (confirm('休業日を解除しますか？')) {
+      isClosed.value = false
+    }
+  }
+}
 </script>
 
 <template>
   <MenuButton />
   <div class="reservation-table-name">
     <h1 class="global-h1">予約表</h1>
+    <div class="toggle-container" @click="toggleClosed">
+      <span class="toggle-label">{{ isClosed ? '休業日' : '営業中' }}</span>
+      <div class="toggle-switch" :class="{ 'is-closed': isClosed }">
+        <div class="toggle-slider"></div>
+      </div>
+    </div>
     <div class="shift-info-container">
       <EditShiftData :id="inputDate" />
       <div v-if="filteredShiftList.length > 0" class="shift-name" @click="goToEditShift">
