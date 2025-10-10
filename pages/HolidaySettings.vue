@@ -22,6 +22,7 @@ const editStartDate = ref('')
 const editEndDate = ref('')
 const isEditCalendarOpen = ref(false)
 const deletingPeriodIndex = ref(null)
+const showEditButtons = ref(false)
 
 async function fetchHolidays() {
   try {
@@ -124,6 +125,7 @@ function handleDatesSelected(dates) {
 function handleEditDatesSelected(dates) {
   editStartDate.value = dates.startDate
   editEndDate.value = dates.endDate
+  showEditButtons.value = true
 }
 
 function handleEditCalendarToggle(isOpen) {
@@ -216,6 +218,7 @@ function startEdit(period) {
   editStartDate.value = period.startDate
   editEndDate.value = period.endDate
   isEditMode.value = true
+  showEditButtons.value = false
 }
 
 // 編集をキャンセル
@@ -225,6 +228,7 @@ function cancelEdit() {
   editStartDate.value = ''
   editEndDate.value = ''
   isEditCalendarOpen.value = false
+  showEditButtons.value = false
 }
 
 // 期間を更新
@@ -359,7 +363,7 @@ onMounted(() => {
             @calendarToggle="handleEditCalendarToggle"
           />
         </div>
-        <div class="modal-buttons">
+        <div v-if="showEditButtons" class="modal-buttons">
           <button type="button" class="cancel-button" @click="cancelEdit">
             キャンセル
           </button>
@@ -376,7 +380,7 @@ onMounted(() => {
     </div>
 
     <!-- 新規追加エリア -->
-    <div class="content section">
+    <div class="content section new-section">
       <h2 class="section-title">新規追加</h2>
       <div class="description">
         休みにする期間を選択してください
@@ -410,7 +414,7 @@ onMounted(() => {
     </div>
 
     <!-- 既存の休み設定一覧 -->
-    <div class="content section">
+    <div class="content section existing-section">
       <h2 class="section-title">既存の休み設定</h2>
 
       <div v-if="holidayPeriods.length === 0" class="no-data">
@@ -454,24 +458,44 @@ onMounted(() => {
 
 <style scoped>
 .holiday-settings {
-  padding: 20px;
   max-width: 100%;
-  margin: 0 auto;
+  margin: -10px -7px;
   margin-bottom: 100px;
+  padding: 20px;
+}
+
+.global-h1 {
+  text-align: center;
+  font-size: 20px;
+  margin-top: -7px;
+  margin-bottom: 20px;
 }
 
 .section {
-  margin-bottom: 40px;
-  padding: 20px;
-  background: #f9f9f9;
+  margin-bottom: 50px;
+  padding: 25px;
   border-radius: 12px;
+  border: 2px solid #ddd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.new-section {
+  background: #fffbea;
+  border-color: #f9a825;
+}
+
+.existing-section {
+  background: #e3f2fd;
+  border-color: #42a5f5;
 }
 
 .section-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #ddd;
 }
 
 .content {

@@ -189,7 +189,7 @@ function setTodayDate(todayStr) {
     </div>
 
     <div v-else>
-      <p class="no-reservations-message">{{ isHoliday ? '休み' : '予約はありません' }}</p>
+      <p class="no-reservations-message" :class="{ 'holiday-text': isHoliday }">{{ isHoliday ? '休み' : '予約はありません' }}</p>
     </div>
   </div>
 
@@ -262,6 +262,10 @@ table tr {
   text-align: center;
   font-size: 22px;
   margin-top: 45px;
+}
+
+.holiday-text {
+  color: red;
 }
 
 .shift-info-container {
