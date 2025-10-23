@@ -16,6 +16,20 @@ const emit = defineEmits(['toggle']);
 function onToggle() {
   emit('toggle', props.date);
 }
+
+/*function toggleClosed(date) {
+  if (!isClosed.value) {
+    if (confirm(`${date} を休業日にしますか？`)) {
+      closedDays.value[date] = true
+    }
+  } else {
+    if (confirm(`${date} の休業日を解除しますか？`)) {
+      closedDays.value[date] = false
+    }
+  }
+  // localStorageに保存
+  localStorage.setItem('closedDays', JSON.stringify(closedDays.value))
+}*/
 </script>
 
 <style scoped>
