@@ -245,13 +245,13 @@ onBeforeUnmount(() => {
   top: 0;
   left: 0;
   right: 0;
-  height: 50px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #F5F5F5;
   border-bottom: 1px solid #ddd;
-  margin: 0;
+  margin: -18px -18px 0 -20px;
 }
 
 .global-h1 {
