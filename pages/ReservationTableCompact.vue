@@ -418,17 +418,4 @@ table tr {
   border-color: #888;
   background: #fff;
 }
-
-.reservation-list-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.closed-message {
-  color: red;
-  font-size: 20px;
-  margin: 40px 0;
-  text-align: center;
-}
 </style>
