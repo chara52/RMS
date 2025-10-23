@@ -242,9 +242,16 @@ onBeforeUnmount(() => {
 
 .header-row {
   position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #F5F5F5;
+  border-bottom: 1px solid #ddd;
+  margin: 0;
 }
 
 .global-h1 {
@@ -469,13 +476,14 @@ input[type="time"] {
   left: 0;
   width: 60px;
   height: 40px;
-  color: black;
-  background-color: #fbc02d;
-  border: 2px solid #fbc02d;
+  color: #fbc02d;
+  background-color: #F5F5F5;
+  border: 2px solid #F5F5F5;
   border-radius: 12px;
   cursor: pointer;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: bold;
+  margin-top: -7px;
 }
 
 .reservebutton {
