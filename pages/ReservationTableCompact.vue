@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted} from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
@@ -147,11 +147,9 @@ function setTodayDate(todayStr) {
     <button @click="handleSort('people', sortPeople)" :class="['sort-button', { active: activeSort === 'people' }]">
       人数順
     </button>
-
     <button @click="handleSort('seat', sortSeat)" :class="['sort-button', { active: activeSort === 'seat' }]">
       卓順
     </button>
-
     <button @click="handleSort('time', sortTime)" :class="['sort-button', { active: activeSort === 'time' }]">
       時間順
     </button>
