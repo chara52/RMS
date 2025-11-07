@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { createClient } from 'microcms-js-sdk'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 import TimePicker from '../components/TimePicker.vue'
 import CalendarPicker from '../components/CalendarPicker.vue'
@@ -33,7 +34,12 @@ function handleDateSelected(date) {
 const router = useRouter()
 const route = useRoute()
 
-const submitReservation = () => {
+const client = createClient({
+  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
+  apiKey: import.meta.env.VITE_API_KEY,
+});
+
+const submitReservation = async () => {
   errors.value = []
 
   if (!formData.date) {
@@ -56,9 +62,28 @@ const submitReservation = () => {
     errors.value.push({ field: 'phone', message: '携帯電話番号は11桁で入力してください!'})
   }
 
+  try {
+    if (formData.date) {
+      const timeStr = `${formData.date}T00:00:00`
+      const res = await client.getList({
+        endpoint: 'data',
+        queries: {
+          filters: `time[equals]${timeStr}&&info[equals]休み`,
+          limit: 1
+        }
+      })
+      if (res && res.contents && res.contents.length > 0) {
+        errors.value.push({ field: 'date', message: '選択した日は休業日のため予約できません。別の日を選んでください。' })
+      }
+    }
+  } catch (err) {
+    console.error('休業日チェックに失敗しました', err)
+    errors.value.push({ field: 'date', message: '休業日です。違う日程を選択して下さい' })
+  }
+
   if(errors.value.length === 0) {
-  localStorage.setItem("formData", JSON.stringify(formData))
-  router.push('/ConfirmReservation')
+    localStorage.setItem("formData", JSON.stringify(formData))
+    router.push('/ConfirmReservation')
   }
 }
 
