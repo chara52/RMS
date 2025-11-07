@@ -257,7 +257,7 @@ onBeforeUnmount(() => {
 .global-h1 {
   font-size: 20px;
   text-align: center;
-  margin-top: -7px;
+  margin-top: 0px;
 }
 
 .form-group {
@@ -479,7 +479,6 @@ input[type="time"] {
   color: #fbc02d;
   background-color: #F5F5F5;
   border: 2px solid #F5F5F5;
-  border-radius: 12px;
   cursor: pointer;
   font-size: 20px;
   font-weight: bold;

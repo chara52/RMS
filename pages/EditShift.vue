@@ -125,8 +125,10 @@ const submitShift = async () => {
 
 <template>
   <div class="shift-edit">
-    <h1 class="global-h1">シフト編集</h1>
-
+    <div class="header-row">
+        <button type="button" @click="goBackWithDate" class="backbutton">＜</button>
+      <h1 class="global-h1">シフト編集</h1>
+    </div>
     <div v-if="editableNames.length > 0">
       <h2>{{ formattedDate }}</h2>
 
@@ -140,7 +142,6 @@ const submitShift = async () => {
 
       <button class="add-btn" @click="addRow">＋ 行を追加</button>
       <div class="button-container">
-        <button class="back-button" @click="goBackWithDate">戻る</button>
         <button class="submit-button" @click="submitShift">更新</button>
       </div>
     </div>
@@ -150,7 +151,6 @@ const submitShift = async () => {
       この日に該当するシフトはありません
       <button class="add-btn" @click="addRow">＋ 行を追加</button>
       <div class="button-container">
-        <button class="back-button" @click="goBackWithDate">戻る</button>
         <button class="submit-button" @click="submitShift">更新</button>
       </div>
     </div>
@@ -158,6 +158,32 @@ const submitShift = async () => {
 </template>
 
 <style scoped>
+.shift-edit {
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.header-row {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5F5F5;
+  border-bottom: 1px solid #ddd;
+  margin: -30px -30px 0 -30px;
+}
+
+.global-h1 {
+  font-size: 20px;
+  text-align: center;
+  margin-top: 0px;
+}
+
 h2 {
   font-size: 25px;
   font-weight: bold;
@@ -222,8 +248,21 @@ input[type="text"] {
   transform: translateX(-50%);
 }
 
-.submit-button,
-.back-button {
+.backbutton {
+  position: absolute;
+  left: 0;
+  width: 60px;
+  height: 40px;
+  color: #fbc02d;
+  background-color: #F5F5F5;
+  border: 2px solid #F5F5F5;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: -8px;
+}
+
+.submit-button {
   width: 130px;
   height: 45px;
   color: black;
