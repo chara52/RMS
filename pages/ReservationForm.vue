@@ -170,8 +170,7 @@ onBeforeUnmount(() => {
           <span class="label-text">日付</span>
           <span class="required-mark">＊</span>
         </label>
-        <CalendarPicker :selectedDate="formData.date" :rounded="false" :alignLeft="true"
-          @dateSelected="handleDateSelected" :class="{ 'input-error': getError('date') }" />
+        <CalendarPicker :selectedDate="formData.date" :rounded="false" :alignLeft="true" @dateSelected="handleDateSelected" :class="{ 'input-error': getError('date') }" />
         <p v-if="getError('date')" class="error">{{ getError('date') }}</p>
       </div>
 
@@ -198,9 +197,12 @@ onBeforeUnmount(() => {
           <span class="label-text">時間</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" id="time" :value="formData.time" readonly @click="openCustomTimePicker"
-          :class="{ 'input-error': getError('time') }" />
-        <TimePicker v-if="showTimePicker" v-model="formData.time" @apply="handleTimePickerApply" />
+        <input type="text" id="time" :value="formData.time" readonly @click="openCustomTimePicker" :class="{ 'input-error': getError('time') }" />
+        <TimePicker
+          v-if="showTimePicker"
+          v-model="formData.time"
+          @apply="handleTimePickerApply"
+        />
         <p v-if="getError('time')" class="error">{{ getError('time') }}</p>
       </div>
 
@@ -222,8 +224,8 @@ onBeforeUnmount(() => {
           </label>
           <select id="drink" v-model="formData.drink" style="color: black;">
             <option value="なし">なし</option>
-            <option value="2500円(2h)">2500円(2h)</option>
-            <option value="3000円(3h)">3000円(3h)</option>
+            <option value="2500円（2h）">2500円（2h）</option>
+            <option value="3000円（3h）">3000円（3h）</option>
           </select>
         </div>
       </div>
@@ -328,8 +330,7 @@ onBeforeUnmount(() => {
   font-size: 20px;
 }
 
-.weekdays,
-.days {
+.weekdays, .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
