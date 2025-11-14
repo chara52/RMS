@@ -43,23 +43,23 @@ const submitReservation = async () => {
   errors.value = []
 
   if (!formData.date) {
-    errors.value.push({ field: 'date', message: '日付を入力してください!' })
+    errors.value.push({ field: 'date', message: '日付を入力してください!'})
   }
 
   if (!formData.name || formData.name.trim() === '') {
-    errors.value.push({ field: 'name', message: '名前を入力してください!' })
+    errors.value.push({ field: 'name', message: '名前を入力してください!'})
   }
 
   if (!formData.people || formData.people.trim() === '') {
-    errors.value.push({ field: 'people', message: '人数を入力してください!' })
+    errors.value.push({ field: 'people', message: '人数を入力してください!'})
   }
 
   if (!formData.time || formData.time.trim() === '') {
-    errors.value.push({ field: 'time', message: '時間を入力してください!' })
+    errors.value.push({ field: 'time', message: '時間を入力してください!'})
   }
 
   if (!isPhoneNumberValid.value) {
-    errors.value.push({ field: 'phone', message: '携帯電話番号は11桁で入力してください!' })
+    errors.value.push({ field: 'phone', message: '携帯電話番号は11桁で入力してください!'})
   }
 
   try {
@@ -76,7 +76,7 @@ const submitReservation = async () => {
       })
 
       if (res && res.contents && res.contents.length > 0) {
-        errors.value.push({ field: 'date', message: '選択した日は休業日のため予約できません。別の日を選んでください。' })
+        errors.value.push({ field: 'date', message: '選択した日は休業日のため予約できません。別の日を選んでください。'})
       }
     }
   } catch (err) {
