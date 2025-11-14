@@ -43,45 +43,47 @@ const submitReservation = async () => {
   errors.value = []
 
   if (!formData.date) {
-    errors.value.push({ field: 'date', message: '日付を入力してください!'})
+    errors.value.push({ field: 'date', message: '日付を入力してください!' })
   }
 
   if (!formData.name || formData.name.trim() === '') {
-    errors.value.push({ field: 'name', message: '名前を入力してください!'})
+    errors.value.push({ field: 'name', message: '名前を入力してください!' })
   }
 
   if (!formData.people || formData.people.trim() === '') {
-    errors.value.push({ field: 'people', message: '人数を入力してください!'})
+    errors.value.push({ field: 'people', message: '人数を入力してください!' })
   }
 
   if (!formData.time || formData.time.trim() === '') {
-    errors.value.push({ field: 'time', message: '時間を入力してください!'})
+    errors.value.push({ field: 'time', message: '時間を入力してください!' })
   }
 
   if (!isPhoneNumberValid.value) {
-    errors.value.push({ field: 'phone', message: '携帯電話番号は11桁で入力してください!'})
+    errors.value.push({ field: 'phone', message: '携帯電話番号は11桁で入力してください!' })
   }
 
   try {
     if (formData.date) {
-      const timeStr = `${formData.date}T00:00:00`
+      const startTime = `${formData.date}T00:00:00`
+      const endTime = `${formData.date}T23:59:59`
+
       const res = await client.getList({
         endpoint: 'data',
         queries: {
-          filters: `time[equals]${timeStr}&&info[equals]休み`,
+          filters: `time[greater_than]${startTime}[and]time[less_than]${endTime}[and]info[equals]休み`,
           limit: 1
         }
       })
+
       if (res && res.contents && res.contents.length > 0) {
         errors.value.push({ field: 'date', message: '選択した日は休業日のため予約できません。別の日を選んでください。' })
       }
     }
   } catch (err) {
     console.error('休業日チェックに失敗しました', err)
-    errors.value.push({ field: 'date', message: '休業日です。違う日程を選択して下さい' })
   }
 
-  if(errors.value.length === 0) {
+  if (errors.value.length === 0) {
     localStorage.setItem("formData", JSON.stringify(formData))
     router.push('/ConfirmReservation')
   }
@@ -168,7 +170,8 @@ onBeforeUnmount(() => {
           <span class="label-text">日付</span>
           <span class="required-mark">＊</span>
         </label>
-        <CalendarPicker :selectedDate="formData.date" :rounded="false" :alignLeft="true" @dateSelected="handleDateSelected" :class="{ 'input-error': getError('date') }" />
+        <CalendarPicker :selectedDate="formData.date" :rounded="false" :alignLeft="true"
+          @dateSelected="handleDateSelected" :class="{ 'input-error': getError('date') }" />
         <p v-if="getError('date')" class="error">{{ getError('date') }}</p>
       </div>
 
@@ -195,12 +198,9 @@ onBeforeUnmount(() => {
           <span class="label-text">時間</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" id="time" :value="formData.time" readonly @click="openCustomTimePicker" :class="{ 'input-error': getError('time') }" />
-        <TimePicker
-          v-if="showTimePicker"
-          v-model="formData.time"
-          @apply="handleTimePickerApply"
-        />
+        <input type="text" id="time" :value="formData.time" readonly @click="openCustomTimePicker"
+          :class="{ 'input-error': getError('time') }" />
+        <TimePicker v-if="showTimePicker" v-model="formData.time" @apply="handleTimePickerApply" />
         <p v-if="getError('time')" class="error">{{ getError('time') }}</p>
       </div>
 
@@ -222,8 +222,8 @@ onBeforeUnmount(() => {
           </label>
           <select id="drink" v-model="formData.drink" style="color: black;">
             <option value="なし">なし</option>
-            <option value="2500円（2h）">2500円（2h）</option>
-            <option value="3000円（3h）">3000円（3h）</option>
+            <option value="2500円(2h)">2500円(2h)</option>
+            <option value="3000円(3h)">3000円(3h)</option>
           </select>
         </div>
       </div>
@@ -328,7 +328,8 @@ onBeforeUnmount(() => {
   font-size: 20px;
 }
 
-.weekdays, .days {
+.weekdays,
+.days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
@@ -446,7 +447,7 @@ select {
   border-radius: 4px;
   box-sizing: border-box;
   font-size: 16px;
-  color:black;
+  color: black;
 }
 
 .form-group textarea {
