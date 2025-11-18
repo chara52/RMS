@@ -81,6 +81,7 @@ const submitReservation = async () => {
     }
   } catch (err) {
     console.error('休業日チェックに失敗しました', err)
+    console.warn('休業日チェックをスキップします')
   }
 
   if (errors.value.length === 0) {
@@ -170,7 +171,13 @@ onBeforeUnmount(() => {
           <span class="label-text">日付</span>
           <span class="required-mark">＊</span>
         </label>
-        <CalendarPicker :selectedDate="formData.date" :rounded="false" :alignLeft="true" @dateSelected="handleDateSelected" :class="{ 'input-error': getError('date') }" />
+        <CalendarPicker
+          :selectedDate="formData.date"
+          :rounded="false"
+          :alignLeft="true"
+          :error="!!getError('date')"
+          @dateSelected="handleDateSelected"
+        />
         <p v-if="getError('date')" class="error">{{ getError('date') }}</p>
       </div>
 
@@ -291,127 +298,6 @@ onBeforeUnmount(() => {
   margin-bottom: 15px;
   position: relative
 }
-
-.calendar {
-  width: 100%;
-  border: 1px solid #ccc;
-  padding: 1rem 1rem 0.5rem;
-  background: white;
-  position: absolute;
-  box-sizing: border-box;
-  z-index: 1000;
-  border-radius: 15px;
-  font-family: Arial;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-}
-
-.header button {
-  display: flex;
-  background: none;
-  border: none;
-  color: blue;
-  font-size: 30px;
-  width: 40px;
-  height: 40px;
-  align-items: center;
-  justify-content: center;
-  padding: 0 10px;
-}
-
-.header-title {
-  flex: 1;
-  text-align: center;
-  font-size: 20px;
-}
-
-.weekdays, .days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-}
-
-.weekdays span {
-  color: rgb(164, 164, 164);
-  font-size: 14px;
-}
-
-.weekdays .sunday {
-  color: red;
-}
-
-.weekdays .saturday {
-  color: blue;
-}
-
-.days span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 45px;
-  box-sizing: border-box;
-  font-size: 20px;
-}
-
-.days span.today {
-  color: blue;
-  font-weight: bold;
-}
-
-.days span.today:not(.selected) {
-  color: rgb(0, 130, 255);
-  font-weight: normal;
-}
-
-.days span.selected {
-  color: blue;
-  background-color: #cce5ff;
-  border-radius: 50%;
-  font-weight: bold;
-}
-
-.days span.today.selected {
-  color: white;
-  background-color: rgb(42, 152, 254);
-}
-
-.days .sunday {
-  color: red;
-}
-
-.days .saturday {
-  color: blue;
-}
-
-.calender-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid #ccc;
-  margin-left: -1rem;
-  margin-right: -1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  width: calc(100% + 2rem);
-  box-sizing: border-box;
-}
-
-.calender-buttons button {
-  background: transparent;
-  color: blue;
-  font-size: 16px;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 
 .row {
   display: flex;

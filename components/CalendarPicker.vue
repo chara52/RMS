@@ -13,6 +13,10 @@ const props = defineProps({
   alignLeft: {
     type: Boolean,
     default: false
+  },
+  error: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -50,7 +54,7 @@ const formattedDate = computed(() => {
 const dateDisplayBoxStyle = computed(() => ({
   borderRadius: props.rounded ? '12px' : '4px',
   height: props.rounded ? '36px' : '40px',
-  border: props.rounded ? '1.5px solid #bbb' : '2px solid rgb(187, 182, 182)',
+  border: props.error ? '2px solid red' : (props.rounded ? '1.5px solid #bbb' : '2px solid rgb(187, 182, 182)'),
   fontSize: props.rounded ? '17px' : '16px',
   color: props.rounded ? '#333' : 'black',
   fontWeight: props.rounded ? 'bold' : 'normal',
