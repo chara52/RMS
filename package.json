@@ -8,16 +8,17 @@
     "dev": "nuxt dev --host 0.0.0.0",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "security:check": "snyk test",
+    "security:monitor": "snyk monitor"
   },
   "dependencies": {
     "@vuepic/vue-datepicker": "^11.0.1",
-    "axios": "^1.7.9",
     "firebase": "^11.6.0",
     "firebase-admin": "^13.3.0",
     "flatpickr": "^4.6.13",
     "microcms-js-sdk": "^3.1.2",
-    "nuxt": "^3.16.0",
+    "nuxt": "^3.19.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
@@ -28,6 +29,7 @@
     "@vue/eslint-config-prettier": "^10.1.0",
     "eslint": "^9.14.0",
     "eslint-plugin-vue": "^9.30.0",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "snyk": "^1.1301.0"
   }
 }
