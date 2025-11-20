@@ -123,6 +123,21 @@ function reverseArray(arr) {
 function setTodayDate(todayStr) {
   inputDate.value = todayStr;
 }
+
+function goToNewReservation() {
+  if (isHoliday.value) {
+    alert('この日は休業日のため予約を作成できません。')
+    return
+  }
+
+  router.push({
+    path: '/ReservationForm',
+    query: {
+      date: inputDate.value,
+      reset: 'true'
+    }
+  })
+}
 </script>
 
 <template>
@@ -191,7 +206,7 @@ function setTodayDate(todayStr) {
     </div>
   </div>
 
-  <BottomNavigation :selectedDate="inputDate" @setTodayDate="setTodayDate" />
+  <BottomNavigation :selectedDate="inputDate" @setTodayDate="setTodayDate" @goToNewReservation="goToNewReservation" />
 </template>
 
 <style scoped>
