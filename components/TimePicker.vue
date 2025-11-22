@@ -23,24 +23,22 @@ const selectedMinute = ref('')
 const hourColumn = ref(null)
 const minuteColumn = ref(null)
 
-// ハプティックフィードバック用の音を再生する関数
 function playClickSound() {
   if (typeof navigator !== 'undefined' && navigator.vibrate) {
     navigator.vibrate(10)
   }
-  // Web Audio APIを使用して軽い音を生成
   try {
     const audioContext = new (window.AudioContext || window.webkitAudioContext)()
     const oscillator = audioContext.createOscillator()
     const gainNode = audioContext.createGain()
-    
+
     oscillator.connect(gainNode)
     gainNode.connect(audioContext.destination)
-    
+
     oscillator.frequency.setValueAtTime(800, audioContext.currentTime)
     gainNode.gain.setValueAtTime(0.1, audioContext.currentTime)
     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05)
-    
+
     oscillator.start(audioContext.currentTime)
     oscillator.stop(audioContext.currentTime + 0.05)
   } catch {
@@ -48,15 +46,13 @@ function playClickSound() {
   }
 }
 
-// スクロール位置から値を計算する関数
 function getValueFromScroll(container, values) {
-  const itemHeight = 40 // 各アイテムの高さ
+  const itemHeight = 40
   const scrollTop = container.scrollTop
   const index = Math.round(scrollTop / itemHeight)
   return values[Math.max(0, Math.min(index, values.length - 1))]
 }
 
-// スクロール位置を値に基づいて設定する関数
 function scrollToValue(container, values, value, instant = false) {
   const itemHeight = 40
   const index = values.indexOf(value)
@@ -69,7 +65,6 @@ function scrollToValue(container, values, value, instant = false) {
   }
 }
 
-// スクロールイベントハンドラー
 function handleHourScroll() {
   if (!hourColumn.value) return
   const newHour = getValueFromScroll(hourColumn.value, props.hours)
@@ -99,8 +94,7 @@ const initializeTime = async () => {
     selectedHour.value = '17'
     selectedMinute.value = '00'
   }
-  
-  // 初期位置にスクロール
+
   await nextTick()
   if (hourColumn.value && minuteColumn.value) {
     scrollToValue(hourColumn.value, props.hours, selectedHour.value, true)
@@ -144,9 +138,9 @@ onMounted(() => {
 <template>
   <div class="time-picker">
     <div class="time-columns">
+      <div class="unified-selection-indicator"></div>
       <div class="time-column-wrapper">
-        <div class="selection-indicator"></div>
-        <div 
+        <div
           ref="hourColumn"
           class="time-column"
           @scroll="handleHourScroll"
@@ -155,7 +149,7 @@ onMounted(() => {
           <div
             v-for="h in hours"
             :key="h"
-            class="time-item"
+            :class="['time-item', 'hour-item', { selected: h === selectedHour }]"
             @click="() => selectHour(h)"
           >
             {{ h }}
@@ -163,10 +157,9 @@ onMounted(() => {
           <div class="spacer"></div>
         </div>
       </div>
-      <span class="colon">:</span>
+      <span class="colon">：</span>
       <div class="time-column-wrapper">
-        <div class="selection-indicator"></div>
-        <div 
+        <div
           ref="minuteColumn"
           class="time-column"
           @scroll="handleMinuteScroll"
@@ -175,7 +168,7 @@ onMounted(() => {
           <div
             v-for="m in minutes"
             :key="m"
-            class="time-item"
+            :class="['time-item', { selected: m === selectedMinute }]"
             @click="() => selectMinute(m)"
           >
             {{ m }}
@@ -208,6 +201,21 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+}
+
+.unified-selection-indicator {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 40px;
+  transform: translateY(-50%);
+  background-color: rgba(230, 230, 230, 0.5);
+  border: 2px solid rgba(230, 230, 230, 0.5);
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .time-column-wrapper {
@@ -215,22 +223,10 @@ onMounted(() => {
   height: 120px;
 }
 
-.selection-indicator {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 40px;
-  transform: translateY(-50%);
-  background-color: rgba(204, 229, 255, 0.5);
-  border: 2px solid #007AFF;
-  border-radius: 8px;
-  pointer-events: none;
-  z-index: 1;
-}
 
 .time-column {
   height: 120px;
+  width: 40vw;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scrollbar-width: none;
@@ -255,21 +251,38 @@ onMounted(() => {
   justify-content: center;
   text-align: center;
   font-size: 20px;
+  line-height: 40px;
   scroll-snap-align: center;
   cursor: pointer;
   transition: all 0.1s ease;
   width: 15vw;
+  color: #ccc;
+  position: relative;
 }
 
-.time-item:hover {
-  background-color: rgba(0, 122, 255, 0.1);
-  border-radius: 4px;
+.time-item.selected {
+  color: #000;
+  font-weight: bold;
+}
+
+.hour-item {
+  justify-content: flex-end !important;
+  padding-right: 20px;
+  padding-left: 80px;
+  text-align: right !important;
+  align-items: center;
+  display: flex !important;
 }
 
 .colon {
   font-size: 20px;
   font-weight: bold;
   padding: 0 10px;
+  align-self: center;
+  line-height: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
 }
 
 .time-buttons {

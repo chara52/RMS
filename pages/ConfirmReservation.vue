@@ -77,11 +77,22 @@ const formattedDisplayDate = computed(() => {
   const weekday = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
   return `${month}月${day}日(${weekday})`
 })
+
+const goBackWithDate = () => {
+  if (formData.date) {
+    router.push(`/ReservationForm?date=${formData.date}`)
+  } else {
+    router.push('/ReservationForm')
+  }
+}
 </script>
 
 <template>
   <div class="reservation-form">
-    <h1 class="global-h1">予約確認</h1>
+    <div class="header-row">
+      <button type="button" @click="goBackWithDate" class="backbutton">＜</button>
+      <h1 class="global-h1">予約確認</h1>
+    </div>
     <form @submit.prevent="submitReservation">
       <div class="form-group">
         <label for="date" class="label-flex">
@@ -157,7 +168,6 @@ const formattedDisplayDate = computed(() => {
       </div>
 
       <div class="button-container">
-        <button type="button" @click="router.push('/ReservationForm')" class="backbutton">戻る</button>
         <button type="submit" class="reservebutton">予約</button>
       </div>
     </form>
@@ -165,6 +175,20 @@ const formattedDisplayDate = computed(() => {
 </template>
 
 <style scoped>
+.header-row {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5F5F5;
+  border-bottom: 1px solid #ddd;
+  margin: -18px -18px 0 -20px;
+}
+
 .button-container {
   display: flex;
   justify-content: center;
@@ -183,7 +207,7 @@ const formattedDisplayDate = computed(() => {
 .global-h1 {
   font-size: 20px;
   text-align: center;
-  margin-top: -7px;
+  margin-top: 0px;
 }
 
 .form-group {
@@ -231,15 +255,17 @@ const formattedDisplayDate = computed(() => {
 }
 
 .backbutton {
-  width: 130px;
-  height: 45px;
-  color: black;
-  background-color: #fbc02d;
-  border: 2px solid #fbc02d;
-  border-radius: 12px;
+  position: absolute;
+  left: 0;
+  width: 60px;
+  height: 40px;
+  color: #fbc02d;
+  background-color: #F5F5F5;
+  border: 2px solid #F5F5F5;
   cursor: pointer;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: bold;
+  margin-top: -7px;
 }
 
 .reservebutton {

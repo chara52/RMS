@@ -88,7 +88,10 @@ function goToConfirm() {
 <template>
   <div class="shift-page-wrapper">
     <div class="shift-page">
-      <h1 class="global-h1">シフト作成</h1>
+      <div class="header-row">
+        <button type="button" @click="goBackWithDate" class="backbutton">＜</button>
+        <h1 class="global-h1">シフト作成</h1>
+      </div>
       <div v-for="(day, index) in shiftData.days" :key="index" class="day-section">
         <h2>{{ getDateWithOffset(index) }} ({{ getWeekdayLabel(index) }})</h2>
         <div v-for="(row, rowIndex) in day" :key="rowIndex" class="shift-row">
@@ -101,7 +104,6 @@ function goToConfirm() {
         <button class="add-btn" @click="addRow(index)">＋ 行を追加</button>
       </div>
       <div class="button-container">
-        <button type="button" @click="goBackWithDate" class="back-button">戻る</button>
         <button class="confirm-button" @click="goToConfirm">確認</button>
       </div>
     </div>
@@ -118,10 +120,24 @@ function goToConfirm() {
   margin: auto;
 }
 
+.header-row {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5F5F5;
+  border-bottom: 1px solid #ddd;
+  margin: -30px -30px 0 -30px;
+}
+
 .global-h1 {
   font-size: 20px;
   text-align: center;
-  margin-top: -15px;
+  margin-top: 0px;
 }
 
 .day-section {
@@ -190,7 +206,20 @@ button.remove-btn:disabled {
   transform: translateX(-50%);
 }
 
-.back-button,
+.backbutton {
+  position: absolute;
+  left: 0;
+  width: 60px;
+  height: 40px;
+  color: #fbc02d;
+  background-color: #F5F5F5;
+  border: 2px solid #F5F5F5;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: -20px;
+}
+
 .confirm-button {
   width: 130px;
   height: 45px;

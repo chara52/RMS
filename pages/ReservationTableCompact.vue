@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted} from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
@@ -9,6 +9,7 @@ import BottomNavigation from '../components/BottomNavigation.vue'
 import { sortPeople } from '../utils/sortPeople.js'
 import { sortSeat } from '../utils/sortSeat.js'
 import CalendarPicker from '../components/CalendarPicker.vue'
+import MenuButton from '../components/MenuButton.vue'
 
 defineProps({ reservationsDetail: Array });
 
@@ -71,11 +72,19 @@ shiftClient.getList({
 
 const filteredReservations = computed(() => {
   if (!inputDate.value) {
-    return reservations;
+    return reservations.value.filter((reservation) => reservation.info !== '休み');
   }
   return reservations.value.filter((reservation) => {
     const reservationDate = reservation.time.split('T')[0];
-    return inputDate.value === reservationDate;
+    return inputDate.value === reservationDate && reservation.info !== '休み';
+  });
+});
+
+const isHoliday = computed(() => {
+  if (!inputDate.value) return false;
+  return reservations.value.some((reservation) => {
+    const reservationDate = reservation.time.split('T')[0];
+    return inputDate.value === reservationDate && reservation.info === '休み';
   });
 });
 
@@ -114,9 +123,25 @@ function reverseArray(arr) {
 function setTodayDate(todayStr) {
   inputDate.value = todayStr;
 }
+
+function goToNewReservation() {
+  if (isHoliday.value) {
+    alert('この日は休業日のため予約を作成できません。')
+    return
+  }
+
+  router.push({
+    path: '/ReservationForm',
+    query: {
+      date: inputDate.value,
+      reset: 'true'
+    }
+  })
+}
 </script>
 
 <template>
+  <MenuButton />
   <div class="reservation-table-name">
     <h1 class="global-h1">予約表</h1>
     <div class="shift-info-container">
@@ -137,11 +162,9 @@ function setTodayDate(todayStr) {
     <button @click="handleSort('people', sortPeople)" :class="['sort-button', { active: activeSort === 'people' }]">
       人数順
     </button>
-
     <button @click="handleSort('seat', sortSeat)" :class="['sort-button', { active: activeSort === 'seat' }]">
       卓順
     </button>
-
     <button @click="handleSort('time', sortTime)" :class="['sort-button', { active: activeSort === 'time' }]">
       時間順
     </button>
@@ -179,11 +202,11 @@ function setTodayDate(todayStr) {
     </div>
 
     <div v-else>
-      <p class="no-reservations-message">予約はありません</p>
+      <p class="no-reservations-message" :class="{ 'holiday-text': isHoliday }">{{ isHoliday ? '休み' : '予約はありません' }}</p>
     </div>
   </div>
 
-  <BottomNavigation :selectedDate="inputDate" @setTodayDate="setTodayDate" />
+  <BottomNavigation :selectedDate="inputDate" @setTodayDate="setTodayDate" @goToNewReservation="goToNewReservation" />
 </template>
 
 <style scoped>
@@ -252,6 +275,10 @@ table tr {
   text-align: center;
   font-size: 22px;
   margin-top: 45px;
+}
+
+.holiday-text {
+  color: red;
 }
 
 .shift-info-container {

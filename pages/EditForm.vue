@@ -81,11 +81,18 @@ onMounted(() => {
 
 const submitForm = () => {
   const reservationId = route.query.id;
+  const errors = [];
 
-  if (!reservationId) {
-    console.error("予約IDが取得できませんでした");
+  if (!isPhoneNumberValid.value) {
+    errors.push('携帯電話番号は11桁で入力してください!');
+  }
+
+  if (errors.length > 0) {
+    errorMessage.value = errors.join('\n');
     return;
   }
+
+  errorMessage.value = '';
 
   const combinedTime = formData.date && formData.time
     ? `${formData.date}T${formData.time}:00.000Z`
@@ -110,28 +117,31 @@ const submitForm = () => {
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error('HTTPエラー: ${response.status}');
+        throw new Error(`HTTPエラー: ${response.status}`);
       }
       return response.json();
     })
-
-  if (isPhoneNumberValid.value) {
-    errorMessage.value = ''
-    alert('予約が更新されました!')
-    if (formData.date) {
-      router.push(`/ReservationTableCompact?date=${formData.date}`);
-    } else {
-      router.push('/ReservationTableCompact');
-    }
-  } else {
-    errorMessage.value = '携帯電話番号は11桁で入力してください!' // エラーメッセージ
-  }
+    .then(() => {
+      alert('予約が更新されました!');
+      if (formData.date) {
+        router.push(`/ReservationTableCompact?date=${formData.date}`);
+      } else {
+        router.push('/ReservationTableCompact');
+      }
+    })
+    .catch((err) => {
+      errorMessage.value = '更新に失敗しました';
+      console.error(err);
+    });
 };
 </script>
 
 <template>
   <div class="reservation-form">
-    <h1 class="global-h1">予約編集</h1>
+    <div class="header-row">
+      <button type="button" @click="router.push('/ReservationDetail')" class="back-button">＜</button>
+      <h1 class="global-h1">予約編集</h1>
+    </div>
     <form @submit.prevent="submitForm">
       <div class="form-group">
         <label for="date" class="label-flex">
@@ -214,7 +224,6 @@ const submitForm = () => {
       </div>
       <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
       <div class="button-container">
-        <button type="button" @click="router.push('/ReservationDetail')" class="back-button">戻る</button>
         <button type="submit" class="submit-button">更新</button>
       </div>
     </form>
@@ -230,10 +239,24 @@ const submitForm = () => {
   background-color: #fff9e6;
 }
 
+.header-row {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5F5F5;
+  border-bottom: 1px solid #ddd;
+  margin: -18px -18px 0 -20px;
+}
+
 .global-h1 {
   font-size: 20px;
   text-align: center;
-  margin-top: -7px;
+  margin-top: 0px;
 }
 
 .form-group {
@@ -447,15 +470,17 @@ input[type="time"] {
 }
 
 .back-button {
-  width: 130px;
-  height: 45px;
-  color: black;
-  background-color: #fbc02d;
-  border: 2px solid #fbc02d;
-  border-radius: 12px;
+  position: absolute;
+  left: 0;
+  width: 60px;
+  height: 40px;
+  color: #fbc02d;
+  background-color: #F5F5F5;
+  border: 2px solid #F5F5F5;
   cursor: pointer;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: bold;
+  margin-top: -7px;
 }
 
 .submit-button {

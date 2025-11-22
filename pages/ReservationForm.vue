@@ -3,7 +3,6 @@ import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 import TimePicker from '../components/TimePicker.vue'
-import CalendarPicker from '../components/CalendarPicker.vue'
 
 const formData = reactive({
   name: '',
@@ -17,7 +16,7 @@ const formData = reactive({
   date: '',
 })
 
-const errorMessage = ref('')
+const errors = ref([])
 const showDetailInput = ref(false)
 
 const courseOptions = computed(() => generateCourseOptions())
@@ -26,44 +25,51 @@ const isPhoneNumberValid = computed(() => {
   return formData.phone.length === 11 && /^\d+$/.test(formData.phone)
 })
 
-function handleDateSelected(date) {
-  formData.date = date
-}
-
 const router = useRouter()
 const route = useRoute()
 
+// 日付をフォーマットして表示
+const formattedDate = computed(() => {
+  if (!formData.date) return ''
+  const date = new Date(formData.date)
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const weekday = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
+  return `${month}月${day}日(${weekday})`
+})
+
 const submitReservation = () => {
-  const errors = []
+  errors.value = []
 
   if (!formData.date) {
-    errors.push('日付を入力してください!')
+    errors.value.push({ field: 'date', message: '日付を入力してください!'})
   }
 
   if (!formData.name || formData.name.trim() === '') {
-    errors.push('名前を入力してください!')
+    errors.value.push({ field: 'name', message: '名前を入力してください!'})
   }
 
   if (!formData.people || formData.people.trim() === '') {
-    errors.push('人数を入力してください!')
+    errors.value.push({ field: 'people', message: '人数を入力してください!'})
   }
 
   if (!formData.time || formData.time.trim() === '') {
-    errors.push('時間を入力してください!')
+    errors.value.push({ field: 'time', message: '時間を入力してください!'})
   }
 
   if (!isPhoneNumberValid.value) {
-    errors.push('携帯電話番号は11桁で入力してください!')
+    errors.value.push({ field: 'phone', message: '携帯電話番号は11桁で入力してください!'})
   }
 
-  if (errors.length > 0) {
-    errorMessage.value = errors.join('\n')
-    return
+  if(errors.value.length === 0) {
+    localStorage.setItem("formData", JSON.stringify(formData))
+    router.push('/ConfirmReservation')
   }
+}
 
-  errorMessage.value = ''
-  localStorage.setItem("formData", JSON.stringify(formData))
-  router.push('/ConfirmReservation')
+const getError = (field) => {
+  const err = errors.value.find(err => err.field === field)
+  return err ? err.message : ''
 }
 
 const goBackWithDate = () => {
@@ -95,6 +101,7 @@ function handleTimePickerApply() {
 }
 
 onMounted(() => {
+  // reset=trueまたは新規作成の場合
   if (route.query.reset === 'true') {
     localStorage.removeItem('formData')
     Object.assign(formData, {
@@ -109,10 +116,12 @@ onMounted(() => {
       date: '',
     })
 
+    // クエリパラメータから日付を取得
     if (route.query.date) {
       formData.date = route.query.date
     }
   } else {
+    // 既存データの読み込み
     const saved = localStorage.getItem("formData")
     if (saved) {
       Object.assign(formData, JSON.parse(saved))
@@ -132,14 +141,20 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="reservation-form">
-    <h1 class="global-h1">新規受付</h1>
+    <div class="header-row">
+      <button type="button" @click="goBackWithDate" class="backbutton">＜</button>
+      <h1 class="global-h1">新規受付</h1>
+    </div>
     <form @submit.prevent="submitReservation">
       <div class="form-group">
         <label for="date" class="label-flex">
           <span class="label-text">日付</span>
           <span class="required-mark">＊</span>
         </label>
-        <CalendarPicker :selectedDate="formData.date" :rounded="false" :alignLeft="true" @dateSelected="handleDateSelected" />
+        <div class="date-display-box" :class="{ 'input-error': getError('date') }">
+          {{ formattedDate }}
+        </div>
+        <p v-if="getError('date')" class="error">{{ getError('date') }}</p>
       </div>
 
       <div class="form-group">
@@ -147,7 +162,8 @@ onBeforeUnmount(() => {
           <span class="label-text">名前</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" id="name" v-model="formData.name" />
+        <input type="text" id="name" v-model="formData.name" :class="{ 'input-error': getError('name') }" />
+        <p v-if="getError('name')" class="error">{{ getError('name') }}</p>
       </div>
 
       <div class="form-group">
@@ -155,7 +171,8 @@ onBeforeUnmount(() => {
           <span class="label-text">人数</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" id="people" v-model="formData.people" />
+        <input type="text" id="people" v-model="formData.people" :class="{ 'input-error': getError('people') }" />
+        <p v-if="getError('people')" class="error">{{ getError('people') }}</p>
       </div>
 
       <div class="form-group">
@@ -163,12 +180,13 @@ onBeforeUnmount(() => {
           <span class="label-text">時間</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="text" id="time" :value="formData.time" readonly @click="openCustomTimePicker" />
+        <input type="text" id="time" :value="formData.time" readonly @click="openCustomTimePicker" :class="{ 'input-error': getError('time') }" />
         <TimePicker
           v-if="showTimePicker"
           v-model="formData.time"
           @apply="handleTimePickerApply"
         />
+        <p v-if="getError('time')" class="error">{{ getError('time') }}</p>
       </div>
 
       <div class="form-group row">
@@ -205,7 +223,8 @@ onBeforeUnmount(() => {
           <span class="label-text">携帯電話番号</span>
           <span class="required-mark">＊</span>
         </label>
-        <input type="tel" id="phone" v-model="formData.phone" />
+        <input type="tel" id="phone" v-model="formData.phone" :class="{ 'input-error': getError('phone') }" />
+        <p v-if="getError('phone')" class="error">{{ getError('phone') }}</p>
       </div>
 
       <div class="form-group">
@@ -215,10 +234,7 @@ onBeforeUnmount(() => {
         <input type="text" id="seat" v-model="formData.seat" />
       </div>
 
-      <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
-
       <div class="button-container">
-        <button type="button" @click="goBackWithDate" class="backbutton">戻る</button>
         <button type="submit" class="reservebutton">確認</button>
       </div>
     </form>
@@ -234,10 +250,24 @@ onBeforeUnmount(() => {
   background-color: #fff9e6;
 }
 
+.header-row {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5F5F5;
+  border-bottom: 1px solid #ddd;
+  margin: -18px -18px 0 -20px;
+}
+
 .global-h1 {
   font-size: 20px;
   text-align: center;
-  margin-top: -7px;
+  margin-top: 0px;
 }
 
 .form-group {
@@ -245,126 +275,20 @@ onBeforeUnmount(() => {
   position: relative
 }
 
-.calendar {
+.date-display-box {
   width: 100%;
-  border: 1px solid #ccc;
-  padding: 1rem 1rem 0.5rem;
-  background: white;
-  position: absolute;
-  box-sizing: border-box;
-  z-index: 1000;
-  border-radius: 15px;
-  font-family: Arial;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-}
-
-.header button {
-  display: flex;
-  background: none;
-  border: none;
-  color: blue;
-  font-size: 30px;
-  width: 40px;
   height: 40px;
-  align-items: center;
-  justify-content: center;
-  padding: 0 10px;
-}
-
-.header-title {
-  flex: 1;
-  text-align: center;
-  font-size: 20px;
-}
-
-.weekdays, .days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-}
-
-.weekdays span {
-  color: rgb(164, 164, 164);
-  font-size: 14px;
-}
-
-.weekdays .sunday {
-  color: red;
-}
-
-.weekdays .saturday {
-  color: blue;
-}
-
-.days span {
+  border: 2px solid rgb(187, 182, 182);
+  border-radius: 4px;
+  background: #f5f5f5;
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 45px;
+  padding: 10px;
   box-sizing: border-box;
-  font-size: 20px;
-}
-
-.days span.today {
-  color: blue;
-  font-weight: bold;
-}
-
-.days span.today:not(.selected) {
-  color: rgb(0, 130, 255);
+  font-size: 16px;
+  color: black;
   font-weight: normal;
 }
-
-.days span.selected {
-  color: blue;
-  background-color: #cce5ff;
-  border-radius: 50%;
-  font-weight: bold;
-}
-
-.days span.today.selected {
-  color: white;
-  background-color: rgb(42, 152, 254);
-}
-
-.days .sunday {
-  color: red;
-}
-
-.days .saturday {
-  color: blue;
-}
-
-.calender-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid #ccc;
-  margin-left: -1rem;
-  margin-right: -1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  width: calc(100% + 2rem);
-  box-sizing: border-box;
-}
-
-.calender-buttons button {
-  background: transparent;
-  color: blue;
-  font-size: 16px;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 
 .row {
   display: flex;
@@ -452,15 +376,17 @@ input[type="time"] {
 }
 
 .backbutton {
-  width: 130px;
-  height: 45px;
-  color: black;
-  background-color: #fbc02d;
-  border: 2px solid #fbc02d;
-  border-radius: 12px;
+  position: absolute;
+  left: 0;
+  width: 60px;
+  height: 40px;
+  color: #fbc02d;
+  background-color: #F5F5F5;
+  border: 2px solid #F5F5F5;
   cursor: pointer;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: bold;
+  margin-top: -7px;
 }
 
 .reservebutton {
@@ -475,10 +401,14 @@ input[type="time"] {
   font-weight: bold;
 }
 
-.error-message {
+.error {
   white-space: pre-line;
   color: red;
   font-size: 14px;
   margin: 0px;
+}
+
+.input-error {
+  border: 2px solid red !important;
 }
 </style>

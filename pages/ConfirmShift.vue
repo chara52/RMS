@@ -123,7 +123,10 @@ const submitShift = async () => {
 
 <template>
   <div class="confirm-page">
-    <h1 class="global-h1">シフト確認</h1>
+    <div class="header-row">
+      <button @click="goBackWithDate" class="backbutton">＜</button>
+      <h1 class="global-h1">シフト確認</h1>
+    </div>
     <div v-for="(day, dayIndex) in validShiftData" :key="dayIndex" class="day-section">
       <h2>{{ formatDateToJP(getDateWithOffset(dayIndex)) }} ({{ getWeekdayLabel(dayIndex) }})</h2>
       <ul>
@@ -134,7 +137,6 @@ const submitShift = async () => {
       </ul>
     </div>
     <div class="button-container">
-      <button @click="goBackWithDate" class="go-back-btn">戻る</button>
       <button @click="submitShift" :disabled="isSubmitting" class="submit-btn">
         {{ isSubmitting ? '送信中...' : '送信' }}
       </button>
@@ -149,10 +151,24 @@ const submitShift = async () => {
   margin: auto;
 }
 
+.header-row {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5F5F5;
+  border-bottom: 1px solid #ddd;
+  margin: -30px -30px 0 -30px;
+}
+
 .global-h1 {
   font-size: 20px;
   text-align: center;
-  margin-top: -15px;
+  margin-top: 0px;
 }
 
 .day-section {
@@ -180,16 +196,18 @@ li {
   justify-content: center;
 }
 
-.go-back-btn {
-  width: 130px;
-  height: 45px;
-  color: black;
-  background-color: #fbc02d;
-  border: 2px solid #fbc02d;
-  border-radius: 12px;
+.backbutton {
+  position: absolute;
+  left: 0;
+  width: 60px;
+  height: 40px;
+  color: #fbc02d;
+  background-color: #F5F5F5;
+  border: 2px solid #F5F5F5;
   cursor: pointer;
-  font-size: 17px;
+  font-size: 20px;
   font-weight: bold;
+  margin-top: -8px;
 }
 
 .submit-btn {
