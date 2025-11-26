@@ -1,7 +1,6 @@
 <script setup>
 import { reactive, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { createClient } from 'microcms-js-sdk'
 
 const router = useRouter()
 const formData = reactive({
@@ -13,11 +12,6 @@ const formData = reactive({
   info: '',
   phone: '',
   seat: '',
-})
-
-const client = createClient({
-  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
-  apiKey: import.meta.env.VITE_API_KEY,
 })
 
 const formattedPhone = computed(() => {
@@ -35,16 +29,19 @@ onMounted(() => {
   }
 })
 
-const submitReservation = () => {
+const submitReservation = async () => {
   if (confirm('予約を確定しますか？')) {
     const combinedTime = formData.date && formData.time
-      ? `${formData.date} ${formData.time}`
+      ? `${formData.date}T${formData.time}:00.000Z`
       : formData.time || '';
 
-    client
-      .create({
-        endpoint: 'data',
-        content: {
+    try {
+      const response = await fetch('/api/reservations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           name: formData.name,
           people: formData.people,
           time: combinedTime,
@@ -53,19 +50,23 @@ const submitReservation = () => {
           info: formData.info,
           phone: formData.phone,
           seat: formData.seat,
-        },
+        }),
       })
-      .then(() => {
-        // 日付をクエリとして渡して予約表に遷移
-        if (formData.date) {
-          router.push(`/ReservationTableCompact?date=${formData.date}`);
-        } else {
-          router.push('/ReservationTableCompact');
-        }
-      })
-      .catch((error) => {
-        console.error('送信エラー:', error);
-      });
+
+      if (!response.ok) {
+        throw new Error('予約の作成に失敗しました');
+      }
+
+      // 日付をクエリとして渡して予約表に遷移
+      if (formData.date) {
+        router.push(`/ReservationTableCompact?date=${formData.date}`);
+      } else {
+        router.push('/ReservationTableCompact');
+      }
+    } catch (error) {
+      console.error('送信エラー:', error);
+      alert('予約の作成に失敗しました');
+    }
   };
 }
 
