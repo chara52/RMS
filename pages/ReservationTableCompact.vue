@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted} from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { createClient } from 'microcms-js-sdk'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
@@ -21,11 +21,6 @@ const goToDetail = (reservation) => {
   router.push('/ReservationDetail');
 };
 
-const reservationClient = createClient({
-  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
-  apiKey: import.meta.env.VITE_API_KEY,
-})
-
 const shiftClient = createClient({
   serviceDomain: import.meta.env.VITE_SHIFT_DOMAIN,
   apiKey: import.meta.env.VITE_SHIFT_API_KEY,
@@ -37,17 +32,25 @@ const shiftList = ref([]);
 const inputDate = ref('');
 const activeSort = ref('');
 
-reservationClient.getList({
-  endpoint: 'data',
-  queries: { limit: 100 }
-})
-.then((res) => {
-   originalReservations.value = reverseArray(res.contents);
-  reservations.value = [...originalReservations.value];
-})
-.catch((err) => console.error(err))
+// Firestoreから予約データを取得（onMountedで実行）
+const fetchReservations = async () => {
+  try {
+    const response = await fetch('/api/reservations')
+    if (!response.ok) {
+      throw new Error('予約データの取得に失敗しました')
+    }
+    const data = await response.json()
+    originalReservations.value = reverseArray(data.reservations);
+    reservations.value = [...originalReservations.value];
+  } catch (err) {
+    console.error('予約データ取得エラー:', err)
+  }
+}
 
-onMounted(() => {
+onMounted(async () => {
+  // 予約データを取得
+  await fetchReservations()
+
   if (!inputDate.value) {
     const now = new Date()
     inputDate.value = new Date(now.getTime() + 9 * 60 * 60 * 1000).toISOString().split('T')[0]
@@ -71,20 +74,27 @@ shiftClient.getList({
 .catch((err) => console.error(err))
 
 const filteredReservations = computed(() => {
+  let filtered;
+
   if (!inputDate.value) {
-    return reservations.value.filter((reservation) => reservation.info !== '休み');
+    // 休みという情報を持つ予約を除外する
+    filtered = reservations.value.filter((reservation) => reservation.info !== '休み');
+  } else {
+    filtered = reservations.value.filter((reservation) => {
+      const reservationDate = reservation.time?.split('T')[0];
+      return reservationDate && inputDate.value === reservationDate && reservation.info !== '休み';
+    });
   }
-  return reservations.value.filter((reservation) => {
-    const reservationDate = reservation.time.split('T')[0];
-    return inputDate.value === reservationDate && reservation.info !== '休み';
-  });
+
+  return filtered;
 });
 
 const isHoliday = computed(() => {
   if (!inputDate.value) return false;
   return reservations.value.some((reservation) => {
-    const reservationDate = reservation.time.split('T')[0];
-    return inputDate.value === reservationDate && reservation.info === '休み';
+    const reservationDate = reservation.time?.split('T')[0];
+    // 特定の日で、予約データのinfoが”休み”というのが1つでもあったらtrueを返す
+    return reservationDate && inputDate.value === reservationDate && reservation.info === '休み';
   });
 });
 
@@ -110,6 +120,11 @@ function handleSort(type, sortFunction) {
     sortFunction(reservations.value);
     activeSort.value = type;
   }
+}
+
+function getTimeFromReservation(timeString) {
+  if (!timeString) return '';
+  return timeString.split('T')[1]?.slice(0, 5) || '';
 }
 
 function reverseArray(arr) {
@@ -186,7 +201,7 @@ function goToNewReservation() {
           <tr v-for="reservation in filteredReservations" :key="reservation.id" @click="goToDetail(reservation)">
             <td class="name-space">{{ reservation.name }}</td>
             <td class="number-space">{{ reservation.people }}</td>
-            <td class="time-space">{{ reservation.time.split('T')[1].slice(0, 5) }}</td>
+            <td class="time-space">{{ getTimeFromReservation(reservation.time) }}</td>
             <td class="seat-space">{{ reservation.seat }}</td>
             <td class="info-space">
               <div>
