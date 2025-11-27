@@ -83,8 +83,7 @@ const handleInputClick = async (event) => {
       <i class="fa-solid fa-pen"></i>
       <span>入力</span>
     </div>
-    <router-link :to="`/Shift?reset=true&date=${selectedDate}`" class="nav-item"
-      :class="{ active: route.path.startsWith('/Shift') }">
+    <router-link :to="`/Shift?reset=true&date=${selectedDate}`" class="nav-item" :class="{ active: route.path.startsWith('/Shift') }">
       <i class="fa-solid fa-user-pen"></i>
       <span>シフト</span>
     </router-link>
@@ -130,13 +129,8 @@ const handleInputClick = async (event) => {
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(-360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
 }
 
 .spinning {
