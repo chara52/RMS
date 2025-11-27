@@ -31,7 +31,7 @@ onMounted(() => {
         Array.isArray(shift.name) ? shift.name : [shift.name]
       );
     })
-    .catch((err) => console.error(err));
+    .catch((err) => alert(err));
 });
 
 const formattedDate = computed(() => {

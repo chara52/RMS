@@ -26,8 +26,8 @@ const handleHomeClick = () => {
     isSpinning.value = true;
     const today = new Date();
     const todayStr = today.getFullYear() + '-' +
-                     String(today.getMonth() + 1).padStart(2, '0') + '-' +
-                     String(today.getDate()).padStart(2, '0');
+      String(today.getMonth() + 1).padStart(2, '0') + '-' +
+      String(today.getDate()).padStart(2, '0');
 
     emit('setTodayDate', todayStr);
     setTimeout(() => {
@@ -65,7 +65,7 @@ const handleInputClick = async (event) => {
 
     router.push(`/ReservationForm?reset=true&date=${props.selectedDate}`);
   } catch (err) {
-    console.error('休業日チェックに失敗しました', err);
+    alert('休業日チェックに失敗しました' + err);
     router.push(`/ReservationForm?reset=true&date=${props.selectedDate}`);
   }
 };

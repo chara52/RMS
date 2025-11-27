@@ -21,7 +21,7 @@ client
     reservations.push(...res.contents)
     sortTime(reservations)
   })
-  .catch((err) => console.error(err))
+  .catch((err) => alert(err))
 
 onMounted(() => {
   const now = new Date()

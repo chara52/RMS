@@ -47,7 +47,7 @@ async function fetchHolidays() {
     console.log('グループ化前のデータ:', holidayData)
     holidays.value = holidayData
   } catch (error) {
-    console.error('休みデータの取得に失敗しました:', error)
+    alert('休みデータの取得に失敗しました:' + error)
   }
 }
 
@@ -205,7 +205,7 @@ async function saveHolidaySettings() {
       query: { date: startDate.value }
     })
   } catch (error) {
-    console.error('休み設定の保存に失敗しました:', error)
+    alert('休み設定の保存に失敗しました:' + error)
     alert('休み設定の保存に失敗しました')
   } finally {
     isSubmitting.value = false
@@ -294,7 +294,7 @@ async function updatePeriod() {
     // 編集モードを終了
     cancelEdit()
   } catch (error) {
-    console.error('休み設定の更新に失敗しました:', error)
+    alert('休み設定の更新に失敗しました:' + error)
     alert('休み設定の更新に失敗しました')
   } finally {
     isSubmitting.value = false
@@ -325,7 +325,7 @@ async function deletePeriod(period, index) {
     // データを再取得
     await fetchHolidays()
   } catch (error) {
-    console.error('休み設定の削除に失敗しました:', error)
+    alert('休み設定の削除に失敗しました:' + error)
     alert('休み設定の削除に失敗しました')
   } finally {
     deletingPeriodIndex.value = null
