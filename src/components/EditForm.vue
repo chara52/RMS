@@ -51,7 +51,7 @@ onMounted(() => {
       formData.drink = String(res.drink || '');
       initFlatpicker();
     })
-    .catch((err) => console.error(err));
+    .catch((err) => alert(err));
 })
 
 const submitForm = () => {
@@ -59,7 +59,7 @@ const submitForm = () => {
   const reservationId = route.query.id;
 
   if (!reservationId) {
-    console.error("予約IDが取得できませんでした");
+    alert("予約IDが取得できませんでした");
     return;
   }
 

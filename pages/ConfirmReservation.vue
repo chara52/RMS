@@ -64,8 +64,7 @@ const submitReservation = async () => {
         router.push('/ReservationTableCompact');
       }
     } catch (error) {
-      console.error('送信エラー:', error);
-      alert('予約の作成に失敗しました');
+      alert('送信エラー:' + error);
     }
   };
 }

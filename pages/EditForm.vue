@@ -74,7 +74,7 @@ onMounted(() => {
       formData.course = String(res.course || '');
       formData.drink = String(res.drink || '');
     })
-    .catch((err) => console.error(err));
+    .catch((err) => alert(err));
 
   document.addEventListener('click', handleClickOutside)
 })
@@ -131,7 +131,7 @@ const submitForm = () => {
     })
     .catch((err) => {
       errorMessage.value = '更新に失敗しました';
-      console.error(err);
+      alert(err);
     });
 };
 </script>

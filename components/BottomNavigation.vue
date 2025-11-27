@@ -26,8 +26,8 @@ const handleHomeClick = () => {
     isSpinning.value = true;
     const today = new Date();
     const todayStr = today.getFullYear() + '-' +
-                     String(today.getMonth() + 1).padStart(2, '0') + '-' +
-                     String(today.getDate()).padStart(2, '0');
+      String(today.getMonth() + 1).padStart(2, '0') + '-' +
+      String(today.getDate()).padStart(2, '0');
 
     emit('setTodayDate', todayStr);
     setTimeout(() => {
@@ -65,7 +65,7 @@ const handleInputClick = async (event) => {
 
     router.push(`/ReservationForm?reset=true&date=${props.selectedDate}`);
   } catch (err) {
-    console.error('休業日チェックに失敗しました', err);
+    alert('休業日チェックに失敗しました' + err);
     router.push(`/ReservationForm?reset=true&date=${props.selectedDate}`);
   }
 };
@@ -83,7 +83,8 @@ const handleInputClick = async (event) => {
       <i class="fa-solid fa-pen"></i>
       <span>入力</span>
     </div>
-    <router-link :to="`/Shift?reset=true&date=${selectedDate}`" class="nav-item" :class="{ active: route.path.startsWith('/Shift') }">
+    <router-link :to="`/Shift?reset=true&date=${selectedDate}`" class="nav-item"
+      :class="{ active: route.path.startsWith('/Shift') }">
       <i class="fa-solid fa-user-pen"></i>
       <span>シフト</span>
     </router-link>
@@ -129,8 +130,13 @@ const handleInputClick = async (event) => {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
 }
 
 .spinning {

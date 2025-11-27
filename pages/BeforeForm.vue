@@ -29,7 +29,7 @@ client
     reservations.push(...res.contents)
     sortTime(reservations)
   })
-  .catch((err) => console.error(err))
+  .catch((err) => alert(err))
 
 const inputDate = ref(null)
 

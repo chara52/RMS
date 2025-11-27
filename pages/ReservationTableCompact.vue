@@ -43,7 +43,7 @@ const fetchReservations = async () => {
     originalReservations.value = reverseArray(data.reservations);
     reservations.value = [...originalReservations.value];
   } catch (err) {
-    console.error('予約データ取得エラー:', err)
+    alert('予約データ取得エラー:', err)
   }
 }
 
@@ -71,7 +71,7 @@ shiftClient.getList({
 .then((res) => {
   shiftList.value = res.contents
 })
-.catch((err) => console.error(err))
+.catch((err) => alert(err))
 
 const filteredReservations = computed(() => {
   let filtered;

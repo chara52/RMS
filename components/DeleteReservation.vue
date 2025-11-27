@@ -28,7 +28,7 @@ const deleteReservation = () => {
       emit('delete', props.id)
     })
     .catch((error) => {
-      console.error(`${props.id}削除失敗`, error)
+      alert(`${props.id}削除失敗` + error)
     })
 }
 </script>
