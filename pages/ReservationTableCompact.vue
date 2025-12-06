@@ -58,6 +58,13 @@ onMounted(async () => {
   if (route.query.date) {
     inputDate.value = route.query.date
   }
+
+  // 削除後に戻ってきた場合の処理
+  router.afterEach(async (to) => {
+    if (to.path === '/ReservationTableCompact') {
+      await fetchReservations()
+    }
+  })
 });
 
 function handleDateSelected(date) {

@@ -1,18 +1,12 @@
 <script setup>
 import { reactive, ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { createClient } from 'microcms-js-sdk';
 import { generateCourseOptions } from '../utils/generateCourseOptions.js'
 import TimePicker from '../components/TimePicker.vue'
 import CalendarPicker from '../components/CalendarPicker.vue'
 
 const router = useRouter()
 const route = useRoute()
-
-const client = createClient({
-  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
-  apiKey: import.meta.env.VITE_API_KEY,
-});
 
 const formData = reactive({
   name: '',
@@ -54,32 +48,33 @@ const handleClickOutside = (event) => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   const reservationId = route.query.id;
 
-  client
-    .get({
-      endpoint: 'data',
-      contentId: reservationId,
-    })
-    .then((res) => {
-      Object.assign(formData, res);
+  try {
+    const response = await fetch(`/api/reservations/${reservationId}`)
+    if (!response.ok) {
+      throw new Error('データ取得に失敗しました')
+    }
+    const res = await response.json()
+    Object.assign(formData, res);
 
-       if (res.time) {
-        const timeParts = res.time.split('T');
-        formData.date = timeParts[0];
-        formData.time = timeParts[1].slice(0, 5);
-      }
+     if (res.time) {
+      const timeParts = res.time.split('T');
+      formData.date = timeParts[0];
+      formData.time = timeParts[1].slice(0, 5);
+    }
 
-      formData.course = String(res.course || '');
-      formData.drink = String(res.drink || '');
-    })
-    .catch((err) => alert(err));
+    formData.course = String(res.course || '');
+    formData.drink = String(res.drink || '');
+  } catch (err) {
+    alert(err)
+  }
 
   document.addEventListener('click', handleClickOutside)
 })
 
-const submitForm = () => {
+const submitForm = async () => {
   const reservationId = route.query.id;
   const errors = [];
 
@@ -98,41 +93,38 @@ const submitForm = () => {
     ? `${formData.date}T${formData.time}:00.000Z`
     : formData.time;
 
-  fetch(`https://${import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1/data/${reservationId}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      "X-MICROCMS-API-KEY": import.meta.env.VITE_API_KEY,
-    },
-    body: JSON.stringify({
-      name: formData.name,
-      people: formData.people,
-      time: combinedTime,
-      course: Array.isArray(formData.course) ? formData.course : [formData.course],
-      drink: Array.isArray(formData.drink) ? formData.drink : [formData.drink],
-      info: formData.info,
-      phone: formData.phone,
-      seat: formData.seat,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTPエラー: ${response.status}`);
-      }
-      return response.json();
+  try {
+    const response = await fetch(`/api/reservations/${reservationId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        people: formData.people,
+        time: combinedTime,
+        course: Array.isArray(formData.course) ? formData.course : [formData.course],
+        drink: Array.isArray(formData.drink) ? formData.drink : [formData.drink],
+        info: formData.info,
+        phone: formData.phone,
+        seat: formData.seat,
+      }),
     })
-    .then(() => {
-      alert('予約が更新されました!');
-      if (formData.date) {
-        router.push(`/ReservationTableCompact?date=${formData.date}`);
-      } else {
-        router.push('/ReservationTableCompact');
-      }
-    })
-    .catch((err) => {
-      errorMessage.value = '更新に失敗しました';
-      alert(err);
-    });
+
+    if (!response.ok) {
+      throw new Error(`HTTPエラー: ${response.status}`)
+    }
+
+    alert('予約が更新されました!');
+    if (formData.date) {
+      router.push(`/ReservationTableCompact?date=${formData.date}`);
+    } else {
+      router.push('/ReservationTableCompact');
+    }
+  } catch (err) {
+    errorMessage.value = '更新に失敗しました';
+    alert(err);
+  }
 };
 </script>
 
