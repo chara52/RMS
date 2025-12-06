@@ -65,16 +65,6 @@ function handleDateSelected(date) {
   inputDate.value = date
 }
 
-// TODO: シフトデータの取得は別途対応が必要
-// shiftClient.getList({
-//   endpoint: 'shiftdata',
-//   queries: { limit: 100 }
-// })
-// .then((res) => {
-//   shiftList.value = res.contents
-// })
-// .catch((err) => alert(err))
-
 const filteredReservations = computed(() => {
   let filtered;
 

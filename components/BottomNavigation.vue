@@ -41,15 +41,6 @@ const handleInputClick = async (event) => {
   }
 
   try {
-    // TODO: 休業日チェックは別途対応が必要（microCMS → Firebase移行）
-    // const startTime = `${props.selectedDate}T00:00:00`;
-    // const endTime = `${props.selectedDate}T23:59:59`;
-    // const res = await client.getList({...});
-    // if (res && res.contents && res.contents.length > 0) {
-    //   alert('この日は休業日のため予約を作成できません。');
-    //   return;
-    // }
-
     router.push(`/ReservationForm?reset=true&date=${props.selectedDate}`);
   } catch (err) {
     alert('休業日チェックに失敗しました' + err);
