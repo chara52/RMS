@@ -1,6 +1,5 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { createClient } from 'microcms-js-sdk'
 import { sortTime } from '../utils/sortTime.js'
 import { addCourseDrink } from '../utils/addCourseDrink.js'
 import { useRouter, useRoute } from 'vue-router'
@@ -20,11 +19,6 @@ const goToDetail = (reservation) => {
   localStorage.setItem('selectedReservation', JSON.stringify(reservation));
   router.push('/ReservationDetail');
 };
-
-const shiftClient = createClient({
-  serviceDomain: import.meta.env.VITE_SHIFT_DOMAIN,
-  apiKey: import.meta.env.VITE_SHIFT_API_KEY,
-})
 
 const reservations = ref([]);
 const originalReservations = ref([]);
@@ -71,14 +65,15 @@ function handleDateSelected(date) {
   inputDate.value = date
 }
 
-shiftClient.getList({
-  endpoint: 'shiftdata',
-  queries: { limit: 100 }
-})
-.then((res) => {
-  shiftList.value = res.contents
-})
-.catch((err) => alert(err))
+// TODO: シフトデータの取得は別途対応が必要
+// shiftClient.getList({
+//   endpoint: 'shiftdata',
+//   queries: { limit: 100 }
+// })
+// .then((res) => {
+//   shiftList.value = res.contents
+// })
+// .catch((err) => alert(err))
 
 const filteredReservations = computed(() => {
   let filtered;
