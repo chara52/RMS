@@ -91,6 +91,31 @@ export default defineEventHandler(async (event) => {
       }
     }
 
+    // 既存予約チェック: 設定しようとしている期間に既存の予約があるか確認
+    const allReservations = await adminDb
+      .collection('reservations')
+      .where('info', '!=', '休み')
+      .get()
+
+    for (const doc of allReservations.docs) {
+      const data = doc.data()
+      // 予約のtime(YYYY-MM-DDTHH:mm:ss形式)から日付部分を取得
+      const reservationDate = new Date(data.time.split('T')[0])
+
+      // 予約日が休み設定期間内にあるかチェック
+      if (reservationDate >= start && reservationDate <= end) {
+        // 日付を「YYYY年M月D日」形式にフォーマット
+        const year = reservationDate.getFullYear()
+        const month = reservationDate.getMonth() + 1
+        const day = reservationDate.getDate()
+        const formattedDate = `${year}年${month}月${day}日`
+        throw createError({
+          statusCode: 409,
+          message: `${formattedDate}に予約が入っているため、休み設定できません`,
+        })
+      }
+    }
+
     // Firestoreに休み設定を保存
     const docRef = await adminDb.collection('reservations').add({
       startDate,
