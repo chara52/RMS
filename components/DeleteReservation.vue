@@ -1,6 +1,4 @@
 <script setup>
-import { createClient } from 'microcms-js-sdk'
-
 const props = defineProps({
   id: {
     type: String,
@@ -16,20 +14,20 @@ const confirmDelete = () => {
   }
 }
 
-const client = createClient({
-  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
-  apiKey: import.meta.env.VITE_API_KEY,
-})
+const deleteReservation = async () => {
+  try {
+    const response = await fetch(`/api/reservations/${props.id}`, {
+      method: 'DELETE',
+    })
 
-const deleteReservation = () => {
-  client
-    .delete({ endpoint: 'data', contentId: props.id })
-    .then(() => {
-      emit('delete', props.id)
-    })
-    .catch((error) => {
-      alert(`${props.id}削除失敗` + error)
-    })
+    if (!response.ok) {
+      throw new Error(`HTTPエラー: ${response.status}`)
+    }
+
+    emit('delete', props.id)
+  } catch (error) {
+    alert(`${props.id}削除失敗: ` + error)
+  }
 }
 </script>
 

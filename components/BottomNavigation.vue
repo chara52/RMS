@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { createClient } from 'microcms-js-sdk'
 
 const route = useRoute();
 const router = useRouter();
@@ -15,11 +14,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['setTodayDate']);
-
-const client = createClient({
-  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
-  apiKey: import.meta.env.VITE_API_KEY,
-});
 
 const handleHomeClick = () => {
   if (route.path === '/ReservationTableCompact') {
@@ -47,22 +41,6 @@ const handleInputClick = async (event) => {
   }
 
   try {
-    const startTime = `${props.selectedDate}T00:00:00`;
-    const endTime = `${props.selectedDate}T23:59:59`;
-
-    const res = await client.getList({
-      endpoint: 'data',
-      queries: {
-        filters: `time[greater_than]${startTime}[and]time[less_than]${endTime}[and]info[equals]休み`,
-        limit: 1
-      }
-    });
-
-    if (res && res.contents && res.contents.length > 0) {
-      alert('この日は休業日のため予約を作成できません。');
-      return;
-    }
-
     router.push(`/ReservationForm?reset=true&date=${props.selectedDate}`);
   } catch (err) {
     alert('休業日チェックに失敗しました' + err);
