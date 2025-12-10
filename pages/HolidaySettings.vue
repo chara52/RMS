@@ -1,16 +1,10 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { createClient } from 'microcms-js-sdk'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import DateRangePicker from '../components/DateRangePicker.vue'
 import BottomNavigation from '../components/BottomNavigation.vue'
 
 const router = useRouter()
-
-const client = createClient({
-  serviceDomain: import.meta.env.VITE_MICROCMS_SERVICE_DOMAIN,
-  apiKey: import.meta.env.VITE_API_KEY,
-})
 
 const startDate = ref('')
 const endDate = ref('')
@@ -21,86 +15,25 @@ const editingPeriod = ref(null)
 const editStartDate = ref('')
 const editEndDate = ref('')
 const isEditCalendarOpen = ref(false)
-const deletingPeriodIndex = ref(null)
+const deletingPeriodId = ref(null)
 const showEditButtons = ref(false)
 
 async function fetchHolidays() {
   try {
-    const res = await client.getList({
-      endpoint: 'data',
-      queries: {
-        limit: 100,
-        filters: 'info[equals]休み'
-      }
-    })
+    const response = await fetch('/api/holidays')
+    if (!response.ok) {
+      throw new Error('休みデータの取得に失敗しました')
+    }
 
-    console.log('取得した休みデータ:', res.contents)
+    const data = await response.json()
+    holidays.value = data.holidays
 
-    const holidayData = res.contents
-      .filter(item => item.info === '休み')
-      .map(item => ({
-        id: item.id,
-        date: item.time.split('T')[0]
-      }))
-      .sort((a, b) => a.date.localeCompare(b.date))
-
-    console.log('グループ化前のデータ:', holidayData)
-    holidays.value = holidayData
+    console.log('取得した休みデータ:', holidays.value)
   } catch (error) {
-    alert('休みデータの取得に失敗しました:' + error)
+    console.error('休みデータ取得エラー:', error)
+    alert('休みデータの取得に失敗しました: ' + error.message)
   }
 }
-
-const holidayPeriods = computed(() => {
-  if (holidays.value.length === 0) return []
-
-  const uniqueDates = {}
-  holidays.value.forEach(item => {
-    if (!uniqueDates[item.date]) {
-      uniqueDates[item.date] = item.id
-    }
-  })
-
-  const uniqueHolidays = Object.keys(uniqueDates)
-    .map(date => ({
-      date: date,
-      id: uniqueDates[date]
-    }))
-    .sort((a, b) => a.date.localeCompare(b.date))
-
-  if (uniqueHolidays.length === 0) return []
-
-  const periods = []
-  let currentPeriod = {
-    startDate: uniqueHolidays[0].date,
-    endDate: uniqueHolidays[0].date,
-    ids: [uniqueHolidays[0].id]
-  }
-
-  for (let i = 1; i < uniqueHolidays.length; i++) {
-    const prevDate = new Date(uniqueHolidays[i - 1].date)
-    const currDate = new Date(uniqueHolidays[i].date)
-    const diffDays = (currDate - prevDate) / (1000 * 60 * 60 * 24)
-
-    if (diffDays === 1) {
-      // 連続している
-      currentPeriod.endDate = uniqueHolidays[i].date
-      currentPeriod.ids.push(uniqueHolidays[i].id)
-    } else {
-      // 連続していない
-      periods.push(currentPeriod)
-      currentPeriod = {
-        startDate: uniqueHolidays[i].date,
-        endDate: uniqueHolidays[i].date,
-        ids: [uniqueHolidays[i].id]
-      }
-    }
-  }
-
-  periods.push(currentPeriod)
-  console.log('グループ化後の期間:', periods)
-  return periods
-})
 
 // 日付フォーマット
 function formatDate(dateStr) {
@@ -132,69 +65,29 @@ function handleEditCalendarToggle(isOpen) {
   isEditCalendarOpen.value = isOpen
 }
 
-// 日付の重複チェック
-function checkDateOverlap(newStartDate, newEndDate) {
-  const newStart = new Date(newStartDate)
-  const newEnd = new Date(newEndDate)
-
-  // 既存の休みデータと重複チェック
-  for (const holiday of holidays.value) {
-    const existingDate = new Date(holiday.date)
-
-    // 新規期間に既存の日付が含まれているかチェック
-    if (existingDate >= newStart && existingDate <= newEnd) {
-      return true
-    }
-  }
-
-  return false
-}
-
 async function saveHolidaySettings() {
   if (!startDate.value || !endDate.value) {
     alert('開始日と終了日を選択してください')
     return
   }
 
-  // 重複チェック
-  if (checkDateOverlap(startDate.value, endDate.value)) {
-    alert('選択した期間は既に休み設定されています')
-    return
-  }
-
   isSubmitting.value = true
 
   try {
-    const start = new Date(startDate.value)
-    const end = new Date(endDate.value)
+    const response = await fetch('/api/holidays', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        startDate: startDate.value,
+        endDate: endDate.value,
+      }),
+    })
 
-    // 開始日から終了日までの各日付に対してデータを作成（順次実行で遅延を入れる）
-    const currentDate = new Date(start)
-
-    while (currentDate <= end) {
-      const dateStr = currentDate.toISOString().split('T')[0]
-      const timeStr = `${dateStr}T00:00:00`
-
-      const holidayData = {
-        name: '-',
-        people: '-',
-        time: timeStr,
-        seat: '-',
-        course: ['-'],
-        drink: ['-'],
-        phone: '-',
-        info: '休み'
-      }
-
-      await client.create({
-        endpoint: 'data',
-        content: holidayData
-      })
-
-      // レート制限回避のため100ms待機
-      await new Promise(resolve => setTimeout(resolve, 100))
-
-      currentDate.setDate(currentDate.getDate() + 1)
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message || '休み設定の保存に失敗しました')
     }
 
     alert('休み設定を保存しました')
@@ -205,8 +98,8 @@ async function saveHolidaySettings() {
       query: { date: startDate.value }
     })
   } catch (error) {
-    alert('休み設定の保存に失敗しました:' + error)
-    alert('休み設定の保存に失敗しました')
+    console.error('休み設定保存エラー:', error)
+    alert(error.message || '休み設定の保存に失敗しました')
   } finally {
     isSubmitting.value = false
   }
@@ -245,45 +138,20 @@ async function updatePeriod() {
   isSubmitting.value = true
 
   try {
-    // 既存の期間を削除（順次実行で遅延を入れる）
-    for (const id of editingPeriod.value.ids) {
-      await client.delete({
-        endpoint: 'data',
-        contentId: id
-      })
-      // レート制限回避のため100ms待機
-      await new Promise(resolve => setTimeout(resolve, 100))
-    }
+    const response = await fetch(`/api/holidays/${editingPeriod.value.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        startDate: editStartDate.value,
+        endDate: editEndDate.value,
+      }),
+    })
 
-    // 新しい期間を作成（順次実行で遅延を入れる）
-    const start = new Date(editStartDate.value)
-    const end = new Date(editEndDate.value)
-    const currentDate = new Date(start)
-
-    while (currentDate <= end) {
-      const dateStr = currentDate.toISOString().split('T')[0]
-      const timeStr = `${dateStr}T00:00:00`
-
-      const holidayData = {
-        name: '-',
-        people: '-',
-        time: timeStr,
-        seat: '-',
-        course: ['-'],
-        drink: ['-'],
-        phone: '-',
-        info: '休み'
-      }
-
-      await client.create({
-        endpoint: 'data',
-        content: holidayData
-      })
-
-      // レート制限回避のため100ms待機
-      await new Promise(resolve => setTimeout(resolve, 100))
-
-      currentDate.setDate(currentDate.getDate() + 1)
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message || '休み設定の更新に失敗しました')
     }
 
     alert('休み設定を更新しました')
@@ -294,30 +162,29 @@ async function updatePeriod() {
     // 編集モードを終了
     cancelEdit()
   } catch (error) {
-    alert('休み設定の更新に失敗しました:' + error)
-    alert('休み設定の更新に失敗しました')
+    console.error('休み設定更新エラー:', error)
+    alert(error.message || '休み設定の更新に失敗しました')
   } finally {
     isSubmitting.value = false
   }
 }
 
 // 期間を削除
-async function deletePeriod(period, index) {
+async function deletePeriod(period) {
   if (!confirm(`${formatPeriod(period)} の休み設定を削除しますか？`)) {
     return
   }
 
-  deletingPeriodIndex.value = index
+  deletingPeriodId.value = period.id
 
   try {
-    // 順次実行で遅延を入れる
-    for (const id of period.ids) {
-      await client.delete({
-        endpoint: 'data',
-        contentId: id
-      })
-      // レート制限回避のため100ms待機
-      await new Promise(resolve => setTimeout(resolve, 100))
+    const response = await fetch(`/api/holidays/${period.id}`, {
+      method: 'DELETE',
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message || '休み設定の削除に失敗しました')
     }
 
     alert('休み設定を削除しました')
@@ -325,10 +192,10 @@ async function deletePeriod(period, index) {
     // データを再取得
     await fetchHolidays()
   } catch (error) {
-    alert('休み設定の削除に失敗しました:' + error)
-    alert('休み設定の削除に失敗しました')
+    console.error('休み設定削除エラー:', error)
+    alert(error.message || '休み設定の削除に失敗しました')
   } finally {
-    deletingPeriodIndex.value = null
+    deletingPeriodId.value = null
   }
 }
 
@@ -417,14 +284,14 @@ onMounted(() => {
     <div class="content section existing-section">
       <h2 class="section-title">既存の休み設定</h2>
 
-      <div v-if="holidayPeriods.length === 0" class="no-data">
+      <div v-if="holidays.length === 0" class="no-data">
         登録されている休み設定はありません
       </div>
 
       <div v-else class="holiday-list">
         <div
-          v-for="(period, index) in holidayPeriods"
-          :key="index"
+          v-for="period in holidays"
+          :key="period.id"
           class="holiday-item"
         >
           <div class="period-info">
@@ -435,17 +302,17 @@ onMounted(() => {
               type="button"
               class="edit-btn"
               @click="startEdit(period)"
-              :disabled="deletingPeriodIndex !== null"
+              :disabled="deletingPeriodId !== null"
             >
               編集
             </button>
             <button
               type="button"
               class="delete-btn"
-              @click="deletePeriod(period, index)"
-              :disabled="deletingPeriodIndex !== null"
+              @click="deletePeriod(period)"
+              :disabled="deletingPeriodId !== null"
             >
-              {{ deletingPeriodIndex === index ? '削除中...' : '削除' }}
+              {{ deletingPeriodId === period.id ? '削除中...' : '削除' }}
             </button>
           </div>
         </div>
