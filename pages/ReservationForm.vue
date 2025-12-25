@@ -38,7 +38,7 @@ const formattedDate = computed(() => {
   return `${month}月${day}日(${weekday})`
 })
 
-const submitReservation = () => {
+const submitReservation = async () => {
   errors.value = []
 
   if (!formData.date) {
@@ -62,6 +62,29 @@ const submitReservation = () => {
   }
 
   if(errors.value.length === 0) {
+    try {
+      const response = await fetch('/api/holidays')
+      if (response.ok) {
+        const data = await response.json()
+        const holidays = data.holidays || []
+
+        // 選択日付が休み期間に含まれるか確認
+        const selectedDate = new Date(formData.date)
+        const isHoliday = holidays.some((holiday) => {
+          const startDate = new Date(holiday.startDate)
+          const endDate = new Date(holiday.endDate)
+          return selectedDate >= startDate && selectedDate <= endDate
+        })
+
+        if (isHoliday) {
+          errors.value.push({ field: 'date', message: 'この日は休業日のため予約できません!'})
+          return
+        }
+      }
+    } catch (error) {
+      alert.error('休み情報確認エラー:', error)
+    }
+
     localStorage.setItem("formData", JSON.stringify(formData))
     router.push('/ConfirmReservation')
   }
