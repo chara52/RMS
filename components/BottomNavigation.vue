@@ -62,7 +62,7 @@ const handleInputClick = async (event) => {
 
     router.push(`/ReservationForm?reset=true&date=${props.selectedDate}`);
   } catch (err) {
-    alert('休業日チェックに失敗しました: ' + err);
+    alert('休業日チェックに失敗しました' + err);
     router.push(`/ReservationForm?reset=true&date=${props.selectedDate}`);
   }
 };
