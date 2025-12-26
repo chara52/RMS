@@ -41,6 +41,25 @@ const handleInputClick = async (event) => {
   }
 
   try {
+    // holiday API から休み期間取得
+    const response = await fetch('/api/holidays');
+    const data = await response.json();
+    const holidays = data.holidays || [];
+
+    // 選択日付が休み期間に含まれるか確認
+    const selectedDate = new Date(props.selectedDate);
+    const isHoliday = holidays.some((holiday) => {
+      const startDate = new Date(holiday.startDate);
+      const endDate = new Date(holiday.endDate);
+      return selectedDate >= startDate && selectedDate <= endDate;
+    });
+
+    // 休み日の場合、アラート表示して終了
+    if (isHoliday) {
+      alert('選択された日付は休業日のため、予約ができません。別の日付を選択してください。');
+      return;
+    }
+
     router.push(`/ReservationForm?reset=true&date=${props.selectedDate}`);
   } catch (err) {
     alert('休業日チェックに失敗しました' + err);
